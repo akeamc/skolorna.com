@@ -21,7 +21,7 @@ const MenusPage: NextPage<PageProps> = ({ menus }) => {
   return (
     <ul>
       {menus.map((menu) => (
-        <li>
+        <li key={menu.id}>
           <Link href={`/menus/${menu.id}`} prefetch={false}>
             <a>{menu.title}</a>
           </Link>
