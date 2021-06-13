@@ -1,6 +1,9 @@
 import { GetStaticProps, NextPage } from "next";
 import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
 import { Menu } from "../../types";
+import levenshtein from "damerau-levenshtein";
+import rankWord from "../../lib/search/rank-word";
 
 export interface PageProps {
   menus: Menu[];
@@ -18,16 +21,42 @@ export const getStaticProps: GetStaticProps<PageProps> = async () => {
 };
 
 const MenusPage: NextPage<PageProps> = ({ menus }) => {
+  const [query, setQuery] = useState<string>("");
+  const [result, setResult] = useState<Menu[]>([]);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const limit = 100;
+
+  useEffect(() => {
+    const lowercaseQuery = query.toLocaleLowerCase();
+
+    const ranked: [Menu, number][] = menus.map((menu) => [
+      menu,
+      rankWord(menu.title.toLocaleLowerCase(), lowercaseQuery),
+    ]);
+
+    const sorted = ranked.sort((a, b) => a[1] - b[1]).map(([menu]) => menu);
+
+    setResult(sorted.slice(0, limit));
+  }, [query]);
+
   return (
-    <ul>
-      {menus.map((menu) => (
-        <li key={menu.id}>
-          <Link href={`/menus/${menu.id}`} prefetch={false}>
-            <a>{menu.title}</a>
-          </Link>
-        </li>
-      ))}
-    </ul>
+    <div>
+      <input
+        value={query}
+        onInput={() => setQuery(inputRef?.current?.value ?? "")}
+        placeholder="Sök ..."
+        ref={inputRef}
+      />
+      <ul>
+        {result.map((menu) => (
+          <li key={menu.id}>
+            <Link href={`/menus/${menu.id}`} prefetch={false}>
+              <a>{menu.title}</a>
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 };
 
