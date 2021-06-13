@@ -39,29 +39,29 @@ const MenuPage: NextPage<PageProps> = ({ menu }) => {
   );
 
   return (
-		<div className="bg-blue-900 text-white min-h-screen">
-			<div className="container mx-auto py-8">
-				<h1 className="text-4xl font-bold">{menu?.title}</h1>
-				<code className="opacity-30 text-sm">{menu?.id}</code>
-				<div className="shadow-lg mt-16 bg-white text-black rounded-lg p-4">
-					{data?.map(({ date, meals }) => (
-						<div className="mb-4">
-							<h3 className="text-lg font-semibold">
-								{new Date(date).toLocaleDateString(undefined, {
-									month: "long",
-									day: "numeric"
-								})}
-							</h3>
-							<ul className="opacity-80">
-								{meals.map((meal) => (
-									<li>{meal.value}</li>
-								))}
-							</ul>
-						</div>
-					))}
-				</div>
-			</div>
-		</div>
+    <div className="bg-blue-900 text-white min-h-screen">
+      <div className="container mx-auto py-8">
+        <h1 className="text-4xl font-bold">{menu?.title}</h1>
+        <code className="opacity-30 text-sm">{menu?.id}</code>
+        <div className="shadow-lg mt-16 bg-white text-black rounded-lg p-4">
+          {data?.map(({ date, meals }) => (
+            <div className="mb-4">
+              <h3 className="text-lg font-semibold">
+                {new Date(date).toLocaleDateString(undefined, {
+                  month: "long",
+                  day: "numeric",
+                })}
+              </h3>
+              <ul className="opacity-80">
+                {meals.map((meal) => (
+                  <li>{meal.value}</li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
   );
 };
 
