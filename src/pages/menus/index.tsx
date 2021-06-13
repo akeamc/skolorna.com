@@ -24,15 +24,20 @@ const MenusPage: NextPage<PageProps> = ({ menus }) => {
   const [query, setQuery] = useState<string>("");
   const [result, setResult] = useState<Menu[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
-  const limit = 100;
+  const limit = 20;
 
   useEffect(() => {
     const lowercaseQuery = query.toLocaleLowerCase();
 
-    const ranked: [Menu, number][] = menus.map((menu) => [
-      menu,
-      rankWord(menu.title.toLocaleLowerCase(), lowercaseQuery),
-    ]);
+    const ranked = menus.reduce((acc, menu) => {
+      const ranking = rankWord(menu.title.toLocaleLowerCase(), lowercaseQuery);
+
+      if (typeof ranking === "number") {
+        acc.push([menu, ranking]);
+      }
+
+      return acc;
+    }, [] as [Menu, number][]);
 
     const sorted = ranked.sort((a, b) => a[1] - b[1]).map(([menu]) => menu);
 
