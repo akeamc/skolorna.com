@@ -40,7 +40,7 @@ const MenuPage: NextPage<PageProps> = ({ menu }) => {
 
   return (
     <div className="bg-blue-900 text-white min-h-screen">
-      <div className="container mx-auto py-8">
+      <div className="container mx-auto py-16">
         <h1 className="text-4xl font-bold">{menu?.title}</h1>
         <code className="opacity-30 text-sm">{menu?.id}</code>
         <div className="shadow-lg mt-16 bg-white text-black rounded-lg p-4">
@@ -48,6 +48,7 @@ const MenuPage: NextPage<PageProps> = ({ menu }) => {
             <div className="mb-4">
               <h3 className="text-lg font-semibold">
                 {new Date(date).toLocaleDateString(undefined, {
+                  weekday: "long",
                   month: "long",
                   day: "numeric",
                 })}
