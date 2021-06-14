@@ -8,6 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@tailwindcss/forms": "^0.3.3",
     "damerau-levenshtein": "^1.0.7",
     "next": "10.2.3",
     "querystring": "^0.2.1",

@@ -1,9 +1,13 @@
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import rankWord from "./rank-word";
 
 export type Document = Record<string, unknown>;
 export type DocumentIndex<T extends Document> = [string, T][];
 export type RankedDocuments<T extends Document> = [number, T][];
 
+/**
+ * Minimal in-browser search engine. Tested with 7k documents.
+ */
 export default class MicroSearch<T extends Document> {
   public documents: DocumentIndex<T>;
 
@@ -30,7 +34,7 @@ export default class MicroSearch<T extends Document> {
     this.documents = MicroSearch.indexDocuments(documents, field);
   }
 
-  public search(rawQuery: string, results?: number): T[] {
+  public search(rawQuery: string, limit?: number): T[] {
     const query = rawQuery.toLocaleLowerCase();
 
     const scores = this.documents.reduce((acc, [key, document]) => {
@@ -45,8 +49,38 @@ export default class MicroSearch<T extends Document> {
 
     const sorted = scores
       .sort(([aScore], [bScore]) => aScore - bScore)
-      .slice(0, results);
+      .slice(0, limit);
 
     return sorted.map(([_score, document]) => document);
   }
+}
+
+export interface UseMicroSearch<T extends Document> {
+  query: string;
+  setQuery: Dispatch<SetStateAction<string>>;
+  results: T[];
+}
+
+export function useMicroSearch<T extends Document>(
+  documents: T[],
+  field: keyof T,
+  limit?: number
+): UseMicroSearch<T> {
+  const [microSearch, setMicroSearch] = useState<MicroSearch<T>>();
+  const [query, setQuery] = useState<string>("");
+  const [results, setResults] = useState<T[]>([]);
+
+  useEffect(() => {
+    setMicroSearch(new MicroSearch<T>(documents, field));
+  }, [documents]);
+
+  useEffect(() => {
+    setResults(microSearch?.search(query, limit) ?? []);
+  }, [query]);
+
+  return {
+    query,
+    setQuery,
+    results,
+  };
 }

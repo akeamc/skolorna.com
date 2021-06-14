@@ -29,6 +29,7 @@ export const getStaticProps: GetStaticProps<PageProps, Q> = async ({
     props: {
       menu,
     },
+    revalidate: 86400,
   };
 };
 
