@@ -2,6 +2,8 @@ import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import { ParsedUrlQuery } from "querystring";
 import React from "react";
 import useSWR from "swr";
+import { MENU_PROXY_URL } from "../../lib/menu-proxy";
+import { fetchMenu } from "../../lib/menu-proxy/menu";
 import { Day, Menu } from "../../lib/menu-proxy/types";
 
 export interface PageProps {
@@ -15,8 +17,13 @@ export interface Q extends ParsedUrlQuery {
 export const getStaticProps: GetStaticProps<PageProps, Q> = async ({
   params,
 }) => {
-  const res = await fetch(`http://localhost:8000/menus/${params?.id}`);
-  const menu: Menu = await res.json();
+  const id = params?.id;
+
+  if (typeof id !== "string") {
+    throw new Error("?id must be a string");
+  }
+
+  const menu = await fetchMenu(id);
 
   return {
     props: {
@@ -34,7 +41,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 const MenuPage: NextPage<PageProps> = ({ menu }) => {
   const { data } = useSWR<Day[]>(
-    () => `http://localhost:8000/menus/${menu.id}/days`,
+    () => new URL(`/menus/${menu.id}/days`, MENU_PROXY_URL).href,
     (url) => fetch(url).then((res) => res.json())
   );
 
@@ -45,7 +52,7 @@ const MenuPage: NextPage<PageProps> = ({ menu }) => {
         <code className="opacity-30 text-sm">{menu?.id}</code>
         <div className="shadow-lg mt-16 bg-white text-black rounded-lg p-4">
           {data?.map(({ date, meals }) => (
-            <div className="mb-4">
+            <div className="mb-4" key={date}>
               <h3 className="text-lg font-semibold">
                 {new Date(date).toLocaleDateString(undefined, {
                   weekday: "long",
@@ -55,7 +62,7 @@ const MenuPage: NextPage<PageProps> = ({ menu }) => {
               </h3>
               <ul className="opacity-80">
                 {meals.map((meal) => (
-                  <li>{meal.value}</li>
+                  <li key={meal.value}>{meal.value}</li>
                 ))}
               </ul>
             </div>

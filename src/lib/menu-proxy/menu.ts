@@ -9,6 +9,12 @@ export async function fetchMenus(): Promise<Menu[]> {
   return res.json();
 }
 
+export async function fetchMenu(id: string): Promise<Menu> {
+  const url = new URL(`/menus/${id}`, MENU_PROXY_URL);
+  const res = await fetch(url.href);
+  return res.json();
+}
+
 export function useMenus(): SWRResponse<Menu[], unknown> {
   return useSWR<Menu[]>("/menus", () => fetchMenus());
 }

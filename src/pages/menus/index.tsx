@@ -1,7 +1,7 @@
 import { NextPage } from "next";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { useMenuSearch } from "../../lib/menu-proxy/menus";
+import { useMenuSearch } from "../../lib/menu-proxy/menu";
 import { Menu } from "../../lib/menu-proxy/types";
 
 const MenusPage: NextPage = () => {
