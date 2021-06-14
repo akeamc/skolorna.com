@@ -2,7 +2,7 @@ import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import { ParsedUrlQuery } from "querystring";
 import React from "react";
 import useSWR from "swr";
-import { Day, Menu } from "../../types";
+import { Day, Menu } from "../../lib/menu-proxy/types";
 
 export interface PageProps {
   menu: Menu;

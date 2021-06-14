@@ -1,26 +1,12 @@
-import { GetStaticProps, NextPage } from "next";
+import { NextPage } from "next";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { Menu } from "../../types";
-import levenshtein from "damerau-levenshtein";
+import { useMenus } from "../../lib/menu-proxy/menus";
+import { Menu } from "../../lib/menu-proxy/types";
 import rankWord from "../../lib/search/rank-word";
 
-export interface PageProps {
-  menus: Menu[];
-}
-
-export const getStaticProps: GetStaticProps<PageProps> = async () => {
-  const res = await fetch("http://localhost:8000/menus");
-  const menus: Menu[] = await res.json();
-
-  return {
-    props: {
-      menus,
-    },
-  };
-};
-
-const MenusPage: NextPage<PageProps> = ({ menus }) => {
+const MenusPage: NextPage = () => {
+  const { data: menus } = useMenus();
   const [query, setQuery] = useState<string>("");
   const [result, setResult] = useState<Menu[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -29,7 +15,7 @@ const MenusPage: NextPage<PageProps> = ({ menus }) => {
   useEffect(() => {
     const lowercaseQuery = query.toLocaleLowerCase();
 
-    const ranked = menus.reduce((acc, menu) => {
+    const ranked = menus?.reduce((acc, menu) => {
       const ranking = rankWord(menu.title.toLocaleLowerCase(), lowercaseQuery);
 
       if (typeof ranking === "number") {
@@ -39,9 +25,9 @@ const MenusPage: NextPage<PageProps> = ({ menus }) => {
       return acc;
     }, [] as [Menu, number][]);
 
-    const sorted = ranked.sort((a, b) => a[1] - b[1]).map(([menu]) => menu);
+    const sorted = ranked?.sort((a, b) => a[1] - b[1]).map(([menu]) => menu);
 
-    setResult(sorted.slice(0, limit));
+    setResult(sorted?.slice(0, limit) ?? []);
   }, [query]);
 
   return (
