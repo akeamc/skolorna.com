@@ -1,5 +1,6 @@
 import useSWR, { SWRResponse } from "swr";
 import { MENU_PROXY_URL } from ".";
+import MicroSearch from "../search/micro-search";
 import { Menu } from "./types";
 
 export async function fetchMenus(): Promise<Menu[]> {
@@ -10,4 +11,12 @@ export async function fetchMenus(): Promise<Menu[]> {
 
 export function useMenus(): SWRResponse<Menu[], unknown> {
   return useSWR<Menu[]>("/menus", () => fetchMenus());
+}
+
+export function useMenuSearch() {
+  const { data } = useMenus();
+
+  const microSearch = new MicroSearch(data ?? [], "title");
+
+  return microSearch;
 }

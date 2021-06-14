@@ -1,4 +1,6 @@
-export interface Menu {
+import { Document } from "../search/micro-search";
+
+export interface Menu extends Document {
   title: string;
   id: string;
   provider: {

@@ -1,33 +1,18 @@
 import { NextPage } from "next";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import { useMenus } from "../../lib/menu-proxy/menus";
+import { useMenuSearch } from "../../lib/menu-proxy/menus";
 import { Menu } from "../../lib/menu-proxy/types";
-import rankWord from "../../lib/search/rank-word";
 
 const MenusPage: NextPage = () => {
-  const { data: menus } = useMenus();
   const [query, setQuery] = useState<string>("");
   const [result, setResult] = useState<Menu[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
-  const limit = 20;
+
+  const menuSearch = useMenuSearch();
 
   useEffect(() => {
-    const lowercaseQuery = query.toLocaleLowerCase();
-
-    const ranked = menus?.reduce((acc, menu) => {
-      const ranking = rankWord(menu.title.toLocaleLowerCase(), lowercaseQuery);
-
-      if (typeof ranking === "number") {
-        acc.push([menu, ranking]);
-      }
-
-      return acc;
-    }, [] as [Menu, number][]);
-
-    const sorted = ranked?.sort((a, b) => a[1] - b[1]).map(([menu]) => menu);
-
-    setResult(sorted?.slice(0, limit) ?? []);
+    setResult(menuSearch.search(query, 20));
   }, [query]);
 
   return (
