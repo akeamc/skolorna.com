@@ -3,6 +3,7 @@ import { ParsedUrlQuery } from "querystring";
 import React from "react";
 import useSWR from "swr";
 import { MENU_PROXY_URL } from "../../lib/menu-proxy";
+import { useDays } from "../../lib/menu-proxy/days";
 import { fetchMenu } from "../../lib/menu-proxy/menu";
 import { Day, Menu } from "../../lib/menu-proxy/types";
 
@@ -41,10 +42,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 const MenuPage: NextPage<PageProps> = ({ menu }) => {
-  const { data } = useSWR<Day[]>(
-    () => new URL(`/menus/${menu.id}/days`, MENU_PROXY_URL).href,
-    (url) => fetch(url).then((res) => res.json())
-  );
+  const { data } = useDays({ menu: menu?.id });
 
   return (
     <div className="bg-blue-900 text-white min-h-screen">

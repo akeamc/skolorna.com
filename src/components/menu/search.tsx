@@ -1,9 +1,12 @@
 import Link from "next/link";
 import React, { FormEventHandler, FunctionComponent, useCallback } from "react";
 import { useMenuSearch } from "../../lib/menu-proxy/menu";
+import MenuTile from "./tile";
 
 const MenuSearch: FunctionComponent = () => {
-  const { setQuery, results } = useMenuSearch(20);
+  const limit = 20;
+
+  const { setQuery, results } = useMenuSearch(limit);
 
   const handleSearchInput: FormEventHandler<HTMLInputElement> = useCallback(
     (event) => {
@@ -25,12 +28,12 @@ const MenuSearch: FunctionComponent = () => {
         placeholder="Sök"
       />
       <div>
-        <ol className="list-decimal list-inside">
+        {results.length}
+        {results.length >= limit && "+"} träffar
+        <ol>
           {results?.map((menu) => (
             <li key={menu.id}>
-              <Link href={`/menus/${menu.id}`} prefetch={false}>
-                <a>{menu.title}</a>
-              </Link>
+              <MenuTile menu={menu} />
             </li>
           ))}
         </ol>
