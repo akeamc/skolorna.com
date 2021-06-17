@@ -1,6 +1,7 @@
 import { DateTime } from "luxon";
 import useSWR, { SWRResponse } from "swr";
 import { MENU_PROXY_URL } from ".";
+import { menuProxyFetch } from "./fetch";
 import { Day } from "./types";
 
 export interface ListDaysQuery {
@@ -9,11 +10,11 @@ export interface ListDaysQuery {
   last?: DateTime;
 }
 
-function listDaysUrl({
+function listDaysPath({
   menu,
   first = DateTime.now(),
   last,
-}: ListDaysQuery): URL {
+}: ListDaysQuery): string {
   if (!menu) {
     throw new Error("menu id must be defined");
   }
@@ -25,15 +26,12 @@ function listDaysUrl({
     last: last.toISODate(),
   });
 
-  return new URL(
-    `/menus/${menu}/days?${searchParams.toString()}`,
-    MENU_PROXY_URL
-  );
+  return `/menus/${menu}/days?${searchParams.toString()}`;
 }
 
 export function useDays(query: ListDaysQuery): SWRResponse<Day[], unknown> {
   return useSWR<Day[]>(
-    () => listDaysUrl(query).href,
-    (url) => fetch(url).then((res) => res.json())
+    () => listDaysPath(query),
+    (path) => menuProxyFetch<Day[]>(path)
   );
 }

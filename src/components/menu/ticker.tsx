@@ -8,7 +8,11 @@ export interface MenuTickerProps {
 }
 
 const MenuTicker: FunctionComponent<MenuTickerProps> = ({ query }) => {
-  const { data } = useDays(query);
+  const { data, error } = useDays(query);
+
+  if (error) {
+    return <span>Ett fel uppstod</span>;
+  }
 
   if (!data) {
     return <span>Läser in ...</span>;

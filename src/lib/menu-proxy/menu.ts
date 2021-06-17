@@ -1,18 +1,14 @@
 import useSWR, { SWRResponse } from "swr";
-import { MENU_PROXY_URL } from ".";
-import MicroSearch, { useMicroSearch } from "../search/micro-search";
+import { useMicroSearch } from "../search/micro-search";
+import { menuProxyFetch } from "./fetch";
 import { Menu } from "./types";
 
 export async function fetchMenus(): Promise<Menu[]> {
-  const url = new URL("/menus", MENU_PROXY_URL);
-  const res = await fetch(url.href);
-  return res.json();
+  return menuProxyFetch<Menu[]>("/menus");
 }
 
 export async function fetchMenu(id: string): Promise<Menu> {
-  const url = new URL(`/menus/${id}`, MENU_PROXY_URL);
-  const res = await fetch(url.href);
-  return res.json();
+  return menuProxyFetch<Menu>(`/menus/${id}`);
 }
 
 export function useMenus(): SWRResponse<Menu[], unknown> {
