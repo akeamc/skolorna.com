@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "chromatic": "npx chromatic --project-token=c6870b35891a"
   },
   "dependencies": {
     "@tailwindcss/forms": "^0.3.3",
@@ -31,6 +32,7 @@
     "@types/react": "17.0.9",
     "autoprefixer": "^9",
     "babel-loader": "^8.2.2",
+    "chromatic": "^5.9.2",
     "postcss": "^7",
     "prettier": "^2.3.1",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat",
