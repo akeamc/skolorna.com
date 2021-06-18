@@ -12,7 +12,10 @@ export async function fetchMenu(id: string): Promise<Menu> {
 }
 
 export function useMenus(): SWRResponse<Menu[], unknown> {
-  return useSWR<Menu[]>("/menus", () => fetchMenus());
+  return useSWR<Menu[]>("/menus", () => fetchMenus(), {
+    // Upwards of 1 megabyte (uncompressed) is transferred. Save the data!
+    revalidateOnFocus: false,
+  });
 }
 
 export function useMenuSearch(limit?: number) {
