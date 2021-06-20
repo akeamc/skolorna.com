@@ -1,7 +1,6 @@
-import Link from "next/link";
 import React, { FormEventHandler, FunctionComponent, useCallback } from "react";
 import { useMenuSearch } from "../../lib/menu-proxy/menu";
-import MenuTile from "./tile";
+import MenuTile from "./MenuTile";
 
 const MenuSearch: FunctionComponent = () => {
   const limit = 20;

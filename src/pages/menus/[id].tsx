@@ -1,11 +1,9 @@
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import { ParsedUrlQuery } from "querystring";
 import React from "react";
-import useSWR from "swr";
-import { MENU_PROXY_URL } from "../../lib/menu-proxy";
 import { useDays } from "../../lib/menu-proxy/days";
 import { fetchMenu } from "../../lib/menu-proxy/menu";
-import { Day, Menu } from "../../lib/menu-proxy/types";
+import { Menu } from "../../lib/menu-proxy/types";
 
 export interface PageProps {
   menu: Menu;
