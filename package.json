@@ -24,7 +24,7 @@
   "devDependencies": {
     "@babel/core": "^7.14.6",
     "@storybook/addon-actions": "^6.3.0-rc.8",
-    "@storybook/addon-essentials": "^6.3.0-rc.8",
+    "@storybook/addon-essentials": "^6.3.0-rc.11",
     "@storybook/addon-links": "^6.3.0-rc.8",
     "@storybook/react": "^6.3.0-rc.8",
     "@types/damerau-levenshtein": "^1.0.0",
