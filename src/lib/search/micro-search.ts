@@ -1,6 +1,4 @@
-import {
-  Dispatch, SetStateAction, useEffect, useState,
-} from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import rankWord from "./rank-word";
 
 export type Document = Record<string, unknown>;
@@ -15,7 +13,7 @@ export default class MicroSearch<T extends Document> {
 
   public static indexDocuments<T extends Document>(
     documents: T[],
-    field: keyof T,
+    field: keyof T
   ): DocumentIndex<T> {
     const index: DocumentIndex<T> = documents.map((document) => {
       const fieldValue = document[field];
@@ -66,7 +64,7 @@ export interface UseMicroSearch<T extends Document> {
 export function useMicroSearch<T extends Document>(
   documents: T[],
   field: keyof T,
-  limit?: number,
+  limit?: number
 ): UseMicroSearch<T> {
   const [microSearch, setMicroSearch] = useState<MicroSearch<T>>();
   const [query, setQuery] = useState<string>("");
@@ -74,11 +72,11 @@ export function useMicroSearch<T extends Document>(
 
   useEffect(() => {
     setMicroSearch(new MicroSearch<T>(documents, field));
-  }, [documents]);
+  }, [documents, field]);
 
   useEffect(() => {
     setResults(microSearch?.search(query, limit) ?? []);
-  }, [query]);
+  }, [limit, microSearch, query]);
 
   return {
     query,

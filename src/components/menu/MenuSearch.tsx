@@ -1,4 +1,5 @@
-import React, { FormEventHandler, FunctionComponent, useCallback } from "react";
+import React, { FunctionComponent, useEffect } from "react";
+import { useDelayedInput } from "../../lib/forms/delayed-input";
 import { useMenuSearch } from "../../lib/menu-proxy/menu";
 import MenuTile from "./MenuTile";
 
@@ -7,12 +8,11 @@ const MenuSearch: FunctionComponent = () => {
 
   const { setQuery, results } = useMenuSearch(limit);
 
-  const handleSearchInput: FormEventHandler<HTMLInputElement> = useCallback(
-    (event) => {
-      setQuery(event.currentTarget.value);
-    },
-    []
-  );
+  const { value, setInput } = useDelayedInput(250);
+
+  useEffect(() => {
+    setQuery(value);
+  }, [setQuery, value]);
 
   return (
     <div>
@@ -23,7 +23,7 @@ const MenuSearch: FunctionComponent = () => {
         autoComplete="off"
         autoCorrect="off"
         maxLength={32}
-        onInput={handleSearchInput}
+        onInput={(event) => setInput(event.currentTarget.value)}
         placeholder="Sök"
       />
       <div>

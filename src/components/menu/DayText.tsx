@@ -1,5 +1,5 @@
 import { DateTime } from "luxon";
-import React , { FunctionComponent } from "react";
+import React, { FunctionComponent } from "react";
 import { Day } from "../../lib/menu-proxy/types";
 
 export interface DayTextProps {
@@ -16,9 +16,7 @@ const DayText: FunctionComponent<DayTextProps> = ({ day }) => {
         month: "short",
         day: "numeric",
       })}
-      :
-      {" "}
-      {mealsText}
+      : {mealsText}
     </span>
   );
 };

@@ -32,6 +32,6 @@ function listDaysPath({
 export function useDays(query: ListDaysQuery): SWRResponse<Day[], unknown> {
   return useSWR<Day[]>(
     () => listDaysPath(query),
-    (path) => menuProxyFetch<Day[]>(path),
+    (path) => menuProxyFetch<Day[]>(path)
   );
 }

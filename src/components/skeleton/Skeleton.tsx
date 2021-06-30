@@ -6,8 +6,8 @@ const cx = classNames.bind(styles);
 
 export interface SkeletonProps
   extends React.DetailedHTMLProps<
-  React.HTMLAttributes<HTMLSpanElement>,
-  HTMLSpanElement
+    React.HTMLAttributes<HTMLSpanElement>,
+    HTMLSpanElement
   > {
   width?: string;
   height?: string;
