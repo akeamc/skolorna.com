@@ -1,10 +1,11 @@
 import { NextPage } from "next";
+import React from "react";
 
-const Home: NextPage = () => {
-  return (
-    <div>
-      <h1>Skolorna</h1>
-      <style jsx>{`
+const Home: NextPage = () => (
+  <div>
+    <h1>Skolorna</h1>
+    <style jsx>
+      {`
         h1 {
           font-size: 20vw;
           font-weight: 700;
@@ -18,15 +19,17 @@ const Home: NextPage = () => {
           align-items: center;
           justify-content: center;
         }
-      `}</style>
-      <style global jsx>{`
+      `}
+    </style>
+    <style global jsx>
+      {`
         body {
           background: black;
           color: white;
         }
-      `}</style>
-    </div>
-  );
-};
+      `}
+    </style>
+  </div>
+);
 
 export default Home;

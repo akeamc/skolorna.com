@@ -32,12 +32,10 @@ export const getStaticProps: GetStaticProps<PageProps, Q> = async ({
   };
 };
 
-export const getStaticPaths: GetStaticPaths = async () => {
-  return {
-    paths: [],
-    fallback: true,
-  };
-};
+export const getStaticPaths: GetStaticPaths = async () => ({
+  paths: [],
+  fallback: true,
+});
 
 const MenuPage: NextPage<PageProps> = ({ menu }) => {
   const { data } = useDays({ menu: menu?.id });

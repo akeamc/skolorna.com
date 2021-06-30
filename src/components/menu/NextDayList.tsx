@@ -1,4 +1,4 @@
-import { FunctionComponent } from "react";
+import React, { FunctionComponent } from "react";
 import { useDays } from "../../lib/menu-proxy/days";
 import InlineSkeleton from "../skeleton/InlineSkeleton";
 

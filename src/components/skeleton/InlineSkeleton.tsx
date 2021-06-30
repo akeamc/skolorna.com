@@ -20,10 +20,11 @@ const InlineSkeleton: FunctionComponent<InlineSkeletonProps> = ({
 }) => (
   <span>
     {Array.from({ length: count }).map((_, index) => (
-      // eslint-disable-next-line react/no-array-index-key
       <Skeleton
+        // eslint-disable-next-line react/no-array-index-key
         key={index}
         className={classNames("max-w-full", className)}
+        // eslint-disable-next-line react/jsx-props-no-spreading
         {...skeletonProps}
       >
         &zwnj;

@@ -6,8 +6,8 @@ const cx = classNames.bind(styles);
 
 export interface SkeletonProps
   extends React.DetailedHTMLProps<
-    React.HTMLAttributes<HTMLSpanElement>,
-    HTMLSpanElement
+  React.HTMLAttributes<HTMLSpanElement>,
+  HTMLSpanElement
   > {
   width?: string;
   height?: string;
@@ -32,6 +32,7 @@ const Skeleton: FunctionComponent<SkeletonProps> = ({
       width,
       height,
     }}
+    // eslint-disable-next-line react/jsx-props-no-spreading
     {...props}
   />
 );
