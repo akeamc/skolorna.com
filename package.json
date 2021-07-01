@@ -30,7 +30,7 @@
     "@storybook/react": "^6.3.0-rc.8",
     "@types/damerau-levenshtein": "^1.0.0",
     "@types/luxon": "^1.27.0",
-    "@types/react": "17.0.9",
+    "@types/react": "17.0.13",
     "@types/unidecode": "^0.1.1",
     "@typescript-eslint/eslint-plugin": "^4.4.1",
     "autoprefixer": "^9",
