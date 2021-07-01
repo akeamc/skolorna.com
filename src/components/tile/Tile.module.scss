@@ -1,0 +1,27 @@
+.tile {
+  display: block;
+  box-shadow: 0 0 0 1px var(--border-color);
+  border-radius: var(--rounded-md);
+  padding: 20px;
+  transition: all 0.1s;
+  color: var(--text-secondary);
+
+  &:hover {
+    box-shadow: var(--shadow-sm);
+    transform: translateY(-2px);
+  }
+}
+
+.secondary {
+  color: var(--text-secondary);
+  font: 700 12px/1 var(--font-display);
+  letter-spacing: 0.03em;
+  margin: 0 0 6px;
+  text-transform: uppercase;
+}
+
+.title {
+  color: var(--text-primary);
+  font: 500 24px/1.1 var(--font-display);
+  margin: 0 0 12px;
+}

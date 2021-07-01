@@ -2,6 +2,7 @@ import React, { FunctionComponent, useEffect } from "react";
 import { useDelayedInput } from "../../lib/forms/delayed-input";
 import { useMenuSearch } from "../../lib/menu-proxy/menu";
 import MenuTile from "./MenuTile";
+import styles from "./MenuSearch.module.scss";
 
 const MenuSearch: FunctionComponent = () => {
   const limit = 20;
@@ -14,10 +15,11 @@ const MenuSearch: FunctionComponent = () => {
     setQuery(value);
   }, [setQuery, value]);
 
+  const noResults = query.length > 0 && results?.length <= 0;
+
   return (
     <div>
       <input
-        className="rounded-md border-gray-300 placeholder-gray-300 font-medium text-xl p-4"
         type="search"
         spellCheck="false"
         autoComplete="off"
@@ -26,20 +28,18 @@ const MenuSearch: FunctionComponent = () => {
         onInput={(event) => setInput(event.currentTarget.value)}
         placeholder="Sök"
       />
-      <div>
-        {query.length > 0 && results?.length <= 0 ? (
+      <div className={styles.results}>
+        {noResults ? (
           <span>
-            inga menyer som matchar &quot;<strong>{query}</strong>&quot;
+            Inga menyer som matchar &quot;<strong>{query}</strong>&quot;
             hittades
           </span>
         ) : (
-          <ol>
+          <div className={styles.grid}>
             {results?.map((menu) => (
-              <li key={menu.id}>
-                <MenuTile menu={menu} />
-              </li>
+              <MenuTile menu={menu} key={menu.id} />
             ))}
-          </ol>
+          </div>
         )}
       </div>
     </div>

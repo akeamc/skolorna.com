@@ -1,4 +1,3 @@
-import classNames from "classnames";
 import React, { FunctionComponent } from "react";
 import Skeleton, { SkeletonProps } from "./Skeleton";
 
@@ -23,7 +22,7 @@ const InlineSkeleton: FunctionComponent<InlineSkeletonProps> = ({
       <Skeleton
         // eslint-disable-next-line react/no-array-index-key
         key={index}
-        className={classNames("max-w-full", className)}
+        className={className}
         // eslint-disable-next-line react/jsx-props-no-spreading
         {...skeletonProps}
       >

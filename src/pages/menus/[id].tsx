@@ -1,9 +1,12 @@
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import { ParsedUrlQuery } from "querystring";
 import React from "react";
+import Main from "../../components/layout/Main";
+import Container from "../../components/layout/Container";
 import { useDays } from "../../lib/menu-proxy/days";
 import { fetchMenu } from "../../lib/menu-proxy/menu";
 import { Menu } from "../../lib/menu-proxy/types";
+import PageHeading from "../../components/typography/PageHeading";
 
 export interface PageProps {
   menu: Menu;
@@ -41,21 +44,20 @@ const MenuPage: NextPage<PageProps> = ({ menu }) => {
   const { data } = useDays({ menu: menu?.id });
 
   return (
-    <div className="bg-blue-900 text-white min-h-screen">
-      <div className="container mx-auto py-16">
-        <h1 className="text-4xl font-bold">{menu?.title}</h1>
-        <code className="opacity-30 text-sm">{menu?.id}</code>
-        <div className="shadow-lg mt-16 bg-white text-black rounded-lg p-4">
+    <Main>
+      <Container>
+        <PageHeading>{menu?.title}</PageHeading>
+        <div>
           {data?.map(({ date, meals }) => (
             <div className="mb-4" key={date}>
-              <h3 className="text-lg font-semibold">
+              <h3>
                 {new Date(date).toLocaleDateString(undefined, {
                   weekday: "long",
                   month: "long",
                   day: "numeric",
                 })}
               </h3>
-              <ul className="opacity-80">
+              <ul>
                 {meals.map((meal) => (
                   <li key={meal.value}>{meal.value}</li>
                 ))}
@@ -63,8 +65,8 @@ const MenuPage: NextPage<PageProps> = ({ menu }) => {
             </div>
           ))}
         </div>
-      </div>
-    </div>
+      </Container>
+    </Main>
   );
 };
 
