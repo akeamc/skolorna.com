@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import unidecode from "unidecode";
 import rankWord from "./rank-word";
 
 export type Document = Record<string, unknown>;
@@ -11,6 +12,12 @@ export type RankedDocuments<T extends Document> = [number, T][];
 export default class MicroSearch<T extends Document> {
   public documents: DocumentIndex<T>;
 
+  public static tokenize(word: string): string {
+    const ascii = unidecode(word);
+
+    return ascii.toLowerCase();
+  }
+
   public static indexDocuments<T extends Document>(
     documents: T[],
     field: keyof T
@@ -22,9 +29,9 @@ export default class MicroSearch<T extends Document> {
         throw new Error("specified field must be of type string");
       }
 
-      const key = fieldValue.toLocaleLowerCase();
+      const token = this.tokenize(fieldValue);
 
-      return [key, document];
+      return [token, document];
     });
 
     return index;
@@ -34,11 +41,11 @@ export default class MicroSearch<T extends Document> {
     this.documents = MicroSearch.indexDocuments(documents, field);
   }
 
-  public search(rawQuery: string, limit?: number): T[] {
-    const query = rawQuery.toLocaleLowerCase();
+  public search(query: string, limit?: number): T[] {
+    const queryToken = MicroSearch.tokenize(query);
 
     const scores = this.documents.reduce((acc, [key, document]) => {
-      const score = rankWord(key, query);
+      const score = rankWord(key, queryToken);
 
       if (typeof score === "number") {
         acc.push([score, document]);
