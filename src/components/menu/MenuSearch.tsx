@@ -6,7 +6,7 @@ import MenuTile from "./MenuTile";
 const MenuSearch: FunctionComponent = () => {
   const limit = 20;
 
-  const { setQuery, results } = useMenuSearch(limit);
+  const { setQuery, query, results } = useMenuSearch(limit);
 
   const { value, setInput } = useDelayedInput(250);
 
@@ -27,15 +27,20 @@ const MenuSearch: FunctionComponent = () => {
         placeholder="Sök"
       />
       <div>
-        {results.length}
-        {results.length >= limit && "+"} träffar
-        <ol>
-          {results?.map((menu) => (
-            <li key={menu.id}>
-              <MenuTile menu={menu} />
-            </li>
-          ))}
-        </ol>
+        {query.length > 0 && results?.length <= 0 ? (
+          <span>
+            inga menyer som matchar &quot;<strong>{query}</strong>&quot;
+            hittades
+          </span>
+        ) : (
+          <ol>
+            {results?.map((menu) => (
+              <li key={menu.id}>
+                <MenuTile menu={menu} />
+              </li>
+            ))}
+          </ol>
+        )}
       </div>
     </div>
   );

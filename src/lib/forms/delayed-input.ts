@@ -20,20 +20,23 @@ export function useDelayedInput(delay = 500): DelayedInput {
   const [timer, setTimer] = useState<NodeJS.Timeout>();
   const [typing, setTyping] = useState(false);
 
-	const setInput: SetInput = useCallback((value) => {
-		setTyping(true);
+  const setInput: SetInput = useCallback(
+    (value) => {
+      setTyping(true);
 
-    if (timer) {
-      clearTimeout(timer);
-    }
+      if (timer) {
+        clearTimeout(timer);
+      }
 
-    const timeout = setTimeout(() => {
-      setDelayedValue(value);
-      setTyping(false);
-    }, delay);
+      const timeout = setTimeout(() => {
+        setDelayedValue(value);
+        setTyping(false);
+      }, delay);
 
-    setTimer(timeout);
-	}, [delay, timer]);
+      setTimer(timeout);
+    },
+    [delay, timer]
+  );
 
   return {
     setInput,
