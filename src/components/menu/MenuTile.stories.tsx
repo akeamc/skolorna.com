@@ -1,4 +1,5 @@
 import React from "react";
+// eslint-disable-next-line import/no-extraneous-dependencies
 import { Meta } from "@storybook/react";
 import MenuTile from "./MenuTile";
 

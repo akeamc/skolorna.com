@@ -7,7 +7,8 @@
   color: var(--text-secondary);
   background-color: var(--bg-primary);
 
-  &:hover, &:focus {
+  &:hover,
+  &:focus {
     box-shadow: var(--shadow-sm);
     transform: translateY(-2px);
   }

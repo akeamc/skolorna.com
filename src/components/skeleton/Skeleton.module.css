@@ -9,7 +9,7 @@
 }
 
 .skeleton-bg {
-  animation: skeleton 2s ease-in-out infinite;
+  animation: skeleton 1.5s ease-in-out infinite;
   background-repeat: no-repeat;
   background-size: 200% 100%;
   background-color: var(--accents-2);

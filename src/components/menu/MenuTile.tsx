@@ -25,7 +25,7 @@ const MenuTile: FunctionComponent<MenuTileProps> = ({ menu }) => (
       </>
     }
   >
-    <NextDayList menu={menu.id} />
+    <NextDayList menu={menu.id} maxMeals={3} />
   </Tile>
 );
 
