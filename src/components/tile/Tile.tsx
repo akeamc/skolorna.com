@@ -4,22 +4,22 @@ import React, { FunctionComponent } from "react";
 import styles from "./Tile.module.scss";
 
 export interface TileProps {
-  primaryTitle: ReactNode;
-  secondaryTitle?: ReactNode;
+  heading: ReactNode;
+  subHeading?: ReactNode;
   href: string;
 }
 
 const Tile: FunctionComponent<TileProps> = ({
-  primaryTitle,
-  secondaryTitle,
+  heading,
+  subHeading,
   children,
   href,
 }) => (
   <Link href={href}>
     {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
     <a className={styles.tile}>
-      {secondaryTitle && <h3 className={styles.secondary}>{secondaryTitle}</h3>}
-      <h2 className={styles.title}>{primaryTitle}</h2>
+      {subHeading && <div className={styles.subheading}>{subHeading}</div>}
+      <h2 className={styles.heading}>{heading}</h2>
       <div>{children}</div>
     </a>
   </Link>

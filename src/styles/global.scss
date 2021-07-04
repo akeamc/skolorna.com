@@ -1,7 +1,7 @@
 @import url("https://rsms.me/inter/inter.css");
 @import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap");
 
-html {
+:root {
   --font-sans: "Inter", sans-serif;
   --font-display: "Space Grotesk", var(--font-sans);
 
@@ -15,33 +15,39 @@ html {
   --accents-7: #333;
   --accents-8: #111;
   --border-color: var(--accents-2);
-  --background-primary: #fff;
+  --bg-primary: #fff;
   --text-primary: #000;
   --text-secondary: var(--accents-6);
+
   --shadow-color: rgba(0, 0, 0, 0.1);
   --shadow-sm: 0 0 3px 2px var(--shadow-color);
+
   --rounded-md: 12px;
+  --rounded-lg: 24px;
+}
 
-  font-family: var(--font-sans);
-  background-color: var(--background-primary);
-
-  @media (prefers-color-scheme: dark) {
-    --accents-8: #fafafa;
-    --accents-7: #eaeaea;
-    --accents-6: #999;
-    --accents-5: #888;
-    --accents-4: #666;
-    --accents-3: #444;
-    --accents-2: #333;
-    --accents-1: #111;
-    --background-primary: #000;
-    --text-primary: #fff;
-    --shadow-color: rgba(255, 255, 255, 0.25);
-  }
+.dark {
+  --accents-8: #fafafa;
+  --accents-7: #eaeaea;
+  --accents-6: #999;
+  --accents-5: #888;
+  --accents-4: #666;
+  --accents-3: #444;
+  --accents-2: #333;
+  --accents-1: #111;
+  --border-color: var(--accents-2);
+  --bg-primary: #000;
+  --text-primary: #fff;
+  --text-secondary: var(--accents-6);
+  --shadow-color: rgba(255, 255, 255, 0.25);
+  --shadow-sm: 0 0 3px 2px var(--shadow-color);
 }
 
 body {
   margin: 0;
+  background-color: var(--bg-primary);
+  font-family: var(--font-sans);
+  color: var(--text-primary);
 }
 
 h1 {

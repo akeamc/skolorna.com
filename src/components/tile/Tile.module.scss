@@ -5,14 +5,20 @@
   padding: 20px;
   transition: all 0.1s;
   color: var(--text-secondary);
+  background-color: var(--bg-primary);
 
-  &:hover {
+  &:hover, &:focus {
     box-shadow: var(--shadow-sm);
     transform: translateY(-2px);
   }
+
+  &:focus {
+    background-color: var(--accents-2);
+    outline: none;
+  }
 }
 
-.secondary {
+.subheading {
   color: var(--text-secondary);
   font: 700 12px/1 var(--font-display);
   letter-spacing: 0.03em;
@@ -20,7 +26,7 @@
   text-transform: uppercase;
 }
 
-.title {
+.heading {
   color: var(--text-primary);
   font: 500 24px/1.1 var(--font-display);
   margin: 0 0 12px;

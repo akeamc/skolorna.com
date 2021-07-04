@@ -18,8 +18,8 @@ export interface MenuTileProps {
 const MenuTile: FunctionComponent<MenuTileProps> = ({ menu }) => (
   <Tile
     href={`/menus/${menu.id}`}
-    primaryTitle={menu.title}
-    secondaryTitle={
+    heading={menu.title}
+    subHeading={
       <>
         Via <mark>{menu.provider.name}</mark>
       </>

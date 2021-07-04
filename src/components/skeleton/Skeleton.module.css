@@ -25,6 +25,6 @@
   composes: skeleton-bg;
   line-height: 1;
   display: inline-block;
-  border-radius: var(--rounded-md);
+  border-radius: var(--rounded-lg);
   width: 100%;
 }
