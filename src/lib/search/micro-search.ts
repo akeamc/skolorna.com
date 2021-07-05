@@ -60,6 +60,10 @@ export default class MicroSearch<T extends Document> {
 
     return sorted.map((entry) => entry[1]);
   }
+
+  public get size(): number {
+    return this.documents.length;
+  }
 }
 
 export type SetQuery = (query: string) => void;
@@ -68,7 +72,7 @@ export interface UseMicroSearch<T extends Document> {
   query: string;
   setQuery: SetQuery;
   results: T[];
-  documents: T[];
+  size: number;
   searching: boolean;
 }
 
@@ -79,7 +83,7 @@ export function useMicroSearch<T extends Document>(
 ): UseMicroSearch<T> {
   const [microSearch, setMicroSearch] = useState<MicroSearch<T>>();
   const [internalQuery, setInternalQuery] = useState<string>("");
-  const [searching, setSearching] = useState(false);
+  const [searching, setSearching] = useState(true);
   const [results, setResults] = useState<T[]>([]);
 
   useEffect(() => {
@@ -87,8 +91,10 @@ export function useMicroSearch<T extends Document>(
   }, [documents, field]);
 
   useEffect(() => {
-    setResults(microSearch?.search(internalQuery, limit) ?? []);
-    setSearching(false);
+    if (microSearch && microSearch.size > 0) {
+      setResults(microSearch.search(internalQuery, limit));
+      setSearching(false);
+    }
   }, [limit, microSearch, internalQuery]);
 
   const setQuery: SetQuery = useCallback((query) => {
@@ -100,7 +106,7 @@ export function useMicroSearch<T extends Document>(
     query: internalQuery,
     setQuery,
     results,
-    documents,
+    size: microSearch?.size ?? 0,
     searching,
   };
 }

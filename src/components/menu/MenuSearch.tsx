@@ -9,8 +9,7 @@ import InlineSkeleton from "../skeleton/InlineSkeleton";
 const MenuSearch: FunctionComponent = () => {
   const limit = 40;
 
-  const { setQuery, query, results, documents, searching } =
-    useMenuSearch(limit);
+  const { setQuery, query, results, size, searching } = useMenuSearch(limit);
 
   const { value, setInput } = useDelayedInput(250);
 
@@ -18,8 +17,8 @@ const MenuSearch: FunctionComponent = () => {
     setQuery(value);
   }, [setQuery, value]);
 
-  const noResults = query.length > 0 && results?.length <= 0;
-  const initializing = documents.length <= 0;
+  const noResults = query.length > 0 && results.length <= 0;
+  const initializing = size === 0;
 
   return (
     <div>
@@ -50,7 +49,7 @@ const MenuSearch: FunctionComponent = () => {
               ) : (
                 <>
                   {searching ? <InlineSkeleton width="1em" /> : results.length}{" "}
-                  av {documents.length}
+                  av {size}
                 </>
               )}
             </div>
