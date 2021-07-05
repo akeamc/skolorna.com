@@ -17,8 +17,8 @@ const MenuSearch: FunctionComponent = () => {
     setQuery(value);
   }, [setQuery, value]);
 
-  const noResults = query.length > 0 && results.length <= 0;
   const initializing = size === 0;
+  const noResults = !searching && results.length <= 0;
 
   return (
     <div>
