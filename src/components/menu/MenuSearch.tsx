@@ -60,7 +60,7 @@ const MenuSearch: FunctionComponent = () => {
 
   const { setQuery, query, results, size, searching } = useMenuSearch(limit);
 
-  const { value, setInput } = useDelayedInput(250);
+  const { value, setInput } = useDelayedInput(150);
 
   useEffect(() => {
     setQuery(value);
