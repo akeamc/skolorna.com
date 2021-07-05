@@ -34,12 +34,17 @@ const Skeleton: FunctionComponent<SkeletonProps> = ({
   const ref = useRef<HTMLSpanElement>(null);
 
   const handleResize = useCallback(() => {
-    const offsetLeft = ref.current?.offsetLeft ?? 0;
-
-    ref.current?.style.setProperty("--offset-left", `${offsetLeft}px`);
+    if (ref.current) {
+      ref.current.style.setProperty(
+        "--offset-left",
+        `${ref.current.offsetLeft}px`
+      );
+    }
   }, []);
 
   useEffect(() => {
+    handleResize();
+
     window.addEventListener("resize", handleResize);
 
     return () => {
