@@ -43,6 +43,11 @@
   --shadow-sm: 0 0 3px 2px var(--shadow-color);
 }
 
+::placeholder {
+  color: var(--accents-4);
+  opacity: 1;
+}
+
 body {
   margin: 0;
   background-color: var(--bg-primary);

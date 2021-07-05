@@ -12,7 +12,7 @@ export type WordRanking = number | null;
  */
 export default function rankWord(word: string, query: string): WordRanking {
   if (query.length === 0) {
-    return null;
+    return 0;
   }
 
   if (word.startsWith(query)) {

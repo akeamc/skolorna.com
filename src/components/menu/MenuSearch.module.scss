@@ -1,4 +1,34 @@
+.search {
+  border-radius: 9999px;
+  border: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+
+  .icon {
+    padding: 16px;
+    color: var(--accents-4);
+    width: 20px;
+    height: 20px;
+  }
+
+  input {
+    border: 0;
+    font: 400 16px/1 var(--font-sans);
+    padding: 16px 0;
+    flex: 1;
+    background: transparent;
+    outline: none;
+  }
+}
+
 .results {
+  margin-top: 48px;
+  color: var(--text-secondary);
+}
+
+.count {
+  margin-bottom: 24px;
+  font-size: 13px;
 }
 
 .grid {

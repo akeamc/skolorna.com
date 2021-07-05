@@ -2,6 +2,7 @@ import React, { FunctionComponent } from "react";
 import { Menu } from "../../lib/menu-proxy/types";
 import NextDayList from "./NextDayList";
 import Tile from "../tile/Tile";
+import InlineSkeleton from "../skeleton/InlineSkeleton";
 
 export interface MenuTileProps {
   menu: Menu;
@@ -17,15 +18,19 @@ export interface MenuTileProps {
  */
 const MenuTile: FunctionComponent<MenuTileProps> = ({ menu }) => (
   <Tile
-    href={`/menus/${menu.id}`}
-    heading={menu.title}
+    href={menu?.id ? `/menus/${menu.id}` : undefined}
+    heading={menu?.title ?? <InlineSkeleton />}
     subHeading={
-      <>
-        Via <mark>{menu.provider.name}</mark>
-      </>
+      menu?.provider?.name ? (
+        <>
+          Via <mark>{menu.provider.name}</mark>
+        </>
+      ) : (
+        <InlineSkeleton width="8em" />
+      )
     }
   >
-    <NextDayList menu={menu.id} maxMeals={3} />
+    <NextDayList menu={menu?.id} maxMeals={3} />
   </Tile>
 );
 

@@ -6,7 +6,7 @@ import styles from "./Tile.module.scss";
 export interface TileProps {
   heading: ReactNode;
   subHeading?: ReactNode;
-  href: string;
+  href?: string;
 }
 
 const Tile: FunctionComponent<TileProps> = ({
@@ -14,15 +14,21 @@ const Tile: FunctionComponent<TileProps> = ({
   subHeading,
   children,
   href,
-}) => (
-  <Link href={href}>
-    {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+}) => {
+  const inner = (
+    // eslint-disable-next-line jsx-a11y/anchor-is-valid
     <a className={styles.tile}>
       {subHeading && <div className={styles.subheading}>{subHeading}</div>}
       <h2 className={styles.heading}>{heading}</h2>
       <div>{children}</div>
     </a>
-  </Link>
-);
+  );
+
+  if (href) {
+    return <Link href={href}>{inner}</Link>;
+  }
+
+  return inner;
+};
 
 export default Tile;

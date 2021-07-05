@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import unidecode from "unidecode";
 import rankWord from "./rank-word";
 
@@ -62,10 +62,14 @@ export default class MicroSearch<T extends Document> {
   }
 }
 
+export type SetQuery = (query: string) => void;
+
 export interface UseMicroSearch<T extends Document> {
   query: string;
-  setQuery: Dispatch<SetStateAction<string>>;
+  setQuery: SetQuery;
   results: T[];
+  documents: T[];
+  searching: boolean;
 }
 
 export function useMicroSearch<T extends Document>(
@@ -74,7 +78,8 @@ export function useMicroSearch<T extends Document>(
   limit?: number
 ): UseMicroSearch<T> {
   const [microSearch, setMicroSearch] = useState<MicroSearch<T>>();
-  const [query, setQuery] = useState<string>("");
+  const [internalQuery, setInternalQuery] = useState<string>("");
+  const [searching, setSearching] = useState(false);
   const [results, setResults] = useState<T[]>([]);
 
   useEffect(() => {
@@ -82,12 +87,20 @@ export function useMicroSearch<T extends Document>(
   }, [documents, field]);
 
   useEffect(() => {
-    setResults(microSearch?.search(query, limit) ?? []);
-  }, [limit, microSearch, query]);
+    setResults(microSearch?.search(internalQuery, limit) ?? []);
+    setSearching(false);
+  }, [limit, microSearch, internalQuery]);
+
+  const setQuery: SetQuery = useCallback((query) => {
+    setSearching(true);
+    setInternalQuery(query);
+  }, []);
 
   return {
-    query,
+    query: internalQuery,
     setQuery,
     results,
+    documents,
+    searching,
   };
 }
