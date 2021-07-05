@@ -1,23 +1,24 @@
 @keyframes skeleton {
   0% {
-    background-position: 200% 0;
+    background-position: calc(-100vw - var(--offset-left)) 0;
   }
 
   100% {
-    background-position: -200% 0;
+    background-position: calc(100vw - var(--offset-left)) 0;
   }
 }
 
 .skeleton-bg {
   animation: skeleton 1.5s ease-in-out infinite;
   background-repeat: no-repeat;
-  background-size: 200% 100%;
-  background-color: var(--accents-2);
+  background-size: 100vw 100%;
+  background-position-x: var(--offset-left);
+  background-color: var(--skeleton-bg);
   background-image: linear-gradient(
     270deg,
-    var(--accents-2),
-    var(--accents-1),
-    var(--accents-2)
+    var(--skeleton-bg),
+    var(--skeleton-fg),
+    var(--skeleton-bg)
   );
 }
 

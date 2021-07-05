@@ -1,5 +1,10 @@
 import classNames from "classnames/bind";
-import React, { FunctionComponent } from "react";
+import React, {
+  FunctionComponent,
+  useCallback,
+  useEffect,
+  useRef,
+} from "react";
 import styles from "./Skeleton.module.css";
 
 const cx = classNames.bind(styles);
@@ -25,16 +30,35 @@ const Skeleton: FunctionComponent<SkeletonProps> = ({
   width,
   height,
   ...props
-}) => (
-  <span
-    className={cx("skeleton", className)}
-    style={{
-      width,
-      height,
-    }}
-    // eslint-disable-next-line react/jsx-props-no-spreading
-    {...props}
-  />
-);
+}) => {
+  const ref = useRef<HTMLSpanElement>(null);
+
+  const handleResize = useCallback(() => {
+    const offsetLeft = ref.current?.offsetLeft ?? 0;
+
+    ref.current?.style.setProperty("--offset-left", `${offsetLeft}px`);
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [handleResize]);
+
+  return (
+    <span
+      className={cx("skeleton", className)}
+      style={{
+        width,
+        height,
+      }}
+      ref={ref}
+      // eslint-disable-next-line react/jsx-props-no-spreading
+      {...props}
+    />
+  );
+};
 
 export default Skeleton;

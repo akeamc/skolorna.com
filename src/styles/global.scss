@@ -18,6 +18,8 @@
   --bg-primary: #fff;
   --text-primary: #000;
   --text-secondary: var(--accents-6);
+  --skeleton-bg: var(--accents-2);
+  --skeleton-fg: var(--accents-1);
 
   --shadow-color: rgba(0, 0, 0, 0.1);
   --shadow-sm: 0 0 3px 2px var(--shadow-color);
@@ -41,6 +43,8 @@
   --text-secondary: var(--accents-6);
   --shadow-color: rgba(255, 255, 255, 0.25);
   --shadow-sm: 0 0 3px 2px var(--shadow-color);
+  --skeleton-bg: var(--accents-1);
+  --skeleton-fg: var(--accents-2);
 }
 
 ::placeholder {
