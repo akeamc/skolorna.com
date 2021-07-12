@@ -56,7 +56,7 @@ const SearchResults: FunctionComponent<SearchResultsProps> = ({
 };
 
 const MenuSearch: FunctionComponent = () => {
-  const limit = 40;
+  const limit = 60;
 
   const { setQuery, query, results, size, searching } = useMenuSearch(limit);
 

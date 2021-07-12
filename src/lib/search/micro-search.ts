@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from "react";
-import unidecode from "unidecode";
 import rankWord from "./rank-word";
 
 export type Document = Record<string, unknown>;
@@ -13,9 +12,7 @@ export default class MicroSearch<T extends Document> {
   public documents: DocumentIndex<T>;
 
   public static tokenize(word: string): string {
-    const ascii = unidecode(word);
-
-    return ascii.toLowerCase();
+    return word.toLowerCase();
   }
 
   public static indexDocuments<T extends Document>(

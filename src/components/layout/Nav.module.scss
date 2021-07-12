@@ -1,0 +1,29 @@
+.nav {
+	height: 64px;
+	background-color: var(--bg-primary);
+	border-bottom: 1px solid var(--border-color);
+	padding: 0 var(--page-gutter);
+
+	ul {
+		padding: 0;
+		margin: 0;
+		list-style: none;
+		display: flex;
+		align-items: center;
+		height: 100%;
+	}
+}
+
+.item {
+	a {
+		display: inline-block;
+		padding: 12px;
+		border-radius: 9999px;
+		font: 400 14px/16px var(--font-sans);
+		transition: background-color 0.1s;
+
+		&:hover {
+			background-color: var(--accents-2);
+		}
+	}
+}
