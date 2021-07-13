@@ -12,5 +12,6 @@ module.exports = {
     "@typescript-eslint/quotes": ["error", "double"],
     "react/prop-types": "off",
     "import/prefer-default-export": "off",
+    "jsx-a11y/anchor-is-valid": "off", // next/link
   },
 };

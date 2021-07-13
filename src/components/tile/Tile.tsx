@@ -16,7 +16,6 @@ const Tile: FunctionComponent<TileProps> = ({
   href,
 }) => {
   const inner = (
-    // eslint-disable-next-line jsx-a11y/anchor-is-valid
     <a className={styles.tile}>
       {subHeading && <div className={styles.subheading}>{subHeading}</div>}
       <h2 className={styles.heading}>{heading}</h2>
