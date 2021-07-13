@@ -4,7 +4,7 @@ import { menuProxyFetch } from "./fetch";
 import { Day } from "./types";
 
 export interface ListDaysQuery {
-  menu: string;
+  menu?: string;
   first?: DateTime;
   last?: DateTime;
 }

@@ -6,6 +6,7 @@ import MenuTile from "./MenuTile";
 import styles from "./MenuSearch.module.scss";
 import InlineSkeleton from "../skeleton/InlineSkeleton";
 import { Menu } from "../../lib/menu-proxy/types";
+import Grid from "../layout/Grid";
 
 interface SearchResultsProps {
   results: Menu[];
@@ -44,13 +45,13 @@ const SearchResults: FunctionComponent<SearchResultsProps> = ({
           </>
         )}
       </div>
-      <div className={styles.grid}>
+      <Grid>
         {(gridSkeleton ? new Array(12).fill(undefined) : results).map(
           (menu, i) => (
             <MenuTile menu={menu} key={menu?.id ?? i} />
           )
         )}
-      </div>
+      </Grid>
     </>
   );
 };

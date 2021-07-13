@@ -1,15 +1,17 @@
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import { ParsedUrlQuery } from "querystring";
 import React from "react";
+import { useRouter } from "next/router";
 import Main from "../../components/layout/Main";
 import Container from "../../components/layout/Container";
-import { useDays } from "../../lib/menu-proxy/days";
 import { fetchMenu } from "../../lib/menu-proxy/menu";
 import { Menu } from "../../lib/menu-proxy/types";
 import PageHeading from "../../components/typography/PageHeading";
+import InlineSkeleton from "../../components/skeleton/InlineSkeleton";
+import DayListSection from "../../components/menu/DayListSection";
 
 export interface PageProps {
-  menu: Menu;
+  menu: Menu | null;
 }
 
 export interface Q extends ParsedUrlQuery {
@@ -25,14 +27,22 @@ export const getStaticProps: GetStaticProps<PageProps, Q> = async ({
     throw new Error("?id must be a string");
   }
 
-  const menu = await fetchMenu(id);
-
-  return {
-    props: {
-      menu,
-    },
-    revalidate: 86400,
-  };
+  try {
+    const menu = await fetchMenu(id);
+    return {
+      props: {
+        menu,
+      },
+      revalidate: 86400,
+    };
+  } catch (error) {
+    return {
+      props: {
+        menu: null,
+      },
+      revalidate: 60,
+    };
+  }
 };
 
 export const getStaticPaths: GetStaticPaths = async () => ({
@@ -41,30 +51,19 @@ export const getStaticPaths: GetStaticPaths = async () => ({
 });
 
 const MenuPage: NextPage<PageProps> = ({ menu }) => {
-  const { data } = useDays({ menu: menu?.id });
+  const { isFallback } = useRouter();
+
+  if (!isFallback && !menu) {
+    return <>404</>;
+  }
 
   return (
     <Main>
       <Container>
-        <PageHeading>{menu?.title}</PageHeading>
-        <div>
-          {data?.map(({ date, meals }) => (
-            <div className="mb-4" key={date}>
-              <h3>
-                {new Date(date).toLocaleDateString(undefined, {
-                  weekday: "long",
-                  month: "long",
-                  day: "numeric",
-                })}
-              </h3>
-              <ul>
-                {meals.map((meal) => (
-                  <li key={meal.value}>{meal.value}</li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
+        <PageHeading>
+          {menu?.title ?? <InlineSkeleton width="16em" />}
+        </PageHeading>
+        <DayListSection menu={menu?.id} />
       </Container>
     </Main>
   );

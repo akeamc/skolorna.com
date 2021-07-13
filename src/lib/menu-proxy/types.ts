@@ -9,9 +9,11 @@ export interface Menu extends Document {
   };
 }
 
+export interface Meal {
+  value: string;
+}
+
 export interface Day {
   date: string;
-  meals: {
-    value: string;
-  }[];
+  meals: Meal[];
 }

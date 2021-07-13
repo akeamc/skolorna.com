@@ -27,4 +27,5 @@
   display: inline-block;
   border-radius: var(--rounded-lg);
   width: 100%;
+  max-width: 100%;
 }
