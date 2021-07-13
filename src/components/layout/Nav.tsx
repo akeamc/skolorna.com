@@ -1,5 +1,6 @@
 import Link from "next/link";
 import React, { FunctionComponent } from "react";
+import Logo from "../brand/Logo";
 import styles from "./Nav.module.scss";
 
 interface ItemProps {
@@ -17,7 +18,9 @@ const Item: FunctionComponent<ItemProps> = ({ href, children }) => (
 const Nav: FunctionComponent = () => (
   <nav className={styles.nav}>
     <Link href="/">
-      <a className={styles.logo}>Skolorna</a>
+      <a className={styles.logo}>
+        <Logo />
+      </a>
     </Link>
     <ul>
       <Item href="/menus">Menyer</Item>
