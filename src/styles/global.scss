@@ -25,6 +25,7 @@
 
   --shadow-color: rgba(0, 0, 0, 0.1);
   --shadow-sm: 0 0 3px 2px var(--shadow-color);
+  --shadow-md: 0 16px 28px rgba(37, 38, 45, 0.12);
 
   --rounded-md: 12px;
   --rounded-lg: 24px;
@@ -46,6 +47,10 @@ body {
   background-color: var(--bg-primary);
   font-family: var(--font-sans);
   color: var(--text-primary);
+}
+
+* {
+  box-sizing: border-box;
 }
 
 h1 {

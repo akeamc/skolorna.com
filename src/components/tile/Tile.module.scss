@@ -1,16 +1,15 @@
 .tile {
   display: block;
-  box-shadow: 0 0 0 1px var(--border-color);
+  border: 1px solid var(--border-color);
   border-radius: var(--rounded-md);
   padding: 20px;
-  transition: box-shadow 0.1s, transform 0.1s, background-color 0.1s;
+  transition: box-shadow 0.1s, background-color 0.1s;
   color: var(--text-secondary);
   background-color: var(--bg-primary);
 
   &:hover,
   &:focus {
-    box-shadow: var(--shadow-sm);
-    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
   }
 
   &:focus {

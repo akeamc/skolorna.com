@@ -22,7 +22,8 @@
     font: 500 14px/16px var(--font-sans);
     transition: background-color 0.1s;
 
-    &:hover {
+    &:hover,
+    &:focus {
       background-color: var(--accents-2);
     }
   }
