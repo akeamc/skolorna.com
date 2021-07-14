@@ -22,6 +22,7 @@ export function useDelayedInput(delay = 500): DelayedInput {
 
   const setInput: SetInput = useCallback(
     (value) => {
+      console.log("bruh");
       setTyping(true);
 
       if (timer) {
