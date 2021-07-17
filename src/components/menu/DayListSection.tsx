@@ -1,10 +1,38 @@
 import React, { FunctionComponent } from "react";
+import { DateTime } from "luxon";
 import { useDays } from "../../lib/menu-proxy/days";
-import Grid from "../layout/Grid";
 import DividedList from "../list/DividedList";
 import InlineSkeleton from "../skeleton/InlineSkeleton";
-import Tile from "../tile/Tile";
-import { Meal } from "../../lib/menu-proxy/types";
+import { Day } from "../../lib/menu-proxy/types";
+import styles from "./DayListSection.module.scss";
+
+interface DayListItemProps {
+  day?: Day;
+}
+
+const DayListItem: FunctionComponent<DayListItemProps> = ({ day }) => {
+  const date = day?.date ? DateTime.fromISO(day.date) : undefined;
+
+  return (
+    <li>
+      <ul className={styles.meals}>
+        {(day?.meals ?? new Array(2).fill(undefined)).map((meal, i) => (
+          <li key={meal?.value ?? i}>
+            {meal?.value ?? <InlineSkeleton width="48em" />}
+          </li>
+        ))}
+      </ul>
+      <h3 className={styles.date}>
+        {date?.toLocaleString({
+          weekday: "long",
+          day: "numeric",
+          month: "long",
+          year: "numeric",
+        }) ?? <InlineSkeleton width="10em" />}
+      </h3>
+    </li>
+  );
+};
 
 export interface DayListSectionProps {
   menu?: string;
@@ -15,21 +43,11 @@ const DayListSection: FunctionComponent<DayListSectionProps> = ({ menu }) => {
 
   return (
     <section>
-      <Grid>
+      <DividedList as="ol" className={styles.days}>
         {(data ?? new Array(12).fill(undefined)).map((day, i) => (
-          <Tile key={day?.id ?? i} heading={day?.date ?? <InlineSkeleton />}>
-            <DividedList>
-              {(day?.meals ?? new Array(2).fill(undefined)).map(
-                (meal: Meal | undefined, j: number) => (
-                  <li key={meal?.value ?? j}>
-                    {meal?.value ?? <InlineSkeleton />}
-                  </li>
-                )
-              )}
-            </DividedList>
-          </Tile>
+          <DayListItem day={day} key={day?.date ?? i} />
         ))}
-      </Grid>
+      </DividedList>
     </section>
   );
 };

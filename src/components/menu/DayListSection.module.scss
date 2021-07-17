@@ -1,0 +1,27 @@
+.days {
+  --list-y-gap: 24px;
+
+  > li {
+    max-width: 960px;
+  }
+}
+
+.meals {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  margin-bottom: 16px;
+
+  li {
+    font: 500 18px/1.4 var(--font-sans);
+    margin-bottom: 8px;
+    letter-spacing: -0.014em;
+  }
+}
+
+.date {
+  font: 400 14px/1 var(--font-sans);
+  margin: 0;
+  color: var(--text-tertiary);
+  text-transform: capitalize;
+}
