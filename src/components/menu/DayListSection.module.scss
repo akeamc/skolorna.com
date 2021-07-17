@@ -48,5 +48,9 @@
 
 .ascii {
   color: var(--accents-2);
-  font-size: min(max(16px, 10vw), 96px);
+  font-size: 24px;
+
+  @media (min-width: 480px) {
+    font-size: min(10vw, 96px);
+  }
 }
