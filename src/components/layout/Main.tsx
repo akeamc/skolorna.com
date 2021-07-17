@@ -1,10 +1,18 @@
 import React, { FunctionComponent } from "react";
+import Head from "next/head";
 import Footer from "./Footer";
 import Nav from "./Nav";
 import styles from "./Main.module.scss";
 
-const Main: FunctionComponent = ({ children }) => (
+export interface MainProps {
+  title?: string;
+}
+
+const Main: FunctionComponent<MainProps> = ({ title, children }) => (
   <div className={styles.container}>
+    <Head>
+      <title>{title}</title>
+    </Head>
     <Nav />
     <main className={styles.main}>{children}</main>
     <Footer />
