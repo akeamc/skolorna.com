@@ -5,7 +5,7 @@ import React, {
   useEffect,
   useRef,
 } from "react";
-import styles from "./Skeleton.module.css";
+import styles from "./Skeleton.module.scss";
 
 const cx = classNames.bind(styles);
 
