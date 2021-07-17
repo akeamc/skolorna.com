@@ -41,6 +41,17 @@ export interface DayListSectionProps {
 const DayListSection: FunctionComponent<DayListSectionProps> = ({ menu }) => {
   const { data } = useDays({ menu });
 
+  if (data && data?.length === 0) {
+    return (
+      <section>
+        <div className={styles.gone}>
+          <code className={styles.ascii}>(╯°□°）╯︵ ┻━┻</code>
+          <p>Ingen information hittades.</p>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section>
       <DividedList as="ol" className={styles.days}>

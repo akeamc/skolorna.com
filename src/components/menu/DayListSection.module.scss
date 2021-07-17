@@ -25,3 +25,28 @@
   color: var(--text-tertiary);
   text-transform: capitalize;
 }
+
+.gone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  flex-direction: column;
+  margin: 128px 0;
+
+  p {
+    color: var(--text-tertiary);
+    font: 400 16px/1 var(--font-sans);
+    margin-top: 32px;
+
+    @media (min-width: 480px) {
+      font-size: 20px;
+      letter-spacing: -0.017em;
+    }
+  }
+}
+
+.ascii {
+  color: var(--accents-2);
+  font-size: min(max(24px, 10vw), 96px);
+}
