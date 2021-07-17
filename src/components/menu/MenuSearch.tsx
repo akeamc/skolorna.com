@@ -79,7 +79,7 @@ const MenuSearch: FunctionComponent = () => {
           autoComplete="off"
           autoCorrect="off"
           onInput={(event) => setInput(event.currentTarget.value)}
-          placeholder="Sök"
+          placeholder={initializing ? "Läser in ..." : "Sök"}
           className={styles.input}
           disabled={initializing}
         />
