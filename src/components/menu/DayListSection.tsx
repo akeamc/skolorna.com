@@ -46,7 +46,7 @@ const DayListSection: FunctionComponent<DayListSectionProps> = ({ menu }) => {
       <section>
         <div className={styles.gone}>
           <code className={styles.ascii}>(╯°□°）╯︵ ┻━┻</code>
-          <p>Ingen information hittades. Du kanske är ledig?</p>
+          <p>Ingen information hittades. Kanske är du ledig?</p>
         </div>
       </section>
     );
