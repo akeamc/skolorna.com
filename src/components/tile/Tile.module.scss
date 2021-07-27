@@ -7,14 +7,16 @@
   color: var(--text-secondary);
   background-color: var(--bg-primary);
 
-  &:hover,
-  &:focus {
-    box-shadow: var(--shadow-md);
-  }
+  &[href] {
+    &:hover,
+    &:focus {
+      box-shadow: var(--shadow-md);
+    }
 
-  &:focus {
-    background-color: var(--accents-2);
-    outline: none;
+    &:focus {
+      background-color: var(--accents-2);
+      outline: none;
+    }
   }
 }
 
