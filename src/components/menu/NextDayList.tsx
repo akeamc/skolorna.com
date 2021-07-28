@@ -19,7 +19,7 @@ const NextDayList: FunctionComponent<NextDayListProps> = ({
   const nextDay = data?.[0];
 
   if (error) {
-    return <span>Ett fel uppstod</span>;
+    return <span>Ett fel inträffade</span>;
   }
 
   if (!nextDay) {
