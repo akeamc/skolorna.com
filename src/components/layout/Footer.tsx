@@ -25,23 +25,6 @@ const footerLinks: FooterLinks = [
         href: "/menus",
         label: "Menyer",
       },
-      {
-        href: "/blog",
-        label: "Blogg",
-      },
-    ],
-  },
-  {
-    heading: "Företaget",
-    links: [
-      {
-        href: "/om",
-        label: "Om oss",
-      },
-      {
-        href: "/kontakt",
-        label: "Kontakta oss",
-      },
     ],
   },
 ];
