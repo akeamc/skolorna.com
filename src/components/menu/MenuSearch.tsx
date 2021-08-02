@@ -24,7 +24,7 @@ const SearchResults: FunctionComponent<SearchResultsProps> = ({
   size,
 }) => {
   const noResults = !searching && results.length === 0;
-  const gridSkeleton = initializing || (searching && results.length === 0);
+  const skeleton = initializing || (searching && results.length === 0);
 
   if (noResults) {
     return (
@@ -41,16 +41,15 @@ const SearchResults: FunctionComponent<SearchResultsProps> = ({
           <InlineSkeleton width="6em" />
         ) : (
           <>
-            {results.length} av {size}
+            {skeleton ? <InlineSkeleton width="1em" /> : results.length} av{" "}
+            {size}
           </>
         )}
       </div>
       <Grid>
-        {(gridSkeleton ? new Array(12).fill(undefined) : results).map(
-          (menu, i) => (
-            <MenuTile menu={menu} key={menu?.id ?? i} />
-          )
-        )}
+        {(skeleton ? new Array(12).fill(undefined) : results).map((menu, i) => (
+          <MenuTile menu={menu} key={menu?.id ?? i} />
+        ))}
       </Grid>
     </>
   );
@@ -61,7 +60,7 @@ const MenuSearch: FunctionComponent = () => {
 
   const { setQuery, query, results, size, searching } = useMenuSearch(limit);
 
-  const { value, setInput } = useDelayedInput(150);
+  const { value, setInput } = useDelayedInput(200);
 
   useEffect(() => {
     setQuery(value);
