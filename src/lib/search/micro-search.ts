@@ -87,12 +87,16 @@ export function useMicroSearch<T extends Document>(
     setMicroSearch(new MicroSearch<T>(documents, field));
   }, [documents, field]);
 
-  useEffect(() => {
+  const executeSearch = useCallback((query: string) => {
     if (microSearch && microSearch.size > 0) {
-      setResults(microSearch.search(internalQuery, limit));
+      setResults(microSearch.search(query, limit));
       setSearching(false);
     }
-  }, [limit, microSearch, internalQuery]);
+  }, [limit, microSearch]);
+
+  useEffect(() => {
+    executeSearch(internalQuery);
+  }, [executeSearch, internalQuery]);
 
   const setQuery: SetQuery = useCallback((query) => {
     setSearching(true);
