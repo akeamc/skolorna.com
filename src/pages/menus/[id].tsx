@@ -34,7 +34,7 @@ export const getStaticProps: GetStaticProps<PageProps, Q> = async ({
     return {
       props: {
         menu,
-        ogImage: `${process.env.VERCEL_URL}/api/opengraph?m=${menu?.id}`,
+        ogImage: `https://${process.env.VERCEL_URL}/api/opengraph?m=${menu?.id}`,
       },
       revalidate: 86400,
     };
