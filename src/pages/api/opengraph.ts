@@ -1,5 +1,6 @@
 import { NextApiHandler } from "next";
-import playwright from "playwright-aws-lambda";
+import chromium from "chrome-aws-lambda";
+import playwright from "playwright-core";
 import { fetchMenu } from "../../lib/menu-proxy/menu";
 
 async function compilePage(menu: string) {
@@ -60,13 +61,13 @@ const handler: NextApiHandler = async (req, res) => {
     return res.status(404).send("menu not found");
   }
 
-	const browser = await playwright.launchChromium();
-	const context = await browser.newContext();
-  const page = await context.newPage();
-  await page.setViewportSize({
-    width: 1200,
-    height: 600,
-  });
+	const browser = await playwright.chromium.launch();
+  const page = await browser.newPage({
+		viewport: {
+			width: 1200,
+			height: 600,
+		}
+	});
   await page.setContent(content);
   // Instead of waiting for all network connections to close (networkidle0),
   // just wait for the fonts to load (since that is the only thing we care about).
