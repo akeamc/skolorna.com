@@ -8,7 +8,10 @@ export interface MainProps {
   title?: string;
 }
 
-const Main: FunctionComponent<MainProps> = ({ title, children }) => (
+const Main: FunctionComponent<MainProps> = ({
+  title = "Skolorna",
+  children,
+}) => (
   <div className={styles.container}>
     <Head>
       <title>{title}</title>
