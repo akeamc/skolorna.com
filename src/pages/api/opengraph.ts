@@ -1,5 +1,5 @@
 import { NextApiHandler } from "next";
-import puppeteer from "puppeteer";
+import playwright from "playwright-aws-lambda";
 import { fetchMenu } from "../../lib/menu-proxy/menu";
 
 async function compilePage(menu: string) {
@@ -60,9 +60,10 @@ const handler: NextApiHandler = async (req, res) => {
     return res.status(404).send("menu not found");
   }
 
-  const browser = await puppeteer.launch();
-  const page = await browser.newPage();
-  await page.setViewport({
+	const browser = await playwright.launchChromium();
+	const context = await browser.newContext();
+  const page = await context.newPage();
+  await page.setViewportSize({
     width: 1200,
     height: 600,
   });
