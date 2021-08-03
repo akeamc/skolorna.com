@@ -2,6 +2,7 @@ import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import { ParsedUrlQuery } from "querystring";
 import React from "react";
 import { useRouter } from "next/router";
+import Head from "next/head";
 import Main from "../../components/layout/Main";
 import Container from "../../components/layout/Container";
 import { fetchMenu } from "../../lib/menu-proxy/menu";
@@ -47,7 +48,7 @@ export const getStaticProps: GetStaticProps<PageProps, Q> = async ({
 
 export const getStaticPaths: GetStaticPaths = async () => ({
   paths: [],
-  fallback: true,
+  fallback: "blocking",
 });
 
 const MenuPage: NextPage<PageProps> = ({ menu }) => {
@@ -57,8 +58,18 @@ const MenuPage: NextPage<PageProps> = ({ menu }) => {
     return <>404</>;
   }
 
+  const ogImageUrl = `${process.env.VERCEL_URL}/api/opengraph?m=${menu?.id}`;
+
   return (
     <Main title={menu?.title}>
+      <Head>
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta property="og:title" content={menu?.title} />
+        <meta property="og:type" content="object" />
+        <meta property="og:image" content={ogImageUrl} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="600" />
+      </Head>
       <Container>
         <PageHeading>
           {menu?.title ?? <InlineSkeleton width="16em" count={2} />}
