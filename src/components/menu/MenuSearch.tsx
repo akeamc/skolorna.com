@@ -1,5 +1,6 @@
-import React, { FunctionComponent, useCallback, useEffect } from "react";
+import React, { FunctionComponent, useEffect } from "react";
 import { Search } from "react-feather";
+import { useRouter } from "next/router";
 import { useDelayedInput } from "../../lib/forms/delayed-input";
 import { useMenuSearch } from "../../lib/menu-proxy/menu";
 import MenuTile from "./MenuTile";
@@ -7,7 +8,6 @@ import styles from "./MenuSearch.module.scss";
 import InlineSkeleton from "../skeleton/InlineSkeleton";
 import { Menu } from "../../lib/menu-proxy/types";
 import Grid from "../layout/Grid";
-import { useRouter } from "next/router";
 
 interface SearchResultsProps {
   results: Menu[];
