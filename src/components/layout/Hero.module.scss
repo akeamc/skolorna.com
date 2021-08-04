@@ -1,6 +1,6 @@
 .hero {
   composes: dark from "../../styles/dark.scss";
   background-color: var(--bg-primary);
-  background-image: linear-gradient(90deg, #201f47 0%, #000 100%);
+  background-image: linear-gradient(120deg, #201f47 0%, #000 100%);
   color: var(--text-primary);
 }
