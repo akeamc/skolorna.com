@@ -1,31 +1,57 @@
-import React, { FunctionComponent, useEffect } from "react";
+import React, {
+  createContext,
+  FunctionComponent,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { Search } from "react-feather";
-import { useRouter } from "next/router";
+import Fuse from "fuse.js";
 import { useDelayedInput } from "../../lib/forms/delayed-input";
-import { useMenuSearch } from "../../lib/menu-proxy/menu";
 import MenuTile from "./MenuTile";
 import styles from "./MenuSearch.module.scss";
 import InlineSkeleton from "../skeleton/InlineSkeleton";
 import { Menu } from "../../lib/menu-proxy/types";
 import Grid from "../layout/Grid";
+import { useMenuFuse } from "../../lib/menu-proxy/menu";
+
+interface MenuSearchContextData {
+  results?: Fuse.FuseResult<Menu>[];
+  query?: string;
+  initializing: boolean;
+  setQuery: (value: string) => void;
+  searching: boolean;
+}
+
+const MenuSearchContext = createContext<MenuSearchContextData>({
+  setQuery: () => {},
+  initializing: true,
+  searching: false,
+});
+
+const useMenuSearchContext = () => useContext(MenuSearchContext);
 
 interface SearchResultsProps {
-  results: Menu[];
-  searching: boolean;
-  initializing: boolean;
-  query: string;
-  size: number;
+  limit?: number;
 }
 
 const SearchResults: FunctionComponent<SearchResultsProps> = ({
-  results,
-  searching,
-  query,
-  initializing,
-  size,
+  limit = 30,
 }) => {
-  const noResults = !searching && results.length === 0;
-  const skeleton = initializing || (searching && results.length === 0);
+  const {
+    initializing,
+    results: allResults = [],
+    query = "",
+    searching,
+  } = useMenuSearchContext();
+
+  const noResults = !(initializing || searching) && allResults.length === 0;
+  const skeleton = initializing || allResults.length === 0;
+  const results = allResults.slice(0, limit);
+
+  if (query.length === 0) {
+    return <span>Sök bland tusentals matsedlar.</span>;
+  }
 
   if (noResults) {
     return (
@@ -42,39 +68,35 @@ const SearchResults: FunctionComponent<SearchResultsProps> = ({
           <InlineSkeleton width="6em" />
         ) : (
           <>
-            {skeleton ? <InlineSkeleton width="1em" /> : results.length} av{" "}
-            {size}
+            Visar{" "}
+            {skeleton ? (
+              <InlineSkeleton width="4em" />
+            ) : (
+              `${results.length} av ${allResults.length}`
+            )}{" "}
+            resultat
           </>
         )}
       </div>
       <Grid>
-        {(skeleton ? new Array(12).fill(undefined) : results).map((menu, i) => (
-          <MenuTile menu={menu} key={menu?.id ?? i} />
-        ))}
+        {(skeleton ? new Array(12).fill(undefined) : results).map(
+          (result, i) => (
+            <MenuTile menu={result?.item} key={result?.id ?? i} />
+          )
+        )}
       </Grid>
     </>
   );
 };
 
-interface SearchBoxProps {
-  onChange: (value: string) => void;
-  disabled?: boolean;
-  placeholder?: string;
-}
-
-const SearchBox: FunctionComponent<SearchBoxProps> = ({
-  onChange,
-  disabled,
-  placeholder,
-}) => {
-  const router = useRouter();
-
-  const q = router.query.q?.toString() ?? "";
+const SearchBox: FunctionComponent = () => {
+  const { setQuery, initializing } = useMenuSearchContext();
+  const { output, setInput } = useDelayedInput(500);
 
   useEffect(() => {
-    onChange(q);
+    setQuery(output);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [q]);
+  }, [output]);
 
   return (
     <div className={styles.search}>
@@ -84,45 +106,50 @@ const SearchBox: FunctionComponent<SearchBoxProps> = ({
         spellCheck="false"
         autoComplete="off"
         autoCorrect="off"
-        onInput={(event) => {
-          router.push({ query: { q: event.currentTarget.value } }, undefined, {
-            shallow: true,
-          });
-        }}
+        onInput={(event) => setInput(event.currentTarget.value)}
         className={styles.input}
-        disabled={disabled}
-        placeholder={placeholder}
-        value={q}
+        disabled={initializing}
+        placeholder={initializing ? "Läser in ..." : "Sök"}
       />
     </div>
   );
 };
 
 const MenuSearch: FunctionComponent = () => {
-  const limit = 60;
-
-  const { setQuery, query, results, size, searching } = useMenuSearch(limit);
-
-  const { value, setInput } = useDelayedInput(200);
+  const [query, setQuery] = useState("");
+  const [results, setResults] = useState<Fuse.FuseResult<Menu>[]>();
+  const [searching, setSearching] = useState(false);
+  const fuse = useMenuFuse();
 
   useEffect(() => {
-    setQuery(value);
-  }, [setQuery, value]);
+    async function executeSearch() {
+      const searchResults = await fuse?.search(query);
+      setResults(searchResults);
+      setSearching(false);
+    }
 
-  const initializing = size === 0;
+    executeSearch();
+  }, [fuse, query]);
 
   return (
-    <div>
-      <SearchBox
-        onChange={setInput}
-        placeholder={initializing ? "Läser in ..." : "Sök"}
-        disabled={initializing}
-      />
+    <MenuSearchContext.Provider
+      value={{
+        results,
+        query,
+        setQuery: (value: string) => {
+          setSearching(true);
+          setQuery(value);
+        },
+        initializing: !fuse || !results,
+        searching,
+      }}
+    >
+      <SearchBox />
 
       <section className={styles.results}>
-        <SearchResults {...{ searching, initializing, results, query, size }} />
+        <SearchResults />
       </section>
-    </div>
+    </MenuSearchContext.Provider>
   );
 };
 

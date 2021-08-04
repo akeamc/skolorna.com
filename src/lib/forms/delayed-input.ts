@@ -1,10 +1,14 @@
 import { useCallback, useState } from "react";
 
-export type SetInput = (value: string) => void;
+export type SetValue = (value: string) => void;
 
 export interface DelayedInput {
-  setInput: SetInput;
-  value: string;
+  setInput: SetValue;
+  /**
+   * Skip the delay and set the output value instantly. Any value that has been sent but not received yet will be exterminated.
+   */
+  setOutput: SetValue;
+  output: string;
   typing: boolean;
 }
 
@@ -20,7 +24,7 @@ export function useDelayedInput(delay = 500): DelayedInput {
   const [timer, setTimer] = useState<NodeJS.Timeout>();
   const [typing, setTyping] = useState(false);
 
-  const setInput: SetInput = useCallback(
+  const setInput: SetValue = useCallback(
     (value) => {
       setTyping(true);
 
@@ -38,9 +42,23 @@ export function useDelayedInput(delay = 500): DelayedInput {
     [delay, timer]
   );
 
+  const setOutput: SetValue = useCallback(
+    (value) => {
+      if (timer) {
+        clearTimeout(timer);
+        setTimer(undefined);
+      }
+
+      setDelayedValue(value);
+      setTyping(false);
+    },
+    [timer]
+  );
+
   return {
     setInput,
-    value: delayedValue,
+    setOutput,
+    output: delayedValue,
     typing,
   };
 }

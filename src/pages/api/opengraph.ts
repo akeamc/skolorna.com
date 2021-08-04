@@ -61,17 +61,17 @@ const handler: NextApiHandler = async (req, res) => {
     return res.status(404).send("menu not found");
   }
 
-	const browser = await playwright.chromium.launch({
+  const browser = await playwright.chromium.launch({
     args: chromium.args,
-    executablePath: await chromium.executablePath ?? undefined, // breaks with null
+    executablePath: (await chromium.executablePath) ?? undefined, // breaks with null
     headless: chromium.headless,
   });
   const page = await browser.newPage({
-		viewport: {
-			width: 1200,
-			height: 600,
-		}
-	});
+    viewport: {
+      width: 1200,
+      height: 600,
+    },
+  });
   await page.setContent(content);
   // Instead of waiting for all network connections to close (networkidle0),
   // just wait for the fonts to load (since that is the only thing we care about).
