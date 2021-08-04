@@ -4,7 +4,7 @@ import DividedList from "../list/DividedList";
 import InlineSkeleton from "../skeleton/InlineSkeleton";
 
 export interface NextDayListProps {
-  menu: string;
+  menu?: string;
   maxMeals?: number;
 }
 
