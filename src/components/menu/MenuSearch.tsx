@@ -49,7 +49,7 @@ const SearchResults: FunctionComponent<SearchResultsProps> = ({
   const skeleton = initializing || allResults.length === 0;
   const results = allResults.slice(0, limit);
 
-  if (query.length === 0) {
+  if (!initializing && query.length === 0) {
     return <span>Sök bland tusentals matsedlar.</span>;
   }
 
