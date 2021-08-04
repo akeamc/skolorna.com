@@ -1,6 +1,6 @@
 import { DateTime } from "luxon";
 import React, { FunctionComponent } from "react";
-import { Day } from "../../lib/menu-proxy/types";
+import { Day } from "../../lib/menu/types";
 
 export interface DayTextProps {
   day: Day;

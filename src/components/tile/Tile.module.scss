@@ -6,6 +6,7 @@
   transition: box-shadow 0.1s, background-color 0.1s;
   color: var(--text-secondary);
   background-color: var(--bg-primary);
+  flex: 1;
 
   &[href] {
     &:hover,

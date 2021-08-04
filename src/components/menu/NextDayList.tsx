@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from "react";
-import { useDays } from "../../lib/menu-proxy/days";
+import { useDays } from "../../lib/menu/days";
 import DividedList from "../list/DividedList";
 import InlineSkeleton from "../skeleton/InlineSkeleton";
 

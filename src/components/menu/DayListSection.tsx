@@ -1,9 +1,9 @@
 import React, { FunctionComponent } from "react";
 import { DateTime } from "luxon";
-import { useDays } from "../../lib/menu-proxy/days";
+import { useDays } from "../../lib/menu/days";
 import DividedList from "../list/DividedList";
 import InlineSkeleton from "../skeleton/InlineSkeleton";
-import { Day } from "../../lib/menu-proxy/types";
+import { Day } from "../../lib/menu/types";
 import styles from "./DayListSection.module.scss";
 
 interface DayListItemProps {

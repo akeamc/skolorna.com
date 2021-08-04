@@ -18,6 +18,10 @@ export function useMenus(): SWRResponse<Menu[], unknown> {
   });
 }
 
+export function useMenu(id: string): SWRResponse<Menu, unknown> {
+  return useSWR<Menu>(id ? `/menus/${id}` : null, () => fetchMenu(id));
+}
+
 export function useMenuFuse(): Fuse<Menu> | undefined {
   const { data: menus } = useMenus();
   // It is highly unlikely that the content of `menus` changes but the length doesn't, but you never know.

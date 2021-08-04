@@ -11,9 +11,9 @@ import { useDelayedInput } from "../../lib/forms/delayed-input";
 import MenuTile from "./MenuTile";
 import styles from "./MenuSearch.module.scss";
 import InlineSkeleton from "../skeleton/InlineSkeleton";
-import { Menu } from "../../lib/menu-proxy/types";
+import { Menu } from "../../lib/menu/types";
 import Grid from "../layout/Grid";
-import { useMenuFuse } from "../../lib/menu-proxy/menu";
+import { useMenuFuse } from "../../lib/menu/menu";
 
 interface MenuSearchContextData {
   results?: Fuse.FuseResult<Menu>[];

@@ -1,7 +1,7 @@
 import { NextApiHandler } from "next";
 import chromium from "chrome-aws-lambda";
 import playwright from "playwright-core";
-import { fetchMenu } from "../../lib/menu-proxy/menu";
+import { fetchMenu } from "../../lib/menu/menu";
 
 async function compilePage(menu: string) {
   const data = await fetchMenu(menu);

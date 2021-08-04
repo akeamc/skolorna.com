@@ -1,15 +1,16 @@
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import { ParsedUrlQuery } from "querystring";
-import React from "react";
+import React, { useEffect } from "react";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import Main from "../../components/layout/Main";
 import Container from "../../components/layout/Container";
-import { fetchMenu } from "../../lib/menu-proxy/menu";
-import { Menu } from "../../lib/menu-proxy/types";
+import { fetchMenu } from "../../lib/menu/menu";
+import { Menu } from "../../lib/menu/types";
 import PageHeading from "../../components/typography/PageHeading";
 import InlineSkeleton from "../../components/skeleton/InlineSkeleton";
 import DayListSection from "../../components/menu/DayListSection";
+import { useMenuHistory } from "../../lib/menu/history";
 
 export interface PageProps {
   menu: Menu | null;
@@ -56,6 +57,14 @@ export const getStaticPaths: GetStaticPaths = async () => ({
 
 const MenuPage: NextPage<PageProps> = ({ menu, ogImage }) => {
   const { isFallback } = useRouter();
+  const history = useMenuHistory();
+
+  useEffect(() => {
+    if (menu?.id) {
+      history.add(menu.id);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [menu?.id]);
 
   if (!isFallback && !menu) {
     return <>404</>;

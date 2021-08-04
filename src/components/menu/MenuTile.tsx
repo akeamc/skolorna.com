@@ -1,11 +1,11 @@
 import React, { FunctionComponent } from "react";
-import { Menu } from "../../lib/menu-proxy/types";
+import { Menu } from "../../lib/menu/types";
 import NextDayList from "./NextDayList";
 import Tile from "../tile/Tile";
 import InlineSkeleton from "../skeleton/InlineSkeleton";
 
 export interface MenuTileProps {
-  menu: Menu;
+  menu?: Menu;
 }
 
 /**
