@@ -1,6 +1,11 @@
 import type { AppProps } from "next/app";
+import dynamic from "next/dynamic";
 import React, { useEffect } from "react";
 import "../styles/global.scss";
+
+const PageProgress = dynamic(() => import("../components/PageProgress"), {
+  ssr: false,
+});
 
 function MyApp({ Component, pageProps }: AppProps) {
   useEffect(() => {
@@ -21,7 +26,12 @@ function MyApp({ Component, pageProps }: AppProps) {
     });
   }, []);
 
-  // eslint-disable-next-line react/jsx-props-no-spreading
-  return <Component {...pageProps} />;
+  return (
+    <>
+      <PageProgress />
+      {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+      <Component {...pageProps} />
+    </>
+  );
 }
 export default MyApp;
