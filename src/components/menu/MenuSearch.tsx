@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import { Search } from "react-feather";
 import Fuse from "fuse.js";
+import classNames from "classnames/bind";
 import { useDelayedInput } from "../../lib/forms/delayed-input";
 import MenuTile from "./MenuTile";
 import styles from "./MenuSearch.module.scss";
@@ -14,6 +15,8 @@ import InlineSkeleton from "../skeleton/InlineSkeleton";
 import { Menu } from "../../lib/menu/types";
 import Grid from "../layout/Grid";
 import { useMenuFuse } from "../../lib/menu/menu";
+
+const cx = classNames.bind(styles);
 
 interface MenuSearchContextData {
   results?: Fuse.FuseResult<Menu>[];
@@ -92,6 +95,7 @@ const SearchResults: FunctionComponent<SearchResultsProps> = ({
 const SearchBox: FunctionComponent = () => {
   const { setQuery, initializing } = useMenuSearchContext();
   const { output, setInput } = useDelayedInput(500);
+  const [focused, setFocused] = useState(false);
 
   useEffect(() => {
     setQuery(output);
@@ -99,7 +103,7 @@ const SearchBox: FunctionComponent = () => {
   }, [output]);
 
   return (
-    <div className={styles.search}>
+    <div className={cx("search", { focused })}>
       <Search className={styles.icon} />
       <input
         type="search"
@@ -110,6 +114,8 @@ const SearchBox: FunctionComponent = () => {
         className={styles.input}
         disabled={initializing}
         placeholder={initializing ? "Läser in ..." : "Sök"}
+        onFocus={() => setFocused(true)}
+        onBlur={() => setFocused(false)}
       />
     </div>
   );

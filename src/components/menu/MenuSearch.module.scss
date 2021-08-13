@@ -5,6 +5,7 @@
   align-items: center;
   background-color: var(--bg-primary);
   margin-top: 64px;
+  transition: box-shadow 0.1s;
 
   .icon {
     margin: 16px;
@@ -21,6 +22,10 @@
     background: transparent;
     outline: none;
     color: var(--text-primary);
+  }
+
+  &.focused {
+    box-shadow: var(--shadow-md);
   }
 }
 
