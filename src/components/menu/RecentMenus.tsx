@@ -20,8 +20,6 @@ const RecentMenu: FunctionComponent<RecentMenuProps> = ({ id, removeItem }) => {
 
   return (
     <div className={styles.recent}>
-      {/* eslint-disable-next-line react/button-has-type */}
-      {/* <button onClick={() => removeItem(id)}>ta bort</button> */}
       <div className={styles.wrapper}>
         <MenuTile menu={data} />
         {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
@@ -43,9 +41,8 @@ const RecentMenus: FunctionComponent = () => {
   const slice = stack.slice(0, 3);
 
   return (
-    <>
+    <section>
       <GridHeading>Snabbåtkomst</GridHeading>
-      {/* <h1>senast visade</h1> */}
       <Grid>
         {slice.map(({ visitedAt, key }) => (
           <RecentMenu
@@ -61,7 +58,7 @@ const RecentMenus: FunctionComponent = () => {
           <InfoText>Dina senast visade menyer syns här.</InfoText>
         </div>
       )}
-    </>
+    </section>
   );
 };
 
