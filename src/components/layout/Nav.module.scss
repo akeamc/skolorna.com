@@ -1,25 +1,25 @@
 .nav {
-  height: 64px;
+  align-items: center;
   background-color: var(--bg-primary);
   border-bottom: 1px solid var(--border-color);
-  padding: 0 var(--page-gutter);
   display: flex;
-  align-items: center;
+  height: 64px;
+  padding: 0 var(--page-gutter);
 
   ul {
-    padding: 0;
-    margin: 0;
-    list-style: none;
     display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
   }
 }
 
 .item {
   a {
-    display: inline-block;
-    padding: 12px;
     border-radius: 9999px;
+    display: inline-block;
     font: 500 14px/16px var(--font-sans);
+    padding: 12px;
     transition: background-color 0.1s;
 
     &:hover,

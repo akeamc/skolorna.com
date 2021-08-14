@@ -36,10 +36,13 @@ const Footer: FunctionComponent = () => (
         <Logo />
 
         <div className={styles.social}>
-          <a href="https://www.instagram.com/skolornapunktcom/">
+          <a
+            href="https://www.instagram.com/skolornapunktcom/"
+            title="Instagram"
+          >
             <Instagram />
           </a>
-          <a href="https://github.com/skolorna/">
+          <a href="https://github.com/skolorna/" title="GitHub">
             <GitHub />
           </a>
         </div>

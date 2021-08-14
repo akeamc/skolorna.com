@@ -1,8 +1,8 @@
 .footer {
-  margin-top: auto;
   background-color: var(--bg-primary);
-  composes: dark from "../../styles/dark.scss";
   color: var(--text-primary);
+  composes: dark from "../../styles/dark.scss";
+  margin-top: auto;
 
   section {
     border-bottom: 1px solid var(--border-color);
@@ -24,23 +24,23 @@
 
 .column {
   h3 {
+    color: var(--text-tertiary);
     font: 700 12px/1 var(--font-display);
     letter-spacing: 0.03em;
-    color: var(--text-tertiary);
-    text-transform: uppercase;
     margin: 0 0 24px;
+    text-transform: uppercase;
   }
 
   ul {
     list-style: none;
-    padding: 0;
     margin: 0;
+    padding: 0;
   }
 
   ul li {
     color: var(--accents-7);
-    margin: 16px 0;
     font: 500 14px/1 var(--font-sans);
+    margin: 16px 0;
   }
 }
 
@@ -55,16 +55,21 @@
 }
 
 .logo {
+  align-items: center;
   display: flex;
   justify-content: space-between;
-  align-items: center;
 }
 
 .social {
   color: var(--text-secondary);
 
   a {
-    margin-left: 16px;
     display: inline-block;
+    margin-left: 16px;
+  }
+
+  a svg {
+    height: 20px;
+    width: 20px;
   }
 }

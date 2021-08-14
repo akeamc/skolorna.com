@@ -18,7 +18,7 @@ const Tile: FunctionComponent<TileProps> = ({
   const inner = (
     <a className={styles.tile}>
       {subHeading && <div className={styles.subheading}>{subHeading}</div>}
-      <h2 className={styles.heading}>{heading}</h2>
+      <h3 className={styles.heading}>{heading}</h3>
       <div>{children}</div>
     </a>
   );

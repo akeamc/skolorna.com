@@ -1,27 +1,27 @@
 .search {
-  border-radius: 9999px;
-  border: 1px solid var(--border-color);
-  display: flex;
   align-items: center;
   background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 9999px;
+  display: flex;
   margin-top: 64px;
   transition: box-shadow 0.1s;
 
   .icon {
-    margin: 16px;
     color: var(--accents-4);
-    width: 20px;
     height: 20px;
+    margin: 16px;
+    width: 20px;
   }
 
   input {
-    border: 0;
-    font: 400 16px/1 var(--font-sans);
-    padding: 16px 0;
-    flex: 1;
     background: transparent;
-    outline: none;
+    border: 0;
     color: var(--text-primary);
+    flex: 1;
+    font: 400 16px/1 var(--font-sans);
+    outline: none;
+    padding: 16px 0;
   }
 
   &.focused {
@@ -30,11 +30,11 @@
 }
 
 .results {
-  margin-top: 48px;
   color: var(--text-secondary);
+  margin-top: 48px;
 }
 
 .count {
-  margin-bottom: 24px;
   font-size: 13px;
+  margin-bottom: 24px;
 }

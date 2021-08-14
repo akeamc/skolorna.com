@@ -7,7 +7,6 @@
   --font-sans: "Inter", sans-serif;
   --font-display: "Space Grotesk", var(--font-sans);
   --font-mono: "JetBrains Mono", monospace;
-
   --brand-color: #000;
   --accents-1: #fafafa;
   --accents-2: #eaeaea;
@@ -24,16 +23,12 @@
   --text-tertiary: var(--accents-4);
   --skeleton-bg: var(--accents-2);
   --skeleton-fg: var(--accents-1);
-
   --shadow-color: rgba(0, 0, 0, 0.1);
   --shadow-sm: 0 0 3px 2px var(--shadow-color);
   --shadow-md: 0 16px 28px rgba(37, 38, 45, 0.12);
-
   --rounded-md: 12px;
   --rounded-lg: 24px;
-
   --page-gutter: 16px;
-
   --progress-bar: #4440bf;
 
   @media (min-width: 480px) {
@@ -47,19 +42,29 @@
 }
 
 body {
-  margin: 0;
   background-color: var(--bg-primary);
-  font-family: var(--font-sans);
   color: var(--text-primary);
+  font-family: var(--font-sans);
+  margin: 0;
 }
 
 * {
   box-sizing: border-box;
 }
 
-h1 {
+h1,
+h2 {
   font-family: var(--font-display);
+}
+
+h1 {
   font-weight: 500;
+}
+
+h2 {
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: -0.022em;
 }
 
 h1,
@@ -68,6 +73,7 @@ h3,
 h4,
 h5,
 h6 {
+  margin: 0;
   overflow-wrap: break-word;
 }
 

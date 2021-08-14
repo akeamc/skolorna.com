@@ -15,6 +15,7 @@ import InlineSkeleton from "../skeleton/InlineSkeleton";
 import { Menu } from "../../lib/menu/types";
 import Grid from "../layout/Grid";
 import { useMenuFuse } from "../../lib/menu/menu";
+import InfoText from "../typography/InfoText";
 
 const cx = classNames.bind(styles);
 
@@ -53,14 +54,14 @@ const SearchResults: FunctionComponent<SearchResultsProps> = ({
   const results = allResults.slice(0, limit);
 
   if (!initializing && query.length === 0) {
-    return <span>Sök bland tusentals matsedlar.</span>;
+    return <InfoText>Sök bland tusentals matsedlar.</InfoText>;
   }
 
   if (noResults) {
     return (
-      <span>
+      <InfoText>
         Inga menyer som matchar &quot;<strong>{query}</strong>&quot; hittades.
-      </span>
+      </InfoText>
     );
   }
 
