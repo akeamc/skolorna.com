@@ -1,0 +1,92 @@
+@import url("https://rsms.me/inter/inter.css");
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap");
+@import "./dark.scss";
+
+:root {
+  --font-sans: "Inter", sans-serif;
+  --font-display: "Space Grotesk", var(--font-sans);
+  --font-mono: "JetBrains Mono", monospace;
+  --brand-color: #000;
+  --accents-1: #fafafa;
+  --accents-2: #eaeaea;
+  --accents-3: #999;
+  --accents-4: #888;
+  --accents-5: #666;
+  --accents-6: #444;
+  --accents-7: #333;
+  --accents-8: #111;
+  --border-color: var(--accents-2);
+  --bg-primary: #fff;
+  --text-primary: #000;
+  --text-secondary: var(--accents-6);
+  --text-tertiary: var(--accents-4);
+  --skeleton-bg: var(--accents-2);
+  --skeleton-fg: var(--accents-1);
+  --shadow-color: rgba(0, 0, 0, 0.1);
+  --shadow-sm: 0 0 3px 2px var(--shadow-color);
+  --shadow-md: 0 16px 28px rgba(37, 38, 45, 0.12);
+  --rounded-md: 12px;
+  --rounded-lg: 24px;
+  --page-gutter: 16px;
+  --progress-bar: #4440bf;
+
+  @media (min-width: 480px) {
+    --page-gutter: 32px;
+  }
+}
+
+::placeholder {
+  color: var(--accents-4);
+  opacity: 1;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  margin: 0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+h1,
+h2 {
+  font-family: var(--font-display);
+}
+
+h1 {
+  font-weight: 500;
+}
+
+h2 {
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: -0.022em;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  overflow-wrap: break-word;
+}
+
+a {
+  color: inherit;
+  text-decoration: inherit;
+}
+
+mark {
+  background-color: inherit;
+  color: var(--text-primary);
+}
+
+code {
+  font-family: var(--font-mono);
+}

@@ -1,0 +1,8 @@
+.logo {
+  font: 500 20px/1 var(--font-display);
+  letter-spacing: -0.01em;
+
+  @media (min-width: 480px) {
+    font-size: 24px;
+  }
+}

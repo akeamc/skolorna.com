@@ -1,11 +1,10 @@
 import { DateTime } from "luxon";
 import useSWR, { SWRResponse } from "swr";
-import { MENU_PROXY_URL } from ".";
 import { menuProxyFetch } from "./fetch";
 import { Day } from "./types";
 
 export interface ListDaysQuery {
-  menu: string;
+  menu?: string;
   first?: DateTime;
   last?: DateTime;
 }
@@ -19,6 +18,7 @@ function listDaysPath({
     throw new Error("menu id must be defined");
   }
 
+  // eslint-disable-next-line no-param-reassign
   last = last ?? first.plus({ weeks: 4 });
 
   const searchParams = new URLSearchParams({

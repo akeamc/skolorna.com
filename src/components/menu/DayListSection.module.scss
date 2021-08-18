@@ -1,0 +1,59 @@
+.days {
+  --list-y-gap: 24px;
+
+  > li {
+    max-width: 960px;
+  }
+}
+
+.meals {
+  list-style-type: none;
+  margin: 0;
+  margin-bottom: 16px;
+  padding: 0;
+
+  li {
+    font: 500 18px/1.4 var(--font-sans);
+    letter-spacing: -0.014em;
+    margin-bottom: 8px;
+  }
+}
+
+.date {
+  color: var(--text-tertiary);
+  font: 400 14px/1 var(--font-sans);
+  margin: 0;
+
+  &::first-letter {
+    text-transform: uppercase;
+  }
+}
+
+.gone {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 128px 0;
+  text-align: center;
+
+  p {
+    color: var(--text-tertiary);
+    font: 400 16px/1 var(--font-sans);
+    margin-top: 32px;
+
+    @media (min-width: 480px) {
+      font-size: 20px;
+      letter-spacing: -0.017em;
+    }
+  }
+}
+
+.ascii {
+  color: var(--accents-2);
+  font-size: 24px;
+
+  @media (min-width: 480px) {
+    font-size: min(10vw, 96px);
+  }
+}

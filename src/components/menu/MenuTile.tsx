@@ -1,11 +1,11 @@
-import Link from "next/link";
 import React, { FunctionComponent } from "react";
-import { Menu } from "../../lib/menu-proxy/types";
-import InlineSkeleton from "../skeleton/InlineSkeleton";
+import { Menu } from "../../lib/menu/types";
 import NextDayList from "./NextDayList";
+import Tile from "../tile/Tile";
+import InlineSkeleton from "../skeleton/InlineSkeleton";
 
 export interface MenuTileProps {
-  menu: Menu;
+  menu?: Menu;
 }
 
 /**
@@ -17,14 +17,21 @@ export interface MenuTileProps {
  * @returns {React.ReactElement} A rendered menu tile.
  */
 const MenuTile: FunctionComponent<MenuTileProps> = ({ menu }) => (
-  <Link href={`/menus/${menu.id}`}>
-    <a className="bg-white rounded-xl shadow-sm hover:shadow-lg transition-shadow p-4 my-2 block text-sm font-medium">
-      <h2 className="text-2xl font-semibold mb-2 tracking-tight">
-        {menu.title}
-      </h2>
-      <NextDayList menu={menu.id} />
-    </a>
-  </Link>
+  <Tile
+    href={menu?.id ? `/menus/${menu.id}` : undefined}
+    heading={menu?.title ?? <InlineSkeleton />}
+    subHeading={
+      menu?.provider?.name ? (
+        <>
+          Via <mark>{menu.provider.name}</mark>
+        </>
+      ) : (
+        <InlineSkeleton width="8em" />
+      )
+    }
+  >
+    <NextDayList menu={menu?.id} maxMeals={3} />
+  </Tile>
 );
 
 export default MenuTile;

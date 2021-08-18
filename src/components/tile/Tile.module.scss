@@ -1,0 +1,37 @@
+.tile {
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--rounded-md);
+  color: var(--text-secondary);
+  display: block;
+  flex: 1;
+  padding: 20px;
+  transition: box-shadow 0.1s, background-color 0.1s;
+
+  &[href] {
+    &:hover,
+    &:focus {
+      box-shadow: var(--shadow-md);
+    }
+
+    &:focus {
+      background-color: var(--accents-2);
+      outline: none;
+    }
+  }
+}
+
+.subheading {
+  color: var(--text-secondary);
+  font: 700 12px/1 var(--font-display);
+  letter-spacing: 0.03em;
+  margin: 0 0 6px;
+  text-transform: uppercase;
+}
+
+.heading {
+  color: var(--text-primary);
+  font: 500 24px/1.1 var(--font-display);
+  letter-spacing: -0.019em;
+  margin: 0 0 12px;
+}

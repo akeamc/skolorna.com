@@ -1,9 +1,9 @@
-import { MENU_PROXY_URL } from ".";
+import urljoin from "url-join";
 
 export async function menuProxyFetch<T>(path: string): Promise<T> {
-  const url = new URL(path, MENU_PROXY_URL);
-
-  const res = await fetch(url.href);
+  const res = await fetch(
+    urljoin("https://api-staging.skolorna.com/v1/mp/", path)
+  );
 
   if (!res.ok) {
     throw new Error(await res.text());

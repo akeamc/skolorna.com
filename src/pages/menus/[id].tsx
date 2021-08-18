@@ -1,12 +1,20 @@
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import { ParsedUrlQuery } from "querystring";
-import React from "react";
-import { useDays } from "../../lib/menu-proxy/days";
-import { fetchMenu } from "../../lib/menu-proxy/menu";
-import { Menu } from "../../lib/menu-proxy/types";
+import React, { useEffect } from "react";
+import { useRouter } from "next/router";
+import Head from "next/head";
+import Main from "../../components/layout/Main";
+import Container from "../../components/layout/Container";
+import { fetchMenu } from "../../lib/menu/menu";
+import { Menu } from "../../lib/menu/types";
+import PageHeading from "../../components/typography/PageHeading";
+import InlineSkeleton from "../../components/skeleton/InlineSkeleton";
+import DayListSection from "../../components/menu/DayListSection";
+import { useMenuHistory } from "../../lib/menu/history";
 
 export interface PageProps {
-  menu: Menu;
+  menu: Menu | null;
+  ogImage: string | null;
 }
 
 export interface Q extends ParsedUrlQuery {
@@ -22,51 +30,63 @@ export const getStaticProps: GetStaticProps<PageProps, Q> = async ({
     throw new Error("?id must be a string");
   }
 
-  const menu = await fetchMenu(id);
-
-  return {
-    props: {
-      menu,
-    },
-    revalidate: 86400,
-  };
+  try {
+    const menu = await fetchMenu(id);
+    return {
+      props: {
+        menu,
+        ogImage: `https://api-staging.skolorna.com/v1/opengraph/menus/${menu.id}`,
+      },
+      revalidate: 86400,
+    };
+  } catch (error) {
+    return {
+      props: {
+        menu: null,
+        ogImage: null,
+      },
+      revalidate: 60,
+    };
+  }
 };
 
-export const getStaticPaths: GetStaticPaths = async () => {
-  return {
-    paths: [],
-    fallback: true,
-  };
-};
+export const getStaticPaths: GetStaticPaths = async () => ({
+  paths: [],
+  fallback: "blocking",
+});
 
-const MenuPage: NextPage<PageProps> = ({ menu }) => {
-  const { data } = useDays({ menu: menu?.id });
+const MenuPage: NextPage<PageProps> = ({ menu, ogImage }) => {
+  const { isFallback } = useRouter();
+  const history = useMenuHistory();
+
+  useEffect(() => {
+    if (menu?.id) {
+      history.add(menu.id);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [menu?.id]);
+
+  if (!isFallback && !menu) {
+    return <>404</>;
+  }
 
   return (
-    <div className="bg-blue-900 text-white min-h-screen">
-      <div className="container mx-auto py-16">
-        <h1 className="text-4xl font-bold">{menu?.title}</h1>
-        <code className="opacity-30 text-sm">{menu?.id}</code>
-        <div className="shadow-lg mt-16 bg-white text-black rounded-lg p-4">
-          {data?.map(({ date, meals }) => (
-            <div className="mb-4" key={date}>
-              <h3 className="text-lg font-semibold">
-                {new Date(date).toLocaleDateString(undefined, {
-                  weekday: "long",
-                  month: "long",
-                  day: "numeric",
-                })}
-              </h3>
-              <ul className="opacity-80">
-                {meals.map((meal) => (
-                  <li key={meal.value}>{meal.value}</li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
+    <Main title={menu?.title}>
+      <Head>
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta property="og:title" content={menu?.title} />
+        <meta property="og:type" content="object" />
+        <meta property="og:image" content={ogImage ?? ""} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="600" />
+      </Head>
+      <Container>
+        <PageHeading>
+          {menu?.title ?? <InlineSkeleton width="16em" count={2} />}
+        </PageHeading>
+        <DayListSection menu={menu?.id} />
+      </Container>
+    </Main>
   );
 };
 
