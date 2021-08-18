@@ -2,7 +2,7 @@ import urljoin from "url-join";
 
 export async function menuProxyFetch<T>(path: string): Promise<T> {
   const res = await fetch(
-    urljoin("https://api-staging.skolorna.com/v1/mp/", path)
+    urljoin("https://api.skolorna.com/v1/mp/", path)
   );
 
   if (!res.ok) {

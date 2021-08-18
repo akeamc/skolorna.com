@@ -35,7 +35,7 @@ export const getStaticProps: GetStaticProps<PageProps, Q> = async ({
     return {
       props: {
         menu,
-        ogImage: `https://api-staging.skolorna.com/v1/opengraph/menus/${menu.id}`,
+        ogImage: `https://api.skolorna.com/v1/opengraph/menus/${menu.id}`,
       },
       revalidate: 86400,
     };
