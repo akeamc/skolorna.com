@@ -14,7 +14,6 @@ import { useMenuHistory } from "../../lib/menu/history";
 
 export interface PageProps {
   menu: Menu | null;
-  ogImage: string | null;
 }
 
 export interface Q extends ParsedUrlQuery {
@@ -35,7 +34,6 @@ export const getStaticProps: GetStaticProps<PageProps, Q> = async ({
     return {
       props: {
         menu,
-        ogImage: `https://api.skolorna.com/v1/opengraph/menus/${menu.id}`,
       },
       revalidate: 86400,
     };
@@ -43,7 +41,6 @@ export const getStaticProps: GetStaticProps<PageProps, Q> = async ({
     return {
       props: {
         menu: null,
-        ogImage: null,
       },
       revalidate: 60,
     };
@@ -55,7 +52,7 @@ export const getStaticPaths: GetStaticPaths = async () => ({
   fallback: "blocking",
 });
 
-const MenuPage: NextPage<PageProps> = ({ menu, ogImage }) => {
+const MenuPage: NextPage<PageProps> = ({ menu }) => {
   const { isFallback } = useRouter();
   const history = useMenuHistory();
 
@@ -76,7 +73,7 @@ const MenuPage: NextPage<PageProps> = ({ menu, ogImage }) => {
         <meta name="twitter:card" content="summary_large_image" />
         <meta property="og:title" content={menu?.title} />
         <meta property="og:type" content="object" />
-        <meta property="og:image" content={ogImage ?? ""} />
+        <meta property="og:image" content={`https://api.skolorna.com/v1/opengraph/menus/${menu?.id ?? ""}`} />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="600" />
       </Head>
