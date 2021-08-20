@@ -6,7 +6,10 @@ import MenuSearch from "../../components/menu/MenuSearch";
 import RecentMenus from "../../components/menu/RecentMenus";
 
 const MenusPage: NextPage = () => (
-  <Main>
+  <Main
+    title="Menyer"
+    description="Sök bland över 7000 olika skolor och se vad det blir till lunch."
+  >
     <Container>
       <RecentMenus />
       <MenuSearch />
