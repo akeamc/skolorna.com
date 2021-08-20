@@ -23,7 +23,7 @@ const Nav: FunctionComponent = () => (
       </a>
     </Link>
     <ul>
-      <Item href="/menus">Menyer</Item>
+      <Item href="/menyer">Menyer</Item>
     </ul>
   </nav>
 );

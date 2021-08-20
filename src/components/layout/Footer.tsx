@@ -22,7 +22,7 @@ const footerLinks: FooterLinks = [
     heading: "Resurser",
     links: [
       {
-        href: "/menus",
+        href: "/menyer",
         label: "Menyer",
       },
     ],

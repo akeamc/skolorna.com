@@ -18,7 +18,7 @@ export interface MenuTileProps {
  */
 const MenuTile: FunctionComponent<MenuTileProps> = ({ menu }) => (
   <Tile
-    href={menu?.id ? `/menus/${menu.id}` : undefined}
+    href={menu?.id ? `/menyer/${menu.id}` : undefined}
     heading={menu?.title ?? <InlineSkeleton />}
     subHeading={
       menu?.provider?.name ? (
