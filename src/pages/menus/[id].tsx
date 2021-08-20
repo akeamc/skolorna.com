@@ -68,12 +68,25 @@ const MenuPage: NextPage<PageProps> = ({ menu }) => {
   }
 
   return (
-    <Main title={menu?.title}>
+    <Main
+      title={menu?.title}
+      description={
+        menu?.title
+          ? `Visa matsedeln för ${menu.title} på skolorna.com istället för din skolas dåliga intranät. #hataskolplattformen`
+          : undefined
+      }
+    >
       <Head>
         <meta name="twitter:card" content="summary_large_image" />
-        <meta property="og:title" content={menu?.title} />
         <meta property="og:type" content="object" />
-        <meta property="og:image" content={`https://api.skolorna.com/v1/opengraph/menus/${menu?.id ?? ""}`} />
+        <meta
+          property="og:image"
+          content={
+            menu?.id
+              ? `https://api.skolorna.com/v1/opengraph/menus/${menu.id}`
+              : undefined
+          }
+        />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="600" />
       </Head>
