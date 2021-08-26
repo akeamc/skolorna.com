@@ -1,12 +1,16 @@
 import { ReactNode } from "markdown-to-jsx/node_modules/@types/react";
 import Link from "next/link";
 import React, { FunctionComponent } from "react";
+import classNames from "classnames/bind";
 import styles from "./Tile.module.scss";
+
+const cx = classNames.bind(styles);
 
 export interface TileProps {
   heading: ReactNode;
   subHeading?: ReactNode;
   href?: string;
+  error?: boolean;
 }
 
 const Tile: FunctionComponent<TileProps> = ({
@@ -14,9 +18,10 @@ const Tile: FunctionComponent<TileProps> = ({
   subHeading,
   children,
   href,
+  error,
 }) => {
   const inner = (
-    <a className={styles.tile}>
+    <a className={cx("tile", { "error-tile": error })}>
       {subHeading && <div className={styles.subheading}>{subHeading}</div>}
       <h3 className={styles.heading}>{heading}</h3>
       <div>{children}</div>

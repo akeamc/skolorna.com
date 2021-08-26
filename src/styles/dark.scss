@@ -8,10 +8,13 @@
   --accents-2: #333;
   --accents-1: #111;
   --border-color: var(--accents-2);
+  --border-error: #5e1b1b;
   --bg-primary: #000;
+  --bg-error: #682424;
   --text-primary: #fff;
   --text-secondary: var(--accents-6);
   --text-tertiary: var(--accents-4);
+  --text-error: #d80f0f;
   --shadow-color: rgba(255, 255, 255, 0.25);
   --shadow-sm: 0 0 3px 2px var(--shadow-color);
   --shadow-md: 0;
