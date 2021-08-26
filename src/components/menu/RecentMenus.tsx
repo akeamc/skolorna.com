@@ -16,12 +16,12 @@ interface RecentMenuProps {
 }
 
 const RecentMenu: FunctionComponent<RecentMenuProps> = ({ id, removeItem }) => {
-  const { data } = useMenu(id);
+  const { data, error } = useMenu(id);
 
   return (
     <div className={styles.recent}>
       <div className={styles.wrapper}>
-        <MenuTile menu={data} />
+        <MenuTile menu={data} error={error} />
         {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
         <button
           type="button"

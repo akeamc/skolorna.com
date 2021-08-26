@@ -2,6 +2,7 @@ import React, { FunctionComponent } from "react";
 import { useDays } from "../../lib/menu/days";
 import DividedList from "../list/DividedList";
 import InlineSkeleton from "../skeleton/InlineSkeleton";
+import InfoText from "../typography/InfoText";
 
 export interface NextDayListProps {
   menu?: string;
@@ -19,13 +20,13 @@ const NextDayList: FunctionComponent<NextDayListProps> = ({
   const nextDay = data?.[0];
 
   if (error) {
-    return <span>Ett fel inträffade</span>;
+    return <InfoText>Misslyckades med att hämta information.</InfoText>;
   }
 
   if (!nextDay) {
     // data has been received, but no nextDay is present.
     if (data) {
-      return <span>Ingen information</span>;
+      return <InfoText>Ingen information.</InfoText>;
     }
 
     // No data. It must be loading!

@@ -24,6 +24,14 @@
     padding: 16px 0;
   }
 
+  input:disabled {
+    cursor: not-allowed;
+  }
+
+  &.initializing {
+    cursor: not-allowed;
+  }
+
   &.focused {
     box-shadow: var(--shadow-md);
   }

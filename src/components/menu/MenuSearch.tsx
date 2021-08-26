@@ -25,6 +25,7 @@ interface MenuSearchContextData {
   initializing: boolean;
   setQuery: (value: string) => void;
   searching: boolean;
+  error?: Error;
 }
 
 const MenuSearchContext = createContext<MenuSearchContextData>({
@@ -47,6 +48,7 @@ const SearchResults: FunctionComponent<SearchResultsProps> = ({
     results: allResults = [],
     query = "",
     searching,
+    error,
   } = useMenuSearchContext();
 
   const noResults = !(initializing || searching) && allResults.length === 0;
@@ -63,6 +65,10 @@ const SearchResults: FunctionComponent<SearchResultsProps> = ({
         Inga menyer som matchar &quot;<strong>{query}</strong>&quot; hittades.
       </InfoText>
     );
+  }
+
+  if (error) {
+    return <InfoText>Det gick inte att hämta menyerna.</InfoText>;
   }
 
   return (
@@ -94,7 +100,7 @@ const SearchResults: FunctionComponent<SearchResultsProps> = ({
 };
 
 const SearchBox: FunctionComponent = () => {
-  const { setQuery, initializing } = useMenuSearchContext();
+  const { setQuery, initializing, error } = useMenuSearchContext();
   const { output, setInput } = useDelayedInput(500);
   const [focused, setFocused] = useState(false);
 
@@ -103,8 +109,13 @@ const SearchBox: FunctionComponent = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [output]);
 
+  let placeholder = "Sök";
+
+  if (initializing) placeholder = "Läser in ...";
+  if (error) placeholder = "Ett fel inträffade";
+
   return (
-    <div className={cx("search", { focused })}>
+    <div className={cx("search", { focused, initializing })}>
       <Search className={styles.icon} />
       <input
         type="search"
@@ -114,7 +125,7 @@ const SearchBox: FunctionComponent = () => {
         onInput={(event) => setInput(event.currentTarget.value)}
         className={styles.input}
         disabled={initializing}
-        placeholder={initializing ? "Läser in ..." : "Sök"}
+        placeholder={placeholder}
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
       />
@@ -126,7 +137,7 @@ const MenuSearch: FunctionComponent = () => {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<Fuse.FuseResult<Menu>[]>();
   const [searching, setSearching] = useState(false);
-  const fuse = useMenuFuse();
+  const { fuse, error } = useMenuFuse();
 
   useEffect(() => {
     async function executeSearch() {
@@ -149,6 +160,7 @@ const MenuSearch: FunctionComponent = () => {
         },
         initializing: !fuse || !results,
         searching,
+        error,
       }}
     >
       <SearchBox />

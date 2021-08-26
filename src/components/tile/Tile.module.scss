@@ -21,6 +21,10 @@
   }
 }
 
+.error-tile {
+  composes: error from "../../styles/error.scss";
+}
+
 .subheading {
   color: var(--text-secondary);
   font: 700 12px/1 var(--font-display);
