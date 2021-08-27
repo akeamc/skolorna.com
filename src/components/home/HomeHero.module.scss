@@ -1,6 +1,6 @@
 .header {
-  position: relative;
   overflow: hidden;
+  position: relative;
 }
 
 .wrapper {
@@ -10,13 +10,13 @@
 }
 
 .bg {
-  left: 0;
-  position: absolute;
-  top: 0;
-  text-align: justify;
-  font: 500 10px/1.25 var(--font-sans);
   color: var(--accents-2);
-  user-select: none;
+  font: 500 8px/1.25 var(--font-sans);
+  left: 0;
+  pointer-events: none;
+  position: absolute;
+  text-align: justify;
+  top: 0;
   z-index: -1;
 }
 
@@ -27,6 +27,11 @@
 
   @media (max-width: 480px) {
     text-align: center;
+  }
+
+  @media (min-width: 768px) {
+    margin-bottom: 64px;
+    margin-top: 64px;
   }
 
   h1 {

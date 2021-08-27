@@ -2,8 +2,10 @@ import React, { FunctionComponent } from "react";
 import Container from "../layout/Container";
 import styles from "./HomeHero.module.scss";
 
+export type Doodle = string;
+
 export interface HomeHeroProps {
-  doodle: string;
+  doodle: Doodle;
 }
 
 const HomeHero: FunctionComponent<HomeHeroProps> = ({ doodle }) => (

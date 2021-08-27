@@ -1,12 +1,12 @@
 import { GetStaticProps, NextPage } from "next";
 import React from "react";
-import HomeHero from "../components/home/HomeHero";
+import HomeHero, { Doodle } from "../components/home/HomeHero";
 import Main from "../components/layout/Main";
 import { fetchMenus } from "../lib/menu/menu";
 import { hashCode } from "../lib/utils/hash";
 
 interface PageProps {
-  doodle: string;
+  doodle: Doodle;
 }
 
 export const getStaticProps: GetStaticProps<PageProps> = async () => {
