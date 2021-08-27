@@ -1,10 +1,14 @@
 import React, { FunctionComponent } from "react";
 import Container from "../layout/Container";
-import Hero from "../layout/Hero";
 import styles from "./HomeHero.module.scss";
 
-const HomeHero: FunctionComponent = () => (
-  <Hero>
+export interface HomeHeroProps {
+  doodle: string;
+}
+
+const HomeHero: FunctionComponent<HomeHeroProps> = ({ doodle }) => (
+  <header className={styles.header}>
+    <div className={styles.bg}>{doodle}</div>
     <Container>
       <div className={styles.wrapper}>
         <div className={styles.text}>
@@ -13,7 +17,7 @@ const HomeHero: FunctionComponent = () => (
         </div>
       </div>
     </Container>
-  </Hero>
+  </header>
 );
 
 export default HomeHero;
