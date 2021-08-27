@@ -1,6 +1,5 @@
-import { ReactNode } from "markdown-to-jsx/node_modules/@types/react";
 import Link from "next/link";
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent, ReactNode } from "react";
 import classNames from "classnames/bind";
 import styles from "./Tile.module.scss";
 
