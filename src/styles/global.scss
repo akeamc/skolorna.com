@@ -29,8 +29,8 @@
   --shadow-color: rgba(0, 0, 0, 0.1);
   --shadow-sm: 0 0 3px 2px var(--shadow-color);
   --shadow-md: 0 16px 28px rgba(37, 38, 45, 0.12);
-  --rounded-md: 12px;
-  --rounded-lg: 24px;
+  --rounded-sm: 5px;
+  --rounded-md: 8px;
   --page-gutter: 16px;
   --progress-bar: #4440bf;
 
@@ -40,7 +40,7 @@
 }
 
 ::placeholder {
-  color: var(--accents-4);
+  color: var(--accents-3);
   opacity: 1;
 }
 
@@ -87,6 +87,10 @@ a {
 
 mark {
   background-color: inherit;
+  color: var(--text-primary);
+}
+
+strong {
   color: var(--text-primary);
 }
 

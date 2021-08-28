@@ -20,7 +20,7 @@
 }
 
 .skeleton {
-  border-radius: var(--rounded-lg);
+  border-radius: var(--rounded-sm);
   composes: skeleton-bg;
   display: inline-block;
   line-height: 1;

@@ -2,16 +2,16 @@
   align-items: center;
   background-color: var(--bg-primary);
   border: 1px solid var(--border-color);
-  border-radius: 9999px;
+  border-radius: var(--rounded-sm);
   display: flex;
   margin-top: 64px;
-  transition: box-shadow 0.1s;
+  transition: border 0.1s;
 
   .icon {
     color: var(--accents-4);
-    height: 20px;
-    margin: 16px;
-    width: 20px;
+    height: 16px;
+    margin: 8px 12px;
+    width: 16px;
   }
 
   input {
@@ -19,9 +19,9 @@
     border: 0;
     color: var(--text-primary);
     flex: 1;
-    font: 400 16px/1 var(--font-sans);
+    font: 400 14px/1 var(--font-sans);
     outline: none;
-    padding: 16px 0;
+    padding: 8px 0;
   }
 
   input:disabled {
@@ -33,13 +33,14 @@
   }
 
   &.focused {
-    box-shadow: var(--shadow-md);
+    // box-shadow: var(--shadow-md);
+    border-color: var(--text-primary);
   }
 }
 
 .results {
   color: var(--text-secondary);
-  margin-top: 48px;
+  margin-top: 24px;
 }
 
 .count {

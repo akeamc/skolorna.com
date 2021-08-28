@@ -16,6 +16,7 @@ import { Menu } from "../../lib/menu/types";
 import Grid from "../layout/Grid";
 import { useMenuFuse } from "../../lib/menu/menu";
 import InfoText from "../typography/InfoText";
+import Spinner from "../Spinner";
 
 const cx = classNames.bind(styles);
 
@@ -100,7 +101,7 @@ const SearchResults: FunctionComponent<SearchResultsProps> = ({
 };
 
 const SearchBox: FunctionComponent = () => {
-  const { setQuery, initializing, error } = useMenuSearchContext();
+  const { setQuery, initializing, searching, error } = useMenuSearchContext();
   const { output, setInput } = useDelayedInput(500);
   const [focused, setFocused] = useState(false);
 
@@ -109,14 +110,18 @@ const SearchBox: FunctionComponent = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [output]);
 
-  let placeholder = "Sök";
+  let placeholder = "Sök ...";
 
   if (initializing) placeholder = "Läser in ...";
   if (error) placeholder = "Ett fel inträffade";
 
   return (
     <div className={cx("search", { focused, initializing })}>
-      <Search className={styles.icon} />
+      {initializing || searching ? (
+        <Spinner className={styles.icon} />
+      ) : (
+        <Search className={styles.icon} />
+      )}
       <input
         type="search"
         spellCheck="false"
