@@ -1,10 +1,16 @@
 import React, { FunctionComponent } from "react";
 import Container from "../layout/Container";
-import Hero from "../layout/Hero";
 import styles from "./HomeHero.module.scss";
 
-const HomeHero: FunctionComponent = () => (
-  <Hero>
+export type Doodle = string;
+
+export interface HomeHeroProps {
+  doodle: Doodle;
+}
+
+const HomeHero: FunctionComponent<HomeHeroProps> = ({ doodle }) => (
+  <header className={styles.header}>
+    <div className={styles.bg}>{doodle}</div>
     <Container>
       <div className={styles.wrapper}>
         <div className={styles.text}>
@@ -13,7 +19,7 @@ const HomeHero: FunctionComponent = () => (
         </div>
       </div>
     </Container>
-  </Hero>
+  </header>
 );
 
 export default HomeHero;
