@@ -1,0 +1,21 @@
+.header {
+  margin-bottom: 56px;
+}
+
+.cover {
+  object-fit: cover;
+  width: 100%;
+}
+
+.description {
+  color: var(--text-secondary);
+  font: 400 20px/1.25 var(--font-sans);
+  margin: 24px 0;
+}
+
+.byline {
+  color: var(--text-tertiary);
+  font: 700 12px/1.1 var(--font-sans);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
