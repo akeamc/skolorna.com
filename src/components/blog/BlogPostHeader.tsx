@@ -21,6 +21,9 @@ const BlogPostHeader: FunctionComponent<BlogPostHeaderProps> = ({ post }) => (
       <time dateTime={post.sys.createdAt}>
         {DateTime.fromISO(post.sys.createdAt).toLocaleString(DateTime.DATE_MED)}
       </time>
+      <span>
+        {post.fields.authors.map((author) => author.fields.name).join(", ")}
+      </span>
     </div>
   </div>
 );
