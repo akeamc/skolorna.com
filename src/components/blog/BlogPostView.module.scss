@@ -1,0 +1,30 @@
+.content {
+  font: 400 16px/1.875 var(--font-sans);
+
+  p {
+    color: var(--text-secondary);
+    letter-spacing: 0.0125em;
+  }
+
+  img {
+    margin: 32px 0;
+    width: 100%;
+  }
+
+  h2 {
+    font: 500 24px/1.1 var(--font-display);
+    margin: 0.5em 0;
+
+    @media (min-width: 480px) {
+      font-size: 32px;
+    }
+  }
+
+  h3 {
+    font: 600 20px/1.1 var(--font-display);
+
+    @media (min-width: 480px) {
+      font-size: 24px;
+    }
+  }
+}

@@ -21,7 +21,7 @@ export const getStaticProps: GetStaticProps<PageProps> = async () => {
     props: {
       doodle: Array.from(set.entries())
         .sort((a, b) => a[0] - b[0])
-        .slice(0, 500)
+        .slice(0, 1000)
         .map((e) => e[1])
         .join("; "),
     },

@@ -25,6 +25,10 @@ const footerLinks: FooterLinks = [
         href: "/menyer",
         label: "Menyer",
       },
+      {
+        href: "/blogg",
+        label: "Blogg",
+      },
     ],
   },
 ];

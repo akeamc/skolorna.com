@@ -1,6 +1,7 @@
 import type { AppProps } from "next/app";
 import dynamic from "next/dynamic";
 import React, { useEffect } from "react";
+import Alerts from "../components/layout/Alerts";
 import "../styles/global.scss";
 
 const PageProgress = dynamic(() => import("../components/PageProgress"), {
@@ -29,6 +30,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <PageProgress />
+      <Alerts />
       {/* eslint-disable-next-line react/jsx-props-no-spreading */}
       <Component {...pageProps} />
     </>
