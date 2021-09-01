@@ -1,5 +1,6 @@
 import { Asset, Entry, EntryFields } from "contentful";
 import { client } from "../utils/contentful";
+import { Author } from "./author";
 
 export interface BlogPost {
   title: EntryFields.Text;
@@ -7,6 +8,7 @@ export interface BlogPost {
   description: EntryFields.Text;
   cover?: Asset;
   content: EntryFields.RichText;
+  authors: Entry<Author>[];
 }
 
 export async function listBlogPosts(): Promise<Entry<BlogPost>[]> {

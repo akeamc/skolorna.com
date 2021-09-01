@@ -20,6 +20,7 @@
   --border-error: #ffb4b4;
   --bg-primary: #fff;
   --bg-error: #ffb1b1;
+  --bg-alert: #c8dcff;
   --text-primary: #000;
   --text-secondary: var(--accents-6);
   --text-tertiary: var(--accents-4);
@@ -32,7 +33,7 @@
   --rounded-sm: 5px;
   --rounded-md: 8px;
   --page-gutter: 16px;
-  --progress-bar: #4440bf;
+  --progress-bar: rgb(8, 0, 255);
 
   @media (min-width: 480px) {
     --page-gutter: 32px;
