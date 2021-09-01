@@ -20,6 +20,8 @@ const Main: FunctionComponent<MainProps> = ({
       <meta name="description" content={description} />
       <meta property="og:title" content={title} />
       <meta property="og:description" content={description} />
+      <meta property="og:site_name" content="Skolorna" />
+      <meta property="og:locale" content="sv_SE" />
     </Head>
     <Nav />
     <main className={styles.main}>{children}</main>
