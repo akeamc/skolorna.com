@@ -24,6 +24,7 @@ const Nav: FunctionComponent = () => (
     </Link>
     <ul>
       <Item href="/menyer">Menyer</Item>
+      <Item href="/blogg">Blogg</Item>
     </ul>
   </nav>
 );

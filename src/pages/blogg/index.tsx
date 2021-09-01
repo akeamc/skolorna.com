@@ -1,7 +1,7 @@
 import { Entry } from "contentful";
 import { GetStaticProps, NextPage } from "next";
-import Link from "next/link";
 import React from "react";
+import PostGrid from "../../components/blog/PostGrid";
 import Container from "../../components/layout/Container";
 import Main from "../../components/layout/Main";
 import PageHeading from "../../components/typography/PageHeading";
@@ -18,6 +18,7 @@ export const getStaticProps: GetStaticProps<PageProps> = async () => {
     props: {
       posts,
     },
+    revalidate: 600,
   };
 };
 
@@ -25,20 +26,7 @@ const BlogHome: NextPage<PageProps> = ({ posts }) => (
   <Main title="Blogg">
     <Container>
       <PageHeading>Blogg</PageHeading>
-      <ul>
-        {posts.map((post) => (
-          <li key={post.sys.id}>
-            <Link href={`/blogg/${post.fields.slug}`}>
-              <a>
-                {/* eslint-disable-next-line jsx-a11y/alt-text */}
-                <img src={post.fields.cover?.fields.file.url} />
-                <h1>{post.fields.title}</h1>
-                <p>{post.fields.description}</p>
-              </a>
-            </Link>
-          </li>
-        ))}
-      </ul>
+      <PostGrid posts={posts} />
     </Container>
   </Main>
 );

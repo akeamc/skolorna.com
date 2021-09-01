@@ -2,6 +2,12 @@
   "extends": "stylelint-config-sass-guidelines",
   "plugins": ["stylelint-order"],
   "rules": {
-    "string-quotes": "double"
+    "string-quotes": "double",
+    "property-no-unknown": [
+      true,
+      {
+        "ignoreProperties": ["composes"]
+      }
+    ]
   }
 }

@@ -6,13 +6,16 @@ export interface BlogPost {
   title: EntryFields.Text;
   slug: EntryFields.Text;
   description: EntryFields.Text;
-  cover?: Asset;
+  cover: Asset;
   content: EntryFields.RichText;
   authors: Entry<Author>[];
 }
 
 export async function listBlogPosts(): Promise<Entry<BlogPost>[]> {
-  const res = await client.getEntries<BlogPost>({ content_type: "post" });
+  const res = await client.getEntries<BlogPost>({
+    content_type: "post",
+    order: "-sys.createdAt",
+  });
   return res.items;
 }
 
