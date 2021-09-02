@@ -31,6 +31,15 @@ const footerLinks: FooterLinks = [
       },
     ],
   },
+  {
+    heading: "Skolorna",
+    links: [
+      {
+        href: "/varumarke",
+        label: "Varumärke",
+      },
+    ],
+  },
 ];
 
 const Footer: FunctionComponent = () => (
