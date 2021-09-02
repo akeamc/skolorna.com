@@ -1,6 +1,7 @@
 import type { AppProps } from "next/app";
 import dynamic from "next/dynamic";
 import React, { useEffect } from "react";
+import GoogleAnalytics from "../components/GoogleAnalytics";
 import Alerts from "../components/layout/Alerts";
 import "../styles/global.scss";
 
@@ -29,6 +30,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <>
+      <GoogleAnalytics trackingId="G-FY7502K4VH" />
       <PageProgress />
       <Alerts />
       {/* eslint-disable-next-line react/jsx-props-no-spreading */}
