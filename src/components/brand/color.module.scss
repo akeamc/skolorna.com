@@ -1,0 +1,14 @@
+.sample {
+  border: 1px solid var(--border-color);
+  font: 400 16px/1.5 var(--font-sans);
+  font-feature-settings: "ss01";
+  padding: 32px;
+  position: relative;
+}
+
+.swatch {
+  display: grid;
+  gap: 32px;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-template-rows: 1fr;
+}
