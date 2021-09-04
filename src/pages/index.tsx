@@ -1,6 +1,7 @@
 import { GetStaticProps, NextPage } from "next";
 import React from "react";
 import HomeHero, { Doodle } from "../components/home/HomeHero";
+import Alerts from "../components/layout/Alerts";
 import Main from "../components/layout/Main";
 import { fetchMenus } from "../lib/menu/menu";
 import { hashCode } from "../lib/utils/hash";
@@ -29,7 +30,10 @@ export const getStaticProps: GetStaticProps<PageProps> = async () => {
 };
 
 const Home: NextPage<PageProps> = ({ doodle }) => (
-  <Main description="Elever i alla skolor, förena er! Vi vet vad det blir till lunch.">
+  <Main
+    description="Elever i alla skolor, förena er! Vi vet vad det blir till lunch."
+    before={<Alerts />}
+  >
     <HomeHero doodle={doodle} />
   </Main>
 );

@@ -1,8 +1,12 @@
-import React, { FunctionComponent } from "react";
+/* eslint-disable jsx-a11y/heading-has-content */
+import classNames from "classnames";
+import React from "react";
 import styles from "./GridHeading.module.scss";
+import { Heading } from "./types";
 
-const GridHeading: FunctionComponent = ({ children }) => (
-  <h2 className={styles.heading}>{children}</h2>
+const GridHeading: Heading = ({ className, ...rest }) => (
+  // eslint-disable-next-line react/jsx-props-no-spreading
+  <h2 {...rest} className={classNames(styles.heading, className)} />
 );
 
 export default GridHeading;

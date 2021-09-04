@@ -1,28 +1,22 @@
-import React, { FunctionComponent } from "react";
-import Head from "next/head";
+import React, { FunctionComponent, ReactNode } from "react";
 import Footer from "./Footer";
 import Nav from "./Nav";
 import styles from "./Main.module.scss";
+import Seo, { SeoProps } from "../Seo";
 
-export interface MainProps {
-  title?: string;
-  description?: string;
+export interface MainProps extends SeoProps {
+  before?: ReactNode;
 }
 
 const Main: FunctionComponent<MainProps> = ({
-  title = "Skolorna",
-  description,
   children,
+  before,
+  ...seoProps
 }) => (
   <div className={styles.container}>
-    <Head>
-      <title>{title}</title>
-      <meta name="description" content={description} />
-      <meta property="og:title" content={title} />
-      <meta property="og:description" content={description} />
-      <meta property="og:site_name" content="Skolorna" />
-      <meta property="og:locale" content="sv_SE" />
-    </Head>
+    {before}
+    {/* eslint-disable-next-line react/jsx-props-no-spreading */}
+    <Seo {...seoProps} />
     <Nav />
     <main className={styles.main}>{children}</main>
     <Footer />

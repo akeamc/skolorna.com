@@ -10,6 +10,7 @@ import {
   listBlogPosts,
   getBlogPostBySlug,
 } from "../../lib/blog/post";
+import NotFound from "../404";
 
 interface PageProps {
   post: Entry<BlogPost> | null;
@@ -62,7 +63,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 const BlogPostPage: NextPage<PageProps> = ({ post }) => {
   if (!post) {
-    return <p>Inlägget hittades inte.</p>;
+    return <NotFound />;
   }
 
   return (
