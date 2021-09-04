@@ -11,6 +11,7 @@ import PageHeading from "../../components/typography/PageHeading";
 import InlineSkeleton from "../../components/skeleton/InlineSkeleton";
 import DayListSection from "../../components/menu/DayListSection";
 import { useMenuHistory } from "../../lib/menu/history";
+import NotFound from "../404";
 
 export interface PageProps {
   menu: Menu | null;
@@ -64,7 +65,7 @@ const MenuPage: NextPage<PageProps> = ({ menu }) => {
   }, [menu?.id]);
 
   if (!isFallback && !menu) {
-    return <>404</>;
+    return <NotFound />;
   }
 
   return (

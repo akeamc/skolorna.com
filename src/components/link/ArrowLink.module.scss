@@ -1,0 +1,21 @@
+.link {
+	color: var(--brand-link);
+	display: inline-block;
+}
+
+.text {
+	font: 500 16px/1 var(--font-sans);
+	letter-spacing: 0.01em;
+}
+
+.icon {
+	vertical-align: -0.15em;
+	height: 1em;
+	width: 1em;
+	margin-left: 0.25em;
+	transition: transform 0.1s;
+}
+
+.link:hover .icon {
+	transform: translateX(0.1em);
+}
