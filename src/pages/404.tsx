@@ -6,7 +6,7 @@ import Seo from "../components/Seo";
 const NotFound: NextPage = () => (
   <>
     <Seo title="Sidan finns inte" />
-    <Matrix target="HTTP 404 <<<" />
+    <Matrix target="ERROR 404" />
   </>
 );
 

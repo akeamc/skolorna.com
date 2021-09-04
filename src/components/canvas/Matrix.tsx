@@ -1,9 +1,11 @@
+import classNames from "classnames";
+import { motion } from "framer-motion";
 import React, { FunctionComponent, useRef } from "react";
 import Canvas from "./Canvas";
 import styles from "./Matrix.module.scss";
 
 export const DEFAULT_CHARS =
-  '日ﾊﾐﾋｰｳｼﾅﾓﾆｻﾜﾂｵﾘｱﾎﾃﾏｹﾒｴｶｷﾑﾕﾗｾﾈｽﾀﾇﾍｦｲｸｺｿﾁﾄﾉﾌﾔﾖﾙﾚﾛﾝ012345789Z:."=*+-<>¦｜╌ｸ';
+  "日ﾊﾐﾋｰｳｼﾅﾓﾆｻﾜﾂｵﾘｱﾎﾃﾏｹﾒｴｶｷﾑﾕﾗｾﾈｽﾀﾇﾍｦｲｸｺｿﾁﾄﾉﾌﾔﾖﾙﾚﾛﾝ012345789Z:.\"=*+-<>¦｜╌ｸ";
 
 export interface MatrixProps {
   chars?: string;
@@ -12,6 +14,7 @@ export interface MatrixProps {
   rowHeight?: number;
   tail?: number;
   target: string;
+  className?: string;
 }
 
 const Matrix: FunctionComponent<MatrixProps> = ({
@@ -19,8 +22,9 @@ const Matrix: FunctionComponent<MatrixProps> = ({
   fontSize = 16,
   rowHeight = 20,
   columnWidth = 20,
-  tail = 15,
+  tail = 16,
   target: targetInput,
+  className,
 }) => {
   const target = ` ${targetInput} `;
 
@@ -95,7 +99,15 @@ const Matrix: FunctionComponent<MatrixProps> = ({
   };
 
   return (
-    <Canvas draw={draw} beforeDraw={beforeDraw} className={styles.canvas} />
+    <div className={classNames(styles.wrapper, className)}>
+      <motion.div
+        initial={{ scale: 2, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ ease: "anticipate", duration: 2 }}
+      >
+        <Canvas draw={draw} beforeDraw={beforeDraw} className={styles.canvas} />
+      </motion.div>
+    </div>
   );
 };
 
