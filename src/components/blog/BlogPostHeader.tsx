@@ -1,6 +1,5 @@
 import { Entry } from "contentful";
 import { DateTime } from "luxon";
-import Link from "next/link";
 import React, { FunctionComponent } from "react";
 import { BlogPost } from "../../lib/blog/post";
 import ContentfulImage from "../../lib/contentful/ContentfulImage";
