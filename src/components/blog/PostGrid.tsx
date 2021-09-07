@@ -3,6 +3,7 @@ import { DateTime } from "luxon";
 import Link from "next/link";
 import React, { FunctionComponent } from "react";
 import { BlogPost } from "../../lib/blog/post";
+import ContentfulImage from "../../lib/contentful/ContentfulImage";
 import styles from "./PostGrid.module.scss";
 
 export interface PostCardProps {
@@ -22,11 +23,7 @@ export const PostCard: FunctionComponent<PostCardProps> = ({ post }) => (
         <p>{post.fields.description}</p>
       </div>
       <div className={styles.cover}>
-        <img
-          src={post.fields.cover.fields.file.url}
-          className={styles.cover}
-          alt=""
-        />
+        <ContentfulImage asset={post.fields.cover} />
       </div>
     </a>
   </Link>

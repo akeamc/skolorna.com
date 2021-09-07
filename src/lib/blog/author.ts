@@ -5,5 +5,7 @@ import { Asset, EntryFields } from "contentful";
  */
 export interface Author {
   name: EntryFields.Text;
+  slug: EntryFields.Text;
+  bio: EntryFields.Text;
   avatar: Asset;
 }

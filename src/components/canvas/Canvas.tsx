@@ -62,7 +62,8 @@ const Canvas: FunctionComponent<CanvasProps> = ({
 
   return (
     // eslint-disable-next-line react/jsx-props-no-spreading
-    <canvas style={{ display: "block", ...style }} {...rest} ref={canvasRef} />
+    <canvas style={{ display: "block",
+    ...style }} {...rest} ref={canvasRef} />
   );
 };
 
