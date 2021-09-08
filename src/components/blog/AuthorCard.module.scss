@@ -1,0 +1,15 @@
+.card {
+  align-items: center;
+  display: inline-flex;
+}
+
+.avatar {
+  border-radius: 50%;
+}
+
+.name {
+  font: 500 14px/1 var(--font-sans);
+  letter-spacing: -0.006em;
+  margin-left: 12px;
+  white-space: nowrap;
+}

@@ -2,6 +2,7 @@ import { Entry } from "contentful";
 import { DateTime } from "luxon";
 import React, { FunctionComponent } from "react";
 import { BlogPost } from "../../lib/blog/post";
+import ContentfulImage from "../../lib/contentful/ContentfulImage";
 import PageHeading from "../typography/PageHeading";
 import styles from "./BlogPostHeader.module.scss";
 
@@ -12,8 +13,7 @@ export interface BlogPostHeaderProps {
 const BlogPostHeader: FunctionComponent<BlogPostHeaderProps> = ({ post }) => (
   <div className={styles.header}>
     {post.fields.cover && (
-      // eslint-disable-next-line jsx-a11y/alt-text
-      <img src={post.fields.cover.fields.file.url} className={styles.cover} />
+      <ContentfulImage asset={post.fields.cover} className={styles.cover} />
     )}
     <PageHeading>{post.fields.title}</PageHeading>
     <p className={styles.description}>{post.fields.description}</p>

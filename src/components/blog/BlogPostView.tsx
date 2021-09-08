@@ -4,6 +4,7 @@ import { Entry } from "contentful";
 import React, { FunctionComponent } from "react";
 import { BlogPost } from "../../lib/blog/post";
 import Container from "../layout/Container";
+import AuthorCard from "./AuthorCard";
 import BlogPostHeader from "./BlogPostHeader";
 import styles from "./BlogPostView.module.scss";
 
@@ -30,6 +31,11 @@ const BlogPostView: FunctionComponent<BlogPostViewProps> = ({ post }) => {
     <Container document>
       <BlogPostHeader post={post} />
       <div className={styles.content}>{content}</div>
+      <div className={styles.footer}>
+        {post.fields.authors.map((author) => (
+          <AuthorCard key={author.sys.id} author={author.fields} />
+        ))}
+      </div>
     </Container>
   );
 };
