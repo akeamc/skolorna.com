@@ -4,7 +4,6 @@ import { X } from "react-feather";
 import { useMenuHistory } from "../../lib/menu/history";
 import { useMenu } from "../../lib/menu/menu";
 import Grid from "../layout/Grid";
-import GridHeading from "../typography/GridHeading";
 import InfoText from "../typography/InfoText";
 import MenuTile from "./MenuTile";
 import styles from "./RecentMenus.module.scss";
@@ -41,8 +40,7 @@ const RecentMenus: FunctionComponent = () => {
   const slice = stack.slice(0, 3);
 
   return (
-    <section>
-      <GridHeading>Snabbåtkomst</GridHeading>
+    <>
       <Grid>
         {slice.map(({ visitedAt, key }) => (
           <RecentMenu
@@ -58,7 +56,7 @@ const RecentMenus: FunctionComponent = () => {
           <InfoText>Dina senast visade menyer syns här.</InfoText>
         </div>
       )}
-    </section>
+    </>
   );
 };
 

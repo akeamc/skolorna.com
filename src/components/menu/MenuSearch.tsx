@@ -11,12 +11,12 @@ import classNames from "classnames/bind";
 import { useDelayedInput } from "../../lib/forms/delayed-input";
 import MenuTile from "./MenuTile";
 import styles from "./MenuSearch.module.scss";
-import InlineSkeleton from "../skeleton/InlineSkeleton";
 import { Menu } from "../../lib/menu/types";
 import Grid from "../layout/Grid";
 import { useMenuFuse } from "../../lib/menu/menu";
 import InfoText from "../typography/InfoText";
 import Spinner from "../Spinner";
+import RecentMenus from "./RecentMenus";
 
 const cx = classNames.bind(styles);
 
@@ -53,11 +53,10 @@ const SearchResults: FunctionComponent<SearchResultsProps> = ({
   } = useMenuSearchContext();
 
   const noResults = !(initializing || searching) && allResults.length === 0;
-  const skeleton = initializing || allResults.length === 0;
   const results = allResults.slice(0, limit);
 
-  if (!initializing && query.length === 0) {
-    return <InfoText>Sök bland tusentals matsedlar.</InfoText>;
+  if (initializing || query.length === 0) {
+    return <RecentMenus />;
   }
 
   if (noResults) {
@@ -75,26 +74,12 @@ const SearchResults: FunctionComponent<SearchResultsProps> = ({
   return (
     <>
       <div className={styles.count}>
-        {initializing ? (
-          <InlineSkeleton width="6em" />
-        ) : (
-          <>
-            Visar{" "}
-            {skeleton ? (
-              <InlineSkeleton width="4em" />
-            ) : (
-              `${results.length} av ${allResults.length}`
-            )}{" "}
-            resultat
-          </>
-        )}
+        Visar {results.length} av {allResults.length} resultat
       </div>
       <Grid>
-        {(skeleton ? new Array(12).fill(undefined) : results).map(
-          (result, i) => (
-            <MenuTile menu={result?.item} key={result?.id ?? i} />
-          )
-        )}
+        {results.map((result, i) => (
+          <MenuTile menu={result.item} key={result.item.id ?? i} />
+        ))}
       </Grid>
     </>
   );
