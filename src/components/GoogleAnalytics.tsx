@@ -15,6 +15,8 @@ export interface GoogleAnalyticsProps {
 const GoogleAnalytics: FunctionComponent<GoogleAnalyticsProps> = ({
   trackingId,
 }) => {
+  const enable = process.env.ENABLE_GOOGLE_ANALYTICS;
+
   useEffect(() => {
     /* eslint-disable @typescript-eslint/no-explicit-any */
     (window as any).dataLayer = (window as any).dataLayer || [];
@@ -30,13 +32,22 @@ const GoogleAnalytics: FunctionComponent<GoogleAnalyticsProps> = ({
     /* eslint-enable @typescript-eslint/no-explicit-any */
   }, [trackingId]);
 
+  useEffect(() => {
+    if (!enable) {
+      // eslint-disable-next-line no-console
+      console.warn("Google Analytics is disabled");
+    }
+  }, [enable]);
+
   return (
     <Head>
       {/* Global site tag (gtag.js) - Google Analytics */}
-      <script
-        async
-        src={`https://www.googletagmanager.com/gtag/js?id=${trackingId}`}
-      />
+      {enable && (
+        <script
+          async
+          src={`https://www.googletagmanager.com/gtag/js?id=${trackingId}`}
+        />
+      )}
     </Head>
   );
 };

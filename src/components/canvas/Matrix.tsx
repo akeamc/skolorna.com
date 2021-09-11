@@ -5,7 +5,8 @@ import Canvas from "./Canvas";
 import styles from "./Matrix.module.scss";
 
 export const DEFAULT_CHARS =
-  "日ﾊﾐﾋｰｳｼﾅﾓﾆｻﾜﾂｵﾘｱﾎﾃﾏｹﾒｴｶｷﾑﾕﾗｾﾈｽﾀﾇﾍｦｲｸｺｿﾁﾄﾉﾌﾔﾖﾙﾚﾛﾝ012345789Z:.\"=*+-<>¦｜╌ｸ";
+  // eslint-disable-next-line @typescript-eslint/quotes
+  '日ﾊﾐﾋｰｳｼﾅﾓﾆｻﾜﾂｵﾘｱﾎﾃﾏｹﾒｴｶｷﾑﾕﾗｾﾈｽﾀﾇﾍｦｲｸｺｿﾁﾄﾉﾌﾔﾖﾙﾚﾛﾝ012345789Z:."=*+-<>¦｜╌ｸ';
 
 export interface MatrixProps {
   chars?: string;
