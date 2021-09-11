@@ -73,7 +73,7 @@ const MenuPage: NextPage<PageProps> = ({ menu }) => {
       title={menu?.title}
       description={
         menu?.title
-          ? `Visa matsedeln för ${menu.title} på skolorna.com istället för din skolas dåliga intranät. #hataskolplattformen`
+          ? `Se matsedeln för ${menu.title} på skolorna.com istället för ditt dåliga intranät. #hataskolplattformen`
           : undefined
       }
     >
