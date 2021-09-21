@@ -53,3 +53,17 @@ export async function login(query: LoginUser): Promise<LoginResponse> {
 		refresh_token: "",
 	};
 }
+
+export async function getAccessToken(refreshToken: string): Promise<string> {
+	const res = await fetch("https://api-staging.skolorna.com/v1/auth/refresh", {
+		method: "POST",
+		body: JSON.stringify({token: refreshToken}),
+		headers: {
+			"Content-Type": "application/json",
+		},
+	});
+
+	const {access_token} = await res.json();
+
+	return access_token;
+}

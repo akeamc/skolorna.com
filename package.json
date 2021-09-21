@@ -29,6 +29,7 @@
     "use-persisted-state": "^0.3.3"
   },
   "devDependencies": {
+    "@types/jsonwebtoken": "^8.5.5",
     "@types/luxon": "^1.27.0",
     "@types/nprogress": "^0.2.0",
     "@types/react": "17.0.20",
