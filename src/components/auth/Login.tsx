@@ -1,18 +1,16 @@
 import React, { FunctionComponent, useEffect } from "react";
 import { Formik, Field, Form } from "formik";
-import { decode } from "jsonwebtoken";
-import { refreshAccessToken, login, LoginUser } from "../../lib/auth/api";
-import { useAuth } from "../../lib/auth/context";
+import { LoginUser } from "../../lib/auth/api";
+import Auth1Client from "../../lib/auth/client";
 
 const Login: FunctionComponent = () => {
-  const { setRefreshToken, setAccessToken } = useAuth();
-
   useEffect(() => {
     async function bruh() {
-      const token = await refreshAccessToken("");
-      const decoded = decode(token);
-      console.log(decoded);
-      console.log(new Date(decoded.exp * 1000));
+      const client = new Auth1Client({
+        endpoint: "https://api-staging.skolorna.com/v1/auth",
+      });
+      const token = await client.getAccessToken();
+      console.log("got access token:", token);
     }
 
     bruh();
@@ -25,10 +23,8 @@ const Login: FunctionComponent = () => {
 
   return (
     <Formik
-      onSubmit={async (values) => {
-        const { refresh_token, access_token } = await login(values);
-        setRefreshToken(refresh_token);
-        setAccessToken(access_token);
+      onSubmit={(v) => {
+        console.log(v);
       }}
       initialValues={initialValues}
     >
