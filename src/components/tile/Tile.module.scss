@@ -21,8 +21,8 @@
   }
 }
 
-.error-tile {
-  composes: error from "../../styles/error.scss";
+.danger-tile {
+  composes: danger from "../../styles/danger.scss";
 }
 
 .subheading {

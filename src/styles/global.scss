@@ -19,16 +19,16 @@
   --accents-9: #333;
   --accents-10: #111;
   --border-color: var(--accents-3);
-  --border-error: #ffb4b4;
+  --border-danger: #ffb4b4;
   --bg-primary: #fff;
-  --bg-error: #ffb1b1;
+  --bg-danger: #ffb1b1;
   --bg-alert: #c8dcff;
   --text-primary: #000;
   --text-secondary: var(--accents-7);
   --text-tertiary: var(--accents-5);
-  --text-error: #df0c0c;
+  --text-danger: #df0c0c;
   --skeleton-bg: var(--accents-2);
-  --skeleton-fg: var(--accents-3);
+  --skeleton-fg: var(--accents-1);
   --shadow-color: rgba(0, 0, 0, 0.1);
   --shadow-sm: 0 0 3px 2px var(--shadow-color);
   --shadow-md: 0 16px 28px rgba(37, 38, 45, 0.12);
@@ -37,6 +37,8 @@
   --page-gutter: 16px;
   --progress-bar: #0800ff;
   --brand-link: #1856ff;
+  --button-fg: #fff;
+  --button-bg: var(--brand-link);
 
   @media (min-width: 480px) {
     --page-gutter: 32px;

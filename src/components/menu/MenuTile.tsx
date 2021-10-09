@@ -20,7 +20,7 @@ export interface MenuTileProps {
 const MenuTile: FunctionComponent<MenuTileProps> = ({ menu, error }) => {
   if (error) {
     return (
-      <Tile heading="???" subHeading="Ett fel inträffade" error>
+      <Tile heading="???" subHeading="Ett fel inträffade" danger>
         {/* Menyn kan inte läsas in. */}
         <NextDayList menu="bruh" />
       </Tile>

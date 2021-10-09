@@ -9,7 +9,7 @@ export interface TileProps {
   heading: ReactNode;
   subHeading?: ReactNode;
   href?: string;
-  error?: boolean;
+  danger?: boolean;
 }
 
 const Tile: FunctionComponent<TileProps> = ({
@@ -17,10 +17,10 @@ const Tile: FunctionComponent<TileProps> = ({
   subHeading,
   children,
   href,
-  error,
+  danger,
 }) => {
   const inner = (
-    <a className={cx("tile", { "error-tile": error })}>
+    <a className={cx("tile", { "danger-tile": danger })}>
       {subHeading && <div className={styles.subheading}>{subHeading}</div>}
       <h3 className={styles.heading}>{heading}</h3>
       <div>{children}</div>

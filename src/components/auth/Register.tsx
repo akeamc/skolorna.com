@@ -1,34 +1,36 @@
 import React, { FunctionComponent } from "react";
 import { Formik, Field, Form } from "formik";
 import { useRouter } from "next/router";
-import { LogIn as LoginIcon } from "react-feather";
-import { LoginUser } from "../../lib/auth/client";
+import { ArrowRight } from "react-feather";
+import { RegisterUser } from "../../lib/auth/client";
 import { useAuth } from "../../lib/auth/context";
 import Button from "../button/Button";
 
-const Login: FunctionComponent = () => {
-  const { login } = useAuth();
+const Register: FunctionComponent = () => {
+  const { register } = useAuth();
   const router = useRouter();
 
-  const initialValues: LoginUser = {
+  const initialValues: RegisterUser = {
     email: "",
     password: "",
+    full_name: "",
   };
 
   return (
     <Formik
-      onSubmit={(v) => login(v).then(() => router.push("/konto"))}
+      onSubmit={(v) => register(v).then(() => router.push("/konto"))}
       initialValues={initialValues}
     >
       <Form>
         <Field name="email" type="email" />
         <Field name="password" type="password" />
-        <Button type="submit" icon={LoginIcon}>
-          Logga in
+        <Field name="full_name" />
+        <Button type="submit" icon={ArrowRight}>
+          Registrera
         </Button>
       </Form>
     </Formik>
   );
 };
 
-export default Login;
+export default Register;

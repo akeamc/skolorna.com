@@ -1,0 +1,28 @@
+.button {
+  align-items: center;
+  background-color: var(--button-bg);
+  border: 0;
+  border-radius: var(--rounded-sm);
+  color: var(--button-fg);
+  cursor: pointer;
+  display: inline-flex;
+  font: 700 14px/1 var(--font-display);
+  height: 40px;
+  letter-spacing: 0.05em;
+  padding: 0 12px;
+  transition: all 0.1s;
+
+  &:hover {
+    opacity: 0.9;
+  }
+}
+
+.danger {
+  composes: danger from "../../styles/danger.scss";
+}
+
+.icon {
+  height: 16px;
+  margin-left: 8px;
+  width: 16px;
+}
