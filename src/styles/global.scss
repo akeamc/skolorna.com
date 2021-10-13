@@ -39,6 +39,7 @@
   --brand-link: #1856ff;
   --button-fg: #fff;
   --button-bg: var(--brand-link);
+  --shadow-focus: 0 0 0 3px rgba(24, 86, 255, 0.3);
 
   @media (min-width: 480px) {
     --page-gutter: 32px;

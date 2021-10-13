@@ -46,7 +46,10 @@ export default class Auth1Client {
   }
 
   public isAuthenticated(): boolean {
-    return typeof this.getStoredRefreshToken() === "string" || typeof this.getStoredAccessToken() === "string";
+    return (
+      typeof this.getStoredRefreshToken() === "string" ||
+      typeof this.getStoredAccessToken() === "string"
+    );
   }
 
   private accessTokenBbf(): number {

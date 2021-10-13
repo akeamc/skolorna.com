@@ -25,10 +25,15 @@ const Button: FunctionComponent<ButtonProps> = ({
   className,
   children,
   icon: Icon,
-  ...rest
+  ...forwardedProps
 }) => (
-  // eslint-disable-next-line react/button-has-type, react/jsx-props-no-spreading
-  <button className={cx("button", mood, className)} type={type} {...rest}>
+  <button
+    className={cx("button", mood, className)}
+    // eslint-disable-next-line react/button-has-type
+    type={type}
+    // eslint-disable-next-line react/jsx-props-no-spreading
+    {...forwardedProps}
+  >
     {children}
     {Icon && <Icon className={cx("icon")} />}
   </button>

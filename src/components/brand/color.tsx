@@ -26,8 +26,7 @@ export const ColorSample: FunctionComponent<ColorSampleProps> = ({ name }) => {
 
   return (
     <div
-      style={{ backgroundColor: `var(--${name})`,
-    color: fg }}
+      style={{ backgroundColor: `var(--${name})`, color: fg }}
       ref={ref}
       className={styles.sample}
     >
