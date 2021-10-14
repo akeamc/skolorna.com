@@ -1,6 +1,5 @@
 import { GetStaticProps, NextPage } from "next";
 import React from "react";
-import Login from "../components/auth/Login";
 import HomeHero, { Doodle } from "../components/home/HomeHero";
 import Alerts from "../components/layout/Alerts";
 import Main from "../components/layout/Main";
@@ -36,7 +35,6 @@ const Home: NextPage<PageProps> = ({ doodle }) => (
     before={<Alerts />}
   >
     <HomeHero doodle={doodle} />
-    <Login />
   </Main>
 );
 

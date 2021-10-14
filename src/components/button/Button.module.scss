@@ -18,9 +18,12 @@
     opacity: 0.9;
   }
   
-  &:focus,
-  &:active {
+  &:focus {
     box-shadow: var(--shadow-focus);
+  }
+
+  &:active {
+    transform: scale(0.95);
   }
 
   &:disabled {

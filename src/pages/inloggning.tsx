@@ -5,10 +5,9 @@ import Main from "../components/layout/Main";
 import { useAuth } from "../lib/auth/context";
 import Container from "../components/layout/Container";
 import PageHeading from "../components/typography/PageHeading";
-import Register from "../components/auth/Register";
-import LogoutButton from "../components/auth/Logout";
+import Login from "../components/auth/Login";
 
-const RegistrationPage: NextPage = () => {
+const LoginPage: NextPage = () => {
   const { user } = useAuth();
   const router = useRouter();
 
@@ -19,14 +18,13 @@ const RegistrationPage: NextPage = () => {
   }
 
   return (
-    <Main title="Skapa konto">
+    <Main title="Logga in">
       <Container>
-        <PageHeading>Skapa konto</PageHeading>
-        <Register />
-        <LogoutButton />
+        <PageHeading>Logga in</PageHeading>
+        <Login />
       </Container>
     </Main>
   );
 };
 
-export default RegistrationPage;
+export default LoginPage;

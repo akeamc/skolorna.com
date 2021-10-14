@@ -27,7 +27,8 @@
     "swr": "^0.5.6",
     "url-join": "^4.0.1",
     "use-persisted-state": "^0.3.3",
-    "yup": "^0.32.11"
+    "yup": "^0.32.11",
+    "zxcvbn": "^4.4.2"
   },
   "devDependencies": {
     "@types/jsonwebtoken": "^8.5.5",
@@ -36,6 +37,7 @@
     "@types/react": "17.0.20",
     "@types/url-join": "^4.0.1",
     "@types/use-persisted-state": "^0.3.0",
+    "@types/zxcvbn": "^4.4.1",
     "@typescript-eslint/eslint-plugin": "^4.4.1",
     "eslint": "^7.32.0",
     "eslint-config-airbnb-typescript": "^12.3.1",

@@ -166,6 +166,10 @@ export default class Auth1Client {
       },
     });
 
+    if (!res.ok) {
+      throw new Error(await res.json());
+    }
+
     const data: TokenResponse = await res.json();
 
     this.setAccessToken(data.access_token);

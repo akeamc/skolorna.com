@@ -23,5 +23,9 @@
 }
 
 .error {
-  border-color: var(--border-danger);
+  composes: danger from "../../styles/danger.scss";
+
+  &:focus {
+    border-color: var(--text-danger);
+  }
 }
