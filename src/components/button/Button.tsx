@@ -7,6 +7,7 @@ const cx = classNames.bind(styles);
 
 export interface ButtonProps {
   type?: "button" | "submit" | "reset";
+  variant?: "primary" | "secondary";
   mood?: "default" | "danger";
   className?: string;
   href?: string;
@@ -17,6 +18,7 @@ export interface ButtonProps {
 
 const Button: FunctionComponent<ButtonProps> = ({
   type = "button",
+  variant = "primary",
   mood = "default",
   className: forwardedClassName,
   children,
@@ -24,7 +26,7 @@ const Button: FunctionComponent<ButtonProps> = ({
   href,
   ...forwardedProps
 }) => {
-  const className = cx("button", mood, forwardedClassName);
+  const className = cx("button", mood, variant, forwardedClassName);
   const content = (
     <>
       {children}

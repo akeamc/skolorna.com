@@ -13,6 +13,9 @@ const Template: ComponentStory<typeof Button> = (args) => <Button {...args} />;
 export const Primary = Template.bind({});
 Primary.args = { children: "Save" };
 
+export const Secondary = Template.bind({});
+Secondary.args = { children: "Log in", variant: "secondary" };
+
 export const Danger = Template.bind({});
 Danger.args = { children: "Delete", mood: "danger" };
 

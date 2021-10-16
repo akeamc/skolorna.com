@@ -5,6 +5,7 @@
   background-color: var(--button-bg);
   border: 0;
   border-radius: var(--rounded-sm);
+  box-sizing: border-box;
   color: var(--button-fg);
   cursor: pointer;
   display: inline-flex;
@@ -37,6 +38,18 @@
 
   &.danger {
     @include mixins.danger;
+  }
+
+  &.secondary {
+    background-color: transparent;
+    border: 1px solid var(--button-bg);
+    color: var(--button-bg);
+
+    &:hover,
+    &:focus {
+      background-color: var(--button-bg);
+      color: var(--button-fg);
+    }
   }
 }
 

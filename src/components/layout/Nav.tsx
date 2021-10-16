@@ -40,7 +40,9 @@ const Nav: FunctionComponent = () => {
               <Avatar clickable />
             ) : (
               <>
-                <Button href="/inloggning">Logga in</Button>
+                <Button href="/inloggning" variant="secondary">
+                  Logga in
+                </Button>
                 <Button href="/registrering">Skapa konto</Button>
               </>
             )}
