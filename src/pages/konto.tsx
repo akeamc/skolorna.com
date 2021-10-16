@@ -6,7 +6,7 @@ import { useAuth } from "../lib/auth/context";
 import Container from "../components/layout/Container";
 import PageHeading from "../components/typography/PageHeading";
 import InlineSkeleton from "../components/skeleton/InlineSkeleton";
-import LogoutButton from "../components/auth/Logout";
+import LogoutButton from "../components/auth/LogoutButton";
 
 const MyAccount: NextPage = () => {
   const { unauthenticated, user } = useAuth();

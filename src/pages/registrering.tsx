@@ -6,7 +6,7 @@ import { useAuth } from "../lib/auth/context";
 import Container from "../components/layout/Container";
 import PageHeading from "../components/typography/PageHeading";
 import Register from "../components/auth/Register";
-import LogoutButton from "../components/auth/Logout";
+import LogoutButton from "../components/auth/LogoutButton";
 
 const RegistrationPage: NextPage = () => {
   const { user } = useAuth();
