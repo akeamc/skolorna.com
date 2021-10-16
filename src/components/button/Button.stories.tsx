@@ -17,7 +17,7 @@ export const Secondary = Template.bind({});
 Secondary.args = { children: "Log in", variant: "secondary" };
 
 export const Danger = Template.bind({});
-Danger.args = { children: "Delete", mood: "danger" };
+Danger.args = { children: "Delete", variant: "danger" };
 
 export const Disabled = Template.bind({});
 Disabled.args = { children: "Unclickable", disabled: true };

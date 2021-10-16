@@ -9,7 +9,7 @@ const LogoutButton: FunctionComponent = () => {
   return (
     <Button
       type="button"
-      mood="danger"
+      variant="danger"
       onClick={() => logout()}
       icon={LogOut}
       disabled={unauthenticated}
