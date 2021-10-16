@@ -1,7 +1,10 @@
+@use "../../styles/mixins";
+
 .footer {
+  @include mixins.dark;
+
   background-color: var(--bg-primary);
   color: var(--text-primary);
-  composes: dark from "../../styles/dark.scss";
   margin-top: auto;
 
   section {

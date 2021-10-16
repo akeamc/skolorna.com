@@ -1,4 +1,4 @@
-.dark {
+@mixin dark {
   --accents-10: #fafafa;
   --accents-9: #eaeaea;
   --accents-8: #999;
@@ -23,4 +23,12 @@
   --shadow-md: 0;
   --skeleton-bg: var(--accents-2);
   --skeleton-fg: var(--accents-3);
+}
+
+@mixin error {
+  --bg-primary: var(--bg-error);
+  --text-primary: var(--text-error);
+  --text-secondary: var(--text-error);
+  --text-tertiary: var(--text-error);
+  --border-color: var(--border-error);
 }
