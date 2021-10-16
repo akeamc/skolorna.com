@@ -1348,10 +1348,10 @@
   dependencies:
     "@contentful/rich-text-types" "^15.1.0"
 
-"@contentful/rich-text-types@^15.1.0":
-  version "15.1.0"
-  resolved "https://registry.yarnpkg.com/@contentful/rich-text-types/-/rich-text-types-15.1.0.tgz#5637452257e6c7c6fc406ec1ec6ab7fcc1158105"
-  integrity sha512-3PgQi/B5yKC3xXDar1Ry4i4l9jgt56PFZ40cOkE+oCNLmNlFtZolo6cTrf4VunuufSsCfjTs4iWovy7fbM1I8Q==
+"@contentful/rich-text-types@^15.1.0", "@contentful/rich-text-types@^15.3.6":
+  version "15.3.6"
+  resolved "https://registry.yarnpkg.com/@contentful/rich-text-types/-/rich-text-types-15.3.6.tgz#9caf022074b86df5a4cd1cb5e1cee01dc2b2cdbe"
+  integrity sha512-mMaS5N1FxjGq7k8l/WDqhBrAV+gu4GHvtDnFBoAwkOQ2V5Qh5oHiy39JKCLesmyXvH9tR+2BNpxwEMp3FVWpzw==
 
 "@discoveryjs/json-ext@^0.5.3":
   version "0.5.5"
