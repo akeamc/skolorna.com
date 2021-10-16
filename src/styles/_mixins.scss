@@ -1,3 +1,5 @@
+@use "sass:color";
+
 @mixin dark {
   --accents-10: #fafafa;
   --accents-9: #eaeaea;
@@ -10,14 +12,14 @@
   --accents-2: #222;
   --accents-1: #111;
   --border-color: var(--accents-3);
-  --border-error: #5e1b1b;
+  --border-danger: #5e1b1b;
   --bg-primary: #000;
-  --bg-error: #682424;
+  --bg-danger: #682424;
   --bg-alert: #0458d6;
   --text-primary: #fff;
   --text-secondary: var(--accents-7);
   --text-tertiary: var(--accents-5);
-  --text-error: #d80f0f;
+  --text-danger: #d80f0f;
   --shadow-color: rgba(255, 255, 255, 0.25);
   --shadow-sm: 0 0 3px 2px var(--shadow-color);
   --shadow-md: 0;
@@ -25,10 +27,19 @@
   --skeleton-fg: var(--accents-3);
 }
 
-@mixin error {
+@mixin rebrand($color) {
+  --progress-bar: #{$color};
+  --brand-link: #{$color};
+  --shadow-focus: 0 0 0 3px #{color.change($color, $alpha: 0.3)};
+  --button-bg: #{$color};
+}
+
+@mixin danger {
   --bg-primary: var(--bg-error);
   --text-primary: var(--text-error);
   --text-secondary: var(--text-error);
   --text-tertiary: var(--text-error);
   --border-color: var(--border-error);
+  --button-bg: var(--text-danger);
+  --shadow-focus: var(--shadow-focus-danger);
 }

@@ -23,8 +23,8 @@
   }
 }
 
-.error-tile {
-  @include mixins.error;
+.danger-tile {
+  @include mixins.danger;
 }
 
 .subheading {

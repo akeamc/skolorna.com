@@ -1,0 +1,19 @@
+.avatar {
+  background-color: var(--accents-2);
+  border: 1px solid var(--border-color);
+  border-radius: 50%;
+  height: 40px;
+  overflow: hidden;
+  transition: all 0.1s;
+  width: 40px;
+
+  &:active {
+    transform: scale(0.95);
+  }
+
+  img {
+    height: 100%;
+    object-fit: cover;
+    width: 100%;
+  }
+}

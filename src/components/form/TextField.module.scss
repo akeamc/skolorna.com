@@ -1,0 +1,33 @@
+@use "../../styles/mixins";
+
+.input {
+  background-color: var(--accents-1);
+  border: 1px solid var(--accents-3);
+  border-radius: var(--rounded-sm);
+  color: var(--text-primary);
+  font: 600 14px/1 var(--font-sans);
+  height: 40px;
+  margin: 16px 0;
+  outline: none;
+  padding: 0 8px;
+  transition: all 0.1s;
+  width: 100%;
+
+  &:focus {
+    border-color: var(--brand-link);
+    box-shadow: var(--shadow-focus);
+  }
+
+  &::placeholder {
+    color: var(--accents-4);
+    font: 700 14px/1 var(--font-display);
+  }
+  
+  .error {
+    @include mixins.danger;
+  
+    &:focus {
+      border-color: var(--text-danger);
+    }
+  }
+}
