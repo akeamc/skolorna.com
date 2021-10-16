@@ -1,3 +1,5 @@
+@use "../../styles/mixins";
+
 .input {
   background-color: var(--accents-1);
   border: 1px solid var(--accents-3);
@@ -20,12 +22,12 @@
     color: var(--accents-4);
     font: 700 14px/1 var(--font-display);
   }
-}
-
-.error {
-  composes: danger from "../../styles/danger.scss";
-
-  &:focus {
-    border-color: var(--text-danger);
+  
+  .error {
+    @include mixins.danger;
+  
+    &:focus {
+      border-color: var(--text-danger);
+    }
   }
 }

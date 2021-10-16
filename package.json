@@ -5,7 +5,9 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "dependencies": {
     "@contentful/rich-text-react-renderer": "^15.2.0",
@@ -31,14 +33,24 @@
     "zxcvbn": "^4.4.2"
   },
   "devDependencies": {
-    "@types/jsonwebtoken": "^8.5.5",
+    "@babel/core": "^7.15.8",
+    "@storybook/addon-actions": "^6.3.12",
+    "@storybook/addon-essentials": "^6.3.12",
+    "@storybook/addon-links": "^6.3.12",
+    "@storybook/builder-webpack5": "^6.3.12",
+    "@storybook/manager-webpack5": "^6.3.12",
+    "@storybook/preset-scss": "^1.0.3",
+    "@storybook/react": "^6.3.12",
     "@types/luxon": "^1.27.0",
+    "@types/jsonwebtoken": "^8.5.5",
     "@types/nprogress": "^0.2.0",
     "@types/react": "17.0.20",
     "@types/url-join": "^4.0.1",
     "@types/use-persisted-state": "^0.3.0",
     "@types/zxcvbn": "^4.4.1",
     "@typescript-eslint/eslint-plugin": "^4.4.1",
+    "babel-loader": "^8.2.2",
+    "css-loader": "^6.4.0",
     "eslint": "^7.32.0",
     "eslint-config-airbnb-typescript": "^12.3.1",
     "eslint-config-next": "^11.0.1",
@@ -49,6 +61,8 @@
     "eslint-plugin-react-hooks": "^4.0.8",
     "prettier": "^2.4.0",
     "sass": "^1.38.1",
+    "sass-loader": "^12.2.0",
+    "style-loader": "^3.3.0",
     "stylelint": "^13.13.1",
     "stylelint-config-sass-guidelines": "^8.0.0",
     "stylelint-config-standard": "^22.0.0",

@@ -1,8 +1,0 @@
-@use "sass:color";
-
-@mixin rebrand($color) {
-  --progress-bar: #{$color};
-  --brand-link: #{$color};
-  --shadow-focus: 0 0 0 3px #{color.change($color, $alpha: 0.3)};
-  --button-bg: #{$color};
-}

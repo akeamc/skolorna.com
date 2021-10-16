@@ -1,4 +1,6 @@
-.dark {
+@use "sass:color";
+
+@mixin dark {
   --accents-10: #fafafa;
   --accents-9: #eaeaea;
   --accents-8: #999;
@@ -23,4 +25,19 @@
   --shadow-md: 0;
   --skeleton-bg: var(--accents-2);
   --skeleton-fg: var(--accents-3);
+}
+
+@mixin rebrand($color) {
+  --progress-bar: #{$color};
+  --brand-link: #{$color};
+  --shadow-focus: 0 0 0 3px #{color.change($color, $alpha: 0.3)};
+  --button-bg: #{$color};
+}
+
+@mixin danger {
+  --bg-primary: var(--bg-error);
+  --text-primary: var(--text-error);
+  --text-secondary: var(--text-error);
+  --text-tertiary: var(--text-error);
+  --border-color: var(--border-error);
 }

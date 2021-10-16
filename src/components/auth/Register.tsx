@@ -43,11 +43,7 @@ const Register: FunctionComponent = () => {
 
   return (
     <Formik
-      onSubmit={(v) =>
-        register(v).then(() =>
-          router.push("/konto")
-        )
-      }
+      onSubmit={(v) => register(v).then(() => router.push("/konto"))}
       initialValues={initialValues}
       validationSchema={RegistrationSchema}
     >

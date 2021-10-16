@@ -11,6 +11,8 @@ export interface ButtonProps {
   className?: string;
   href?: string;
   icon?: ComponentType<{ className?: string }>;
+  onClick?: () => void;
+  disabled?: boolean;
 }
 
 const Button: FunctionComponent<ButtonProps> = ({
