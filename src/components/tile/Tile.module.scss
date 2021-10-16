@@ -1,3 +1,5 @@
+@use "../../styles/mixins";
+
 .tile {
   background-color: var(--bg-primary);
   border: 1px solid var(--border-color);
@@ -22,7 +24,7 @@
 }
 
 .error-tile {
-  composes: error from "../../styles/error.scss";
+  @include mixins.error;
 }
 
 .subheading {
