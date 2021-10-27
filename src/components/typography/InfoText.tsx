@@ -5,7 +5,9 @@ const InfoText: FunctionComponent = ({ children }) => (
     <style jsx>{`
       p {
         color: var(--text-tertiary);
-        font: 400 14px/1 var(--font-sans);
+        font-weight: 400;
+        font-size: 14px;
+        font-family: var(--font-sans);
         letter-spacing: -0.006em;
         text-align: center;
         margin: 0;
