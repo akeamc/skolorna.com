@@ -1327,10 +1327,10 @@
   dependencies:
     "@contentful/rich-text-types" "^15.1.0"
 
-"@contentful/rich-text-types@^15.1.0":
-  version "15.1.0"
-  resolved "https://registry.yarnpkg.com/@contentful/rich-text-types/-/rich-text-types-15.1.0.tgz#5637452257e6c7c6fc406ec1ec6ab7fcc1158105"
-  integrity sha512-3PgQi/B5yKC3xXDar1Ry4i4l9jgt56PFZ40cOkE+oCNLmNlFtZolo6cTrf4VunuufSsCfjTs4iWovy7fbM1I8Q==
+"@contentful/rich-text-types@^15.1.0", "@contentful/rich-text-types@^15.6.2":
+  version "15.6.2"
+  resolved "https://registry.yarnpkg.com/@contentful/rich-text-types/-/rich-text-types-15.6.2.tgz#fe213886970b2d8a867a7272de938753e95d1f6e"
+  integrity sha512-PAgQo7rGmYjCzkNmzfs6VYqB4SXpNy9mBTH2vLYcNrOh2qEkG3hIjjgCZCH96mAz6WHEr5OaZ+BASP3kIeu2gA==
 
 "@discoveryjs/json-ext@^0.5.3":
   version "0.5.5"
