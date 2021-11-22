@@ -1,0 +1,27 @@
+.container {
+  // background-color: #fafafa;
+}
+
+.heading {
+  font-size: 56px;
+  letter-spacing: -0.022em;
+  font-weight: 700;
+  line-height: 64px;
+
+  // @media (min-width: 792px) {
+  //   font-size: 96px;
+  // }
+}
+
+.num {
+  font-size: 50vh;
+  font-weight: 500;
+  font-feature-settings: "ss01";
+  // text-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  // color: #fff;
+}
+
+.scene {
+  // background-color: #000;
+  height: 400px;
+}

@@ -1,29 +1,26 @@
 import { GetStaticProps, NextPage } from "next";
 import React from "react";
-import Container from "../components/layout/Container";
+import { HomeHero } from "../components/layout/HomeHero";
 import Main from "../components/layout/Main";
-import { searchClient } from "../lib/oden/search";
+import { getMenus } from "../lib/oden/menus";
 
 interface PageProps {
-  menuCount: number;
+  menus: string[];
 }
 
 export const getStaticProps: GetStaticProps<PageProps> = async () => {
-  console.log(await searchClient.getRawIndex("menus"));
+  const menus = await getMenus();
 
   return {
     props: {
-      menuCount: 1
+      menus: menus.slice(0, 100).map((m) => m.title),
     },
   };
-}
+};
 
-const Home: NextPage<PageProps> = ({menuCount}) => (
+const Home: NextPage<PageProps> = ({ menus }) => (
   <Main>
-    <Container>
-      <h1>Vi vet vad det blir för mat</h1>
-      <p>{menuCount}</p>
-    </Container>
+    <HomeHero menus={menus} />
   </Main>
 );
 
