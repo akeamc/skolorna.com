@@ -2,5 +2,5 @@ import { MeiliSearch } from "meilisearch";
 
 export const searchClient = new MeiliSearch({
   host: "https://api-staging.skolorna.com/v0/search",
-  apiKey: "a0c3773f83653bf6f76440ab3b89d7c133a266a2523aa092c4cdc09c3437297f"
+  apiKey: "8802393b6aa51c9b2727ea5be44fe3a19b65a68022f8f6ac31bc87896bb6e56d"
 });
