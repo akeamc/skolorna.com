@@ -20,6 +20,7 @@
     "fuse.js": "^6.4.6",
     "jsonwebtoken": "^8.5.1",
     "luxon": "^1.27.0",
+    "meilisearch": "^0.23.0",
     "next": "^12.0.1",
     "nprogress": "^0.2.0",
     "polished": "^4.1.3",

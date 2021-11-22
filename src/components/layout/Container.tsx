@@ -1,16 +1,8 @@
 import React, { FunctionComponent } from "react";
-import classNames from "classnames/bind";
 import styles from "./Container.module.scss";
 
-const cx = classNames.bind(styles);
-
-export interface ContainerProps {
-  document?: boolean;
-}
-
-const Container: FunctionComponent<ContainerProps> = ({
+const Container: FunctionComponent = ({
   children,
-  document,
-}) => <div className={cx("container", { document })}>{children}</div>;
+}) => <div className={styles.container}>{children}</div>;
 
 export default Container;

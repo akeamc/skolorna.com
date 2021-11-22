@@ -1,40 +1,29 @@
 import { GetStaticProps, NextPage } from "next";
 import React from "react";
-import HomeHero, { Doodle } from "../components/home/HomeHero";
-import Alerts from "../components/layout/Alerts";
+import Container from "../components/layout/Container";
 import Main from "../components/layout/Main";
-import { fetchMenus } from "../lib/menu/menu";
-import { hashCode } from "../lib/utils/hash";
+import { searchClient } from "../lib/oden/search";
 
 interface PageProps {
-  doodle: Doodle;
+  menuCount: number;
 }
 
 export const getStaticProps: GetStaticProps<PageProps> = async () => {
-  const menus = await fetchMenus();
-
-  const set = menus.reduce(
-    (acc, menu) => acc.set(hashCode(menu.title), menu.title),
-    new Map<number, string>()
-  );
+  console.log(await searchClient.getRawIndex("menus"));
 
   return {
     props: {
-      doodle: Array.from(set.entries())
-        .sort((a, b) => a[0] - b[0])
-        .slice(0, 1000)
-        .map((e) => e[1])
-        .join("; "),
+      menuCount: 1
     },
   };
-};
+}
 
-const Home: NextPage<PageProps> = ({ doodle }) => (
-  <Main
-    description="Elever i alla skolor, förena er! Vi vet vad det blir till lunch."
-    before={<Alerts />}
-  >
-    <HomeHero doodle={doodle} />
+const Home: NextPage<PageProps> = ({menuCount}) => (
+  <Main>
+    <Container>
+      <h1>Vi vet vad det blir för mat</h1>
+      <p>{menuCount}</p>
+    </Container>
   </Main>
 );
 
