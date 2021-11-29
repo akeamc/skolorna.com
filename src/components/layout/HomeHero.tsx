@@ -68,13 +68,13 @@ const Scene: FunctionComponent<Props> = ({ menus }) => (
     <ambientLight />
     {/* {/* <pointLight position={[10, 10, 10]} castShadow /> */}
     <spotLight
-          penumbra={1}
-          angle={1}
-          castShadow
-          position={[10, 60, -5]}
-          intensity={8}
-          shadow-mapSize={[2048, 2048]}
-        />
+      penumbra={1}
+      angle={1}
+      castShadow
+      position={[10, 60, -5]}
+      intensity={8}
+      shadow-mapSize={[2048, 2048]}
+    />
     <BlackHole />
     <Thing position={[2, 0, 0]} />
     {/* <Thing position={[2.1, 0, 0]} />

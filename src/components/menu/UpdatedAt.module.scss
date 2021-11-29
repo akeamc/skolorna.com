@@ -1,0 +1,31 @@
+@use "../../styles/font";
+@use "../../styles/mixins";
+
+.updatedAt {
+  --bg: var(--bg-success);
+  --fg: var(--fg-success);
+  align-items: center;
+  background-color: var(--bg);
+  border-radius: 9999px;
+  display: inline-flex;
+  font-size: 14px;
+  padding: 8px 12px;
+
+  &.never {
+    --bg: var(--bg-danger);
+    --fg: var(--fg-danger);
+  }
+
+  svg {
+    color: var(--fg);
+    height: 16px;
+    width: 16px;
+  }
+
+  span {
+    color: #000;
+    font: 500 14px/1 var(--font-sans);
+    letter-spacing: font.inter-tracking(14);
+    margin-left: 6px;
+  }
+}

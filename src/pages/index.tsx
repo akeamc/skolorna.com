@@ -1,26 +1,16 @@
-import { GetStaticProps, NextPage } from "next";
-import React from "react";
-import { HomeHero } from "../components/layout/HomeHero";
+import React, { FunctionComponent } from "react";
+import { NextPage } from "next";
 import Main from "../components/layout/Main";
-import { getMenus } from "../lib/oden/menus";
+import { InstantMenuSearch } from "../lib/oden/instantsearch";
+import { Hits, SearchBox } from "react-instantsearch-dom";
+import { Hit } from "../components/menu/search/Hit";
 
-interface PageProps {
-  menus: string[];
-}
-
-export const getStaticProps: GetStaticProps<PageProps> = async () => {
-  const menus = await getMenus();
-
-  return {
-    props: {
-      menus: menus.slice(0, 100).map((m) => m.title),
-    },
-  };
-};
-
-const Home: NextPage<PageProps> = ({ menus }) => (
+const Home: NextPage = () => (
   <Main>
-    <HomeHero menus={menus} />
+    <InstantMenuSearch>
+      <SearchBox />
+      <Hits hitComponent={Hit} />
+    </InstantMenuSearch>
   </Main>
 );
 

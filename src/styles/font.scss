@@ -1,0 +1,12 @@
+@use "sass:math";
+
+// https://rsms.me/inter/dynmetrics/
+@function inter-tracking($z) {
+  $a: -0.0223;
+  $b: 0.185;
+  $c: -0.1745;
+
+  $tracking: $a + $b * math.pow(math.$e, $c * $z);
+
+  @return $tracking * 1em;
+}

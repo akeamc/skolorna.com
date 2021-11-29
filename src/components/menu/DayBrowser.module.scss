@@ -1,0 +1,20 @@
+.date {
+  color: #8e8e8e;
+  font: 400 14px/1 var(--font-sans);
+  margin: 0;
+}
+
+.meals {
+  margin-bottom: 16px;
+
+  li {
+    font: 500 18px/1.4 var(--font-sans);
+    margin-bottom: 8px;
+  }
+}
+
+.day {
+  border-bottom: 1px solid #eaeaea;
+  max-width: 960px;
+  padding: 24px 0;
+}

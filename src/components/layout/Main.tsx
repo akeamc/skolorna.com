@@ -1,9 +1,13 @@
 import React, { FunctionComponent } from "react";
 import styles from "./Main.module.scss";
+import { Navbar } from "./Navbar";
 
 const Main: FunctionComponent = ({ children }) => (
-  <div className={styles.container}>
-    <main className={styles.main}>{children}</main>
+  <div>
+    <Navbar />
+    <div className={styles.container}>
+      <main className={styles.main}>{children}</main>
+    </div>
   </div>
 );
 

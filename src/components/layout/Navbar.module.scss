@@ -1,0 +1,45 @@
+@use "../../styles/font";
+
+.nav {
+  --navbar-height: 64px;
+  --item-spacing: 12px;
+
+  height: var(--navbar-height);
+
+  ul {
+    align-items: center;
+    display: flex;
+    height: var(--navbar-height);
+    margin: 0;
+    padding: 0;
+  }
+}
+
+.item {
+  font: 500 14px/1 var(--font-sans);
+  letter-spacing: font.inter-tracking(14);
+  margin: 0 var(--item-spacing);
+  position: relative;
+
+  a {
+    display: inline-block;
+    padding: 10px;
+  }
+}
+
+.logo {
+  display: inline-block;
+  margin-right: var(--item-spacing);
+  width: 24px;
+}
+
+.indicator {
+  background-color: var(--accents-3);
+  border-radius: 12px;
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: -1;
+}
