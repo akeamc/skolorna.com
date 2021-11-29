@@ -1,9 +1,9 @@
 import React, { FunctionComponent, useState } from "react";
 import Link from "next/link";
-import Container from "./Container";
-import styles from "./Navbar.module.scss";
 import { useRouter } from "next/router";
 import { AnimateSharedLayout, motion } from "framer-motion";
+import Container from "./Container";
+import styles from "./Navbar.module.scss";
 import { LogoIcon } from "../brand/Icon";
 
 interface Item {

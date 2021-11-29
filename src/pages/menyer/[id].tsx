@@ -4,10 +4,9 @@ import React from "react";
 import { useRouter } from "next/router";
 import { DateTime } from "luxon";
 import Main from "../../components/layout/Main";
-import { getDays, getMenu, Menu } from "../../lib/oden/menus";
+import { getMenu, Menu } from "../../lib/oden/menus";
 import { UpdatedAt } from "../../components/menu/UpdatedAt";
 import Container from "../../components/layout/Container";
-import useSWR from "swr";
 import { DayBrowser } from "../../components/menu/DayBrowser";
 import { InlineSkeleton } from "../../components/skeleton/InlineSkeleton";
 

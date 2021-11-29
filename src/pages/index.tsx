@@ -1,8 +1,8 @@
-import React, { FunctionComponent } from "react";
+import React from "react";
 import { NextPage } from "next";
+import { Hits, SearchBox } from "react-instantsearch-dom";
 import Main from "../components/layout/Main";
 import { InstantMenuSearch } from "../lib/oden/instantsearch";
-import { Hits, SearchBox } from "react-instantsearch-dom";
 import { Hit } from "../components/menu/search/Hit";
 
 const Home: NextPage = () => (

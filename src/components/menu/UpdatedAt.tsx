@@ -14,7 +14,7 @@ export interface Props {
  * Display when the data was last updated.
  */
 export const UpdatedAt: FunctionComponent<Props> = ({ updatedAt }) => {
-  const loading = typeof updatedAt === "undefined";
+  // const loading = typeof updatedAt === "undefined";
   const never = updatedAt === null;
 
   return (
