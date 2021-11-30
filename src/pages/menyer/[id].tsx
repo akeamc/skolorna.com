@@ -9,6 +9,7 @@ import { UpdatedAt } from "../../components/menu/UpdatedAt";
 import Container from "../../components/layout/Container";
 import { DayBrowser } from "../../components/menu/DayBrowser";
 import { InlineSkeleton } from "../../components/skeleton/InlineSkeleton";
+import styles from "./[id].module.scss";
 
 export interface PageProps {
   menu: Menu | null;
@@ -61,7 +62,9 @@ const MenuPage: NextPage<PageProps> = ({ menu }) => {
   return (
     <Main>
       <Container>
-        <h1>{menu?.title ?? <InlineSkeleton width="10em" />}</h1>
+        <h1 className={styles.heading}>
+          {menu?.title ?? <InlineSkeleton width="10em" />}
+        </h1>
         <UpdatedAt
           updatedAt={
             typeof menu?.updated_at === "string"

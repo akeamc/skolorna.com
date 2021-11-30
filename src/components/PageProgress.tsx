@@ -1,15 +1,29 @@
 import Router from "next/router";
 import NProgress from "nprogress";
-import React, { FunctionComponent, useEffect } from "react";
+import React, { FunctionComponent, useEffect, useRef } from "react";
+
+const DELAY = 250;
 
 /**
  * NProgress for Next.js.
  */
 const PageProgress: FunctionComponent = () => {
+  const timer = useRef<NodeJS.Timeout | null>(null);
+
+  function done() {
+    NProgress.done();
+
+    if (timer.current) {
+      clearTimeout(timer.current);
+    }
+  }
+
   useEffect(() => {
-    Router.events.on("routeChangeStart", () => NProgress.start());
-    Router.events.on("routeChangeComplete", () => NProgress.done());
-    Router.events.on("routeChangeError", () => NProgress.done());
+    Router.events.on("routeChangeStart", () => {
+      timer.current = setTimeout(() => NProgress.start(), DELAY);
+    });
+    Router.events.on("routeChangeComplete", () => done());
+    Router.events.on("routeChangeError", () => done());
   }, []);
 
   return (
@@ -27,7 +41,7 @@ const PageProgress: FunctionComponent = () => {
         left: 0;
         width: 100%;
         height: 2px;
-        box-shadow: 0 0 10px var(--progress-bar);
+        // box-shadow: 0 0 10px var(--progress-bar);
       }
 
       /* Fancy blur effect */

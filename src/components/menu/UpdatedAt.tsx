@@ -28,7 +28,7 @@ export const UpdatedAt: FunctionComponent<Props> = ({ updatedAt }) => {
             dateTime={updatedAt?.toISO()}
             title={updatedAt?.toLocaleString(DateTime.DATETIME_FULL)}
           >
-            {updatedAt?.toRelative({ locale: "sv", style: "short" })}
+            Uppdaterades {updatedAt?.toRelativeCalendar({ locale: "sv" })}
           </time>
         )}
       </span>
