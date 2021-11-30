@@ -9,7 +9,8 @@ import { UpdatedAt } from "../../components/menu/UpdatedAt";
 import Container from "../../components/layout/Container";
 import { DayBrowser } from "../../components/menu/DayBrowser";
 import { InlineSkeleton } from "../../components/skeleton/InlineSkeleton";
-import styles from "./[id].module.scss";
+import { StandardPageHeading } from "../../components/typography/Heading";
+import NotFound from "../404";
 
 export interface PageProps {
   menu: Menu | null;
@@ -56,15 +57,15 @@ const MenuPage: NextPage<PageProps> = ({ menu }) => {
   const { isFallback } = useRouter();
 
   if (!isFallback && !menu) {
-    return <p>404</p>;
+    return <NotFound />;
   }
 
   return (
     <Main>
       <Container>
-        <h1 className={styles.heading}>
+        <StandardPageHeading>
           {menu?.title ?? <InlineSkeleton width="10em" />}
-        </h1>
+        </StandardPageHeading>
         <UpdatedAt
           updatedAt={
             typeof menu?.updated_at === "string"

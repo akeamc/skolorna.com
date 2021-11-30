@@ -1,0 +1,56 @@
+@use "../../styles/font";
+
+.narrow,
+.prose > :not(.big) {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 576px;
+  padding: 0 var(--page-gutter);
+
+  @media (min-width: 1024px) {
+    max-width: 640px;
+  }
+}
+
+.prose {
+  margin: 0 auto;
+  max-width: 692px;
+
+  @media (min-width: 1024px) {
+    max-width: 980px;
+  }
+
+  p {
+    font: 400 16px/1.5 var(--font-sans);
+    letter-spacing: font.inter-tracking(16);
+    margin-bottom: 32px;
+  }
+
+  hr {
+    border: 0;
+    border-top: 1px solid var(--accents-4);
+  }
+}
+
+.big {
+  margin: 48px 0;
+
+  @media (min-width: 690px) {
+    // margin: 0 var(--page-gutter);
+
+    img {
+      border-radius: 12px;
+    }
+  }
+
+  figcaption {
+    // letter-spacing: font.inter-tracking(12);
+    color: var(--accents-7);
+    font: 600 12px/16px var(--font-sans);
+    margin-top: 16px;
+  }
+}
+
+.hrWrapper {
+  margin: 32px 0;
+}

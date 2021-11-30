@@ -1,10 +1,10 @@
 @use "../../styles/font";
 
-.heading {
+.standard {
   font: 500 32px/1 var(--font-sans);
   letter-spacing: font.inter-tracking(32);
-  max-width: 720px;
   margin: 0.5em 0;
+  max-width: 720px;
 
   @media (min-width: 480px) {
     font-size: 48px;

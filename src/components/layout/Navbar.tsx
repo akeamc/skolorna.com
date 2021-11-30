@@ -58,6 +58,7 @@ export const Navbar: FunctionComponent = () => {
                   <motion.div
                     className={styles.indicator}
                     layoutId="indicator"
+                    style={{ borderRadius: 12 }} // Fix distortion by informing Framer about the border radius
                   />
                 )}
               </li>
