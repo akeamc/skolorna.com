@@ -1,5 +1,5 @@
 .date {
-  color: #8e8e8e;
+  color: var(--accents-7);
   font: 400 14px/1 var(--font-sans);
   margin: 0;
 }
@@ -14,7 +14,7 @@
 }
 
 .day {
-  border-bottom: 1px solid #eaeaea;
+  border-bottom: 1px solid var(--accents-4);
   max-width: 960px;
   padding: 24px 0;
 }
