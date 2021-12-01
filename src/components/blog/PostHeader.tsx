@@ -12,7 +12,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { BlogPost } from "../../lib/blog/post";
 import { StandardPageHeading } from "../typography/Heading";
-import { NarrowContainer } from "./Prose";
+import { Narrow, ProseContainer, WideProseImage } from "./Prose";
 import styles from "./PostHeader.module.scss";
 import { Author } from "../../lib/blog/author";
 
@@ -76,24 +76,35 @@ export const Authors: FunctionComponent<{
   </>
 );
 
-export const PostHeader: FunctionComponent<Props> = ({ post }) => (
-  <header>
-    <NarrowContainer>
-      <StandardPageHeading>{post.fields.title}</StandardPageHeading>
-      <p className={styles.description}>{post.fields.description}</p>
-      <div className={styles.byline}>
-        <Authors authors={post.fields.authors} />{" "}
-        <time dateTime={post.sys.createdAt}>
-          {DateTime.fromISO(post.sys.createdAt).toLocaleString({
-            hour: "numeric",
-            minute: "numeric",
-            day: "numeric",
-            month: "short",
-            year: "numeric",
-            locale: "sv",
-          })}
-        </time>
-      </div>
-    </NarrowContainer>
-  </header>
-);
+export const PostHeader: FunctionComponent<Props> = ({ post }) => {
+  const { title, description, cover, authors } = post.fields;
+
+  return (
+    <header>
+      <ProseContainer>
+        <Narrow>
+          <StandardPageHeading>{title}</StandardPageHeading>
+          <p className={styles.description}>{description}</p>
+          <div className={styles.byline}>
+            <Authors authors={authors} />{" "}
+            <time dateTime={post.sys.createdAt}>
+              {DateTime.fromISO(post.sys.createdAt).toLocaleString({
+                hour: "numeric",
+                minute: "numeric",
+                day: "numeric",
+                month: "short",
+                year: "numeric",
+                locale: "sv",
+              })}
+            </time>
+          </div>
+        </Narrow>
+        <WideProseImage
+          src={cover.fields.file.url}
+          title={cover.fields.title}
+          caption={cover.fields.description}
+        />
+      </ProseContainer>
+    </header>
+  );
+};

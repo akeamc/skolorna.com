@@ -8,8 +8,35 @@ export interface Props {
   text: EntryFields.RichText;
 }
 
-export const NarrowContainer: FunctionComponent = (props) => (
+/**
+ * TODO: This should be renamed.
+ */
+export const Narrow: FunctionComponent = (props) => (
   <div className={styles.narrow} {...props} />
+);
+
+/**
+ * TODO: Could use a better name.
+ */
+export const ProseContainer: FunctionComponent = (props) => (
+  <div className={styles.proseContainer} {...props} />
+);
+
+interface WideProseImageProps {
+  src: string;
+  title: string;
+  caption?: string;
+}
+
+export const WideProseImage: FunctionComponent<WideProseImageProps> = ({
+  src,
+  title,
+  caption,
+}) => (
+  <div className={styles.wide}>
+    <img src={src} title={title} alt={caption} />
+    {caption && <figcaption className={styles.narrow}>{caption}</figcaption>}
+  </div>
 );
 
 export const Prose: FunctionComponent<Props> = ({ text }) => {
@@ -20,10 +47,11 @@ export const Prose: FunctionComponent<Props> = ({ text }) => {
 
         if (file.details.image) {
           return (
-            <div className={styles.big}>
-              <img src={file.url} title={title} alt={description} />
-              <figcaption className={styles.narrow}>{description}</figcaption>
-            </div>
+            <WideProseImage
+              src={file.url}
+              title={title}
+              caption={description}
+            />
           );
         }
 
