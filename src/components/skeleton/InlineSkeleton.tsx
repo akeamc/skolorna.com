@@ -15,6 +15,7 @@ export interface InlineSkeletonProps extends SkeletonProps {
 export const InlineSkeleton: FunctionComponent<InlineSkeletonProps> = ({
   count = 1,
   className,
+  style,
   ...skeletonProps
 }) => (
   <span>
@@ -23,6 +24,10 @@ export const InlineSkeleton: FunctionComponent<InlineSkeletonProps> = ({
         // eslint-disable-next-line react/no-array-index-key
         key={index}
         className={className}
+        style={{
+          lineHeight: 0.9,
+          ...style,
+        }}
         // eslint-disable-next-line react/jsx-props-no-spreading
         {...skeletonProps}
       >

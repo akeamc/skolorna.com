@@ -5,11 +5,15 @@
   --bg: var(--bg-success);
   --fg: var(--fg-success);
   align-items: center;
-  background-color: var(--bg);
   border-radius: 9999px;
   display: inline-flex;
   font-size: 14px;
-  padding: 8px 12px;
+  height: 32px;
+  padding: 0 12px;
+
+  &:not(.skeleton) {
+    background-color: var(--bg);
+  }
 
   &.never {
     --bg: var(--bg-danger);
@@ -28,4 +32,10 @@
     letter-spacing: font.inter-tracking(14);
     margin-left: 6px;
   }
+}
+
+.skeleton {
+  composes: skeleton-bg from "../skeleton/Skeleton.module.scss";
+  max-width: 100%;
+  width: 20em;
 }

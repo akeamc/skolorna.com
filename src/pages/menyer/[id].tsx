@@ -50,7 +50,7 @@ export const getStaticProps: GetStaticProps<PageProps, Q> = async ({
 
 export const getStaticPaths: GetStaticPaths = async () => ({
   paths: [],
-  fallback: "blocking",
+  fallback: true,
 });
 
 const MenuPage: NextPage<PageProps> = ({ menu }) => {
@@ -64,7 +64,7 @@ const MenuPage: NextPage<PageProps> = ({ menu }) => {
     <Main>
       <Container>
         <StandardPageHeading>
-          {menu?.title ?? <InlineSkeleton width="10em" />}
+          {menu?.title ?? <InlineSkeleton width="10em" count={2} />}
         </StandardPageHeading>
         <UpdatedAt
           updatedAt={

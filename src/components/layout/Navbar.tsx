@@ -48,6 +48,7 @@ export const Navbar: FunctionComponent = () => {
                 className={styles.item}
                 onMouseEnter={() => setHighlighted(href)}
                 onMouseLeave={() => setHighlighted(router.asPath)}
+                key={href}
               >
                 <Link href={href}>
                   <a>{label}</a>

@@ -3,6 +3,7 @@ import React, {
   AnchorHTMLAttributes,
   DetailedHTMLProps,
   forwardRef,
+  Fragment,
   FunctionComponent,
   useState,
 } from "react";
@@ -64,13 +65,13 @@ export const Authors: FunctionComponent<{
 }> = ({ authors }) => (
   <>
     {authors.map((author, i) => (
-      <>
-        <Link href={`/${author.fields.slug}`} key={author.sys.id} passHref>
+      <Fragment key={author.sys.id}>
+        <Link href={`/${author.fields.slug}`} passHref>
           <FancyLink>{author.fields.name}</FancyLink>
         </Link>
         {i < authors.length - 2 && ", "}
         {i === authors.length - 2 && " och "}
-      </>
+      </Fragment>
     ))}
   </>
 );
