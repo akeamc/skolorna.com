@@ -4,6 +4,7 @@ import { usePlaceholder } from "../../lib/contentful/placeholder";
 
 export interface Props {
   asset: Asset;
+  sizes?: number[];
 }
 
 function normalizeAssetUrl(asset: Asset): string {
@@ -13,15 +14,17 @@ function normalizeAssetUrl(asset: Asset): string {
 }
 
 type Format = "jpeg" | "png" | "webp";
-const SIZES = [200, 540, 768, 1024, 1400];
 
-function srcSet(base: string, format: Format): string {
-  return SIZES.map((size) => `${base}?w=${size}&fm=${format} ${size}w`).join(
-    ", "
-  );
+function srcSet(base: string, format: Format, sizes: number[]): string {
+  return sizes
+    .map((size) => `${base}?w=${size}&fm=${format} ${size}w`)
+    .join(", ");
 }
 
-export const ProgressiveImage: FunctionComponent<Props> = ({ asset }) => {
+export const ProgressiveImage: FunctionComponent<Props> = ({
+  asset,
+  sizes = [200, 540, 768, 1024, 1400],
+}) => {
   const { title, file, description } = asset.fields;
   const placeholder = usePlaceholder(asset.sys.id);
   const base = normalizeAssetUrl(asset);
@@ -44,8 +47,8 @@ export const ProgressiveImage: FunctionComponent<Props> = ({ asset }) => {
             ${file.details.image?.height};
         }
       `}</style>
-      <source srcSet={srcSet(base, "webp")} type="image/webp" />
-      <source srcSet={srcSet(base, "jpeg")} type="image/jpeg" />
+      <source srcSet={srcSet(base, "webp", sizes)} type="image/webp" />
+      <source srcSet={srcSet(base, "jpeg", sizes)} type="image/jpeg" />
       <img
         src={`${base}?w=400`}
         alt={description}

@@ -66,9 +66,10 @@ export const Authors: FunctionComponent<{
   <>
     {authors.map((author, i) => (
       <Fragment key={author.sys.id}>
-        <Link href={`/${author.fields.slug}`} passHref>
+        {author.fields.name}
+        {/* <Link href={`/${author.fields.slug}`} passHref>
           <FancyLink>{author.fields.name}</FancyLink>
-        </Link>
+        </Link> */}
         {i < authors.length - 2 && ", "}
         {i === authors.length - 2 && " och "}
       </Fragment>

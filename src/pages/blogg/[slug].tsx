@@ -49,10 +49,9 @@ export const getStaticProps: GetStaticProps<PageProps, Q> = async ({
 
     const placeholders = Object.fromEntries(
       await Promise.all(
-        assets.map(async (asset) => {
-          const b64 = await generatePlaceholder(asset as any);
-          return [asset?.sys.id, b64];
-        })
+        assets.map((asset) =>
+          generatePlaceholder(asset as any).then((b64) => [asset?.sys.id, b64])
+        )
       )
     );
 
