@@ -45,6 +45,10 @@ export const ProgressiveImage: FunctionComponent<Props> = ({
           width: 100%;
           aspect-ratio: ${file.details.image?.width} /
             ${file.details.image?.height};
+          text-indent: -10000px;
+          white-space: nowrap;
+          overflow: hidden;
+          color: transparent;
         }
       `}</style>
       <source srcSet={srcSet(base, "webp", sizes)} type="image/webp" />
