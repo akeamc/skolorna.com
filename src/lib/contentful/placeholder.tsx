@@ -1,4 +1,5 @@
 import { Asset } from "contentful";
+import { createContext, useContext } from "react";
 
 export const blobToDataUri = (blob: Blob): Promise<string> =>
   new Promise((resolve, reject) => {
@@ -9,7 +10,7 @@ export const blobToDataUri = (blob: Blob): Promise<string> =>
     reader.onerror = () => reject(reader.error);
   });
 
-export async function lowres(asset: Asset) {
+export async function generatePlaceholder(asset: Asset) {
   const url = new URL(`https:${asset.fields.file.url}`);
   // Oversized assets point to downloads.ctfassets.net which doesn't allow manipulation
   url.hostname = "images.ctfassets.net";
@@ -28,3 +29,13 @@ export async function lowres(asset: Asset) {
     "base64"
   )}`;
 }
+
+export type PlaceholderTable = Record<string, string>;
+
+export const PlaceholderContext = createContext<PlaceholderTable>({});
+
+export const usePlaceholder = (key: string): string | undefined => {
+  const lut = useContext(PlaceholderContext);
+
+  return lut[key];
+};

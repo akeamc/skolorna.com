@@ -1,7 +1,8 @@
 import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 import { BLOCKS } from "@contentful/rich-text-types";
-import { EntryFields } from "contentful";
+import { Asset, EntryFields } from "contentful";
 import React, { FunctionComponent } from "react";
+import { ProgressiveImage } from "../contentful/ProgressiveImage";
 import styles from "./Prose.module.scss";
 
 export interface Props {
@@ -23,36 +24,32 @@ export const ProseContainer: FunctionComponent = (props) => (
 );
 
 interface WideProseImageProps {
-  src: string;
-  title: string;
-  caption?: string;
+  asset: Asset;
 }
 
 export const WideProseImage: FunctionComponent<WideProseImageProps> = ({
-  src,
-  title,
-  caption,
-}) => (
-  <div className={styles.wide}>
-    <img src={src} title={title} alt={caption} />
-    {caption && <figcaption className={styles.narrow}>{caption}</figcaption>}
-  </div>
-);
+  asset,
+}) => {
+  const { description } = asset.fields;
+
+  return (
+    <div className={styles.wide}>
+      <ProgressiveImage asset={asset} />
+      {description && (
+        <figcaption className={styles.narrow}>{description}</figcaption>
+      )}
+    </div>
+  );
+};
 
 export const Prose: FunctionComponent<Props> = ({ text }) => {
   const content = documentToReactComponents(text as any, {
     renderNode: {
       [BLOCKS.EMBEDDED_ASSET]: ({ data }) => {
-        const { file, title, description } = data.target.fields;
+        const { target } = data;
 
-        if (file.details.image) {
-          return (
-            <WideProseImage
-              src={file.url}
-              title={title}
-              caption={description}
-            />
-          );
+        if (target.fields.file.details.image) {
+          return <WideProseImage asset={target} />;
         }
 
         return null;

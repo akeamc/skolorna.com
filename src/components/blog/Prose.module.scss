@@ -39,9 +39,15 @@
 .wide {
   margin: 48px 0;
 
+  img {
+    width: 100%;
+  }
+
   @media (min-width: 690px) {
-    img {
+    img,
+    picture {
       border-radius: 12px;
+      overflow: hidden;
     }
   }
 

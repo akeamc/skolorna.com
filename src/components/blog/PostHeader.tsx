@@ -99,11 +99,7 @@ export const PostHeader: FunctionComponent<Props> = ({ post }) => {
             </time>
           </div>
         </Narrow>
-        <WideProseImage
-          src={cover.fields.file.url}
-          title={cover.fields.title}
-          caption={cover.fields.description}
-        />
+        <WideProseImage asset={cover} />
       </ProseContainer>
     </header>
   );

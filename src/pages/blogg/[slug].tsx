@@ -1,5 +1,5 @@
 import { BLOCKS } from "@contentful/rich-text-types";
-import { Entry } from "contentful";
+import { Asset, Entry } from "contentful";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import Head from "next/head";
 import { ParsedUrlQuery } from "querystring";
@@ -12,12 +12,16 @@ import {
   listBlogPosts,
   getBlogPostBySlug,
 } from "../../lib/blog/post";
-import { lowres } from "../../lib/contentful/lowres";
+import {
+  generatePlaceholder,
+  PlaceholderContext,
+  PlaceholderTable,
+} from "../../lib/contentful/placeholder";
 import NotFound from "../404";
 
 interface PageProps {
   post: Entry<BlogPost> | null;
-  previews: Record<string, string> | null;
+  placeholders: PlaceholderTable | null;
 }
 
 interface Q extends ParsedUrlQuery {
@@ -36,22 +40,26 @@ export const getStaticProps: GetStaticProps<PageProps, Q> = async ({
   try {
     const post = await getBlogPostBySlug(slug);
 
-    const entries = await Promise.all(
-      post.fields.content.content
+    const assets: Asset[] = [
+      post.fields.cover,
+      ...post.fields.content.content
         .filter(({ nodeType }) => (nodeType as any) === BLOCKS.EMBEDDED_ASSET)
-        .map(async (node) => {
-          const asset = node.data.target;
-          const b64 = await lowres(asset as any);
+        .map((node) => node.data.target as any),
+    ];
+
+    const placeholders = Object.fromEntries(
+      await Promise.all(
+        assets.map(async (asset) => {
+          const b64 = await generatePlaceholder(asset as any);
           return [asset?.sys.id, b64];
         })
+      )
     );
-
-    const previews = Object.fromEntries(entries);
 
     return {
       props: {
         post,
-        previews,
+        placeholders,
       },
       revalidate: 300,
     };
@@ -59,7 +67,7 @@ export const getStaticProps: GetStaticProps<PageProps, Q> = async ({
     return {
       props: {
         post: null,
-        previews: null,
+        placeholders: null,
       },
       revalidate: 60,
     };
@@ -79,36 +87,34 @@ export const getStaticPaths: GetStaticPaths = async () => {
   };
 };
 
-const BlogPostPage: NextPage<PageProps> = ({ post, previews }) => {
+const BlogPostPage: NextPage<PageProps> = ({ post, placeholders }) => {
   if (!post) {
     return <NotFound />;
   }
 
   return (
-    <Main>
-      <Head>
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta property="og:type" content="article" />
-        <meta
-          property="og:image"
-          content={post.fields.cover?.fields.file.url}
-        />
-        <meta
-          property="og:image:width"
-          content={post.fields.cover?.fields.file.details.image?.width.toString()}
-        />
-        <meta
-          property="og:image:height"
-          content={post.fields.cover?.fields.file.details.image?.height.toString()}
-        />
-      </Head>
-      {previews &&
-        Object.entries(previews).map(([id, src]) => (
-          <img src={src} key={id} title={id} alt="" />
-        ))}
-      <PostHeader post={post} />
-      <Prose text={post.fields.content} />
-    </Main>
+    <PlaceholderContext.Provider value={placeholders ?? {}}>
+      <Main>
+        <Head>
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta property="og:type" content="article" />
+          <meta
+            property="og:image"
+            content={post.fields.cover?.fields.file.url}
+          />
+          <meta
+            property="og:image:width"
+            content={post.fields.cover?.fields.file.details.image?.width.toString()}
+          />
+          <meta
+            property="og:image:height"
+            content={post.fields.cover?.fields.file.details.image?.height.toString()}
+          />
+        </Head>
+        <PostHeader post={post} />
+        <Prose text={post.fields.content} />
+      </Main>
+    </PlaceholderContext.Provider>
   );
 };
 
