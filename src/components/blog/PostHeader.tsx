@@ -9,7 +9,6 @@ import React, {
 } from "react";
 import { DateTime } from "luxon";
 import { motion } from "framer-motion";
-import Link from "next/link";
 import { BlogPost } from "../../lib/blog/post";
 import { StandardPageHeading } from "../typography/Heading";
 import { Narrow, ProseContainer, WideProseImage } from "./Prose";
@@ -20,7 +19,7 @@ export interface Props {
   post: Entry<BlogPost>;
 }
 
-const FancyLink = forwardRef<
+export const FancyLink = forwardRef<
   HTMLAnchorElement,
   DetailedHTMLProps<AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement>
 >(({ children, ...props }, ref) => {

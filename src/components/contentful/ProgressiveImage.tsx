@@ -7,7 +7,7 @@ export interface Props {
   sizes?: number[];
 }
 
-function normalizeAssetUrl(asset: Asset): string {
+export function normalizeAssetUrl(asset: Asset): string {
   const url = new URL(`https:${asset.fields.file.url}`);
   url.hostname = "images.ctfassets.net";
   return url.href;
