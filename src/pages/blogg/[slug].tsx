@@ -10,7 +10,8 @@ import Main from "../../components/layout/Main";
 import {
   BlogPost,
   listBlogPosts,
-  getBlogPostBySlug,
+  getBlogPost,
+  getPreviewBlogPost,
 } from "../../lib/blog/post";
 import {
   generatePlaceholder,
@@ -30,6 +31,7 @@ interface Q extends ParsedUrlQuery {
 
 export const getStaticProps: GetStaticProps<PageProps, Q> = async ({
   params,
+  preview,
 }) => {
   const slug = params?.slug;
 
@@ -38,7 +40,13 @@ export const getStaticProps: GetStaticProps<PageProps, Q> = async ({
   }
 
   try {
-    const post = await getBlogPostBySlug(slug);
+    let post;
+
+    if (preview) {
+      post = await getPreviewBlogPost(slug);
+    } else {
+      post = await getBlogPost(slug);
+    }
 
     const assets: Asset[] = [
       post.fields.cover,
@@ -63,6 +71,7 @@ export const getStaticProps: GetStaticProps<PageProps, Q> = async ({
       revalidate: 300,
     };
   } catch (error) {
+    console.log(error);
     return {
       props: {
         post: null,
