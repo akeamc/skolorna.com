@@ -34,14 +34,14 @@ const PageProgress: FunctionComponent = () => {
       }
 
       #nprogress .bar {
-        background: var(--progress-bar);
+        background: var(--brand);
         position: fixed;
         z-index: 1031;
         top: 0;
         left: 0;
         width: 100%;
         height: 2px;
-        // box-shadow: 0 0 10px var(--progress-bar);
+        // box-shadow: 0 0 10px var(--brand);
       }
 
       /* Fancy blur effect */
@@ -51,7 +51,7 @@ const PageProgress: FunctionComponent = () => {
         right: 0px;
         width: 100px;
         height: 100%;
-        box-shadow: 0 0 10px var(--progress-bar), 0 0 5px var(--progress-bar);
+        box-shadow: 0 0 10px var(--brand), 0 0 5px var(--brand);
         opacity: 1;
 
         -webkit-transform: rotate(3deg) translate(0px, -4px);
