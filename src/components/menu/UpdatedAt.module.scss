@@ -2,10 +2,11 @@
 @use "../../styles/mixins";
 
 .updatedAt {
-  --bg: var(--bg-success);
-  --fg: var(--fg-success);
+  --bg: var(--success);
+
   align-items: center;
   border-radius: 9999px;
+  color: #fff;
   display: inline-flex;
   font-size: 14px;
   height: 32px;
@@ -16,18 +17,15 @@
   }
 
   &.never {
-    --bg: var(--bg-danger);
-    --fg: var(--fg-danger);
+    --bg: var(--warning);
   }
 
   svg {
-    color: var(--fg);
     height: 16px;
     width: 16px;
   }
 
   span {
-    color: #000;
     font: 500 14px/1 var(--font-sans);
     letter-spacing: font.inter-tracking(14);
     margin-left: 6px;
