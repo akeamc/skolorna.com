@@ -20,7 +20,8 @@ export const PostList: FunctionComponent<Props> = ({ posts }) => (
               className={styles.image}
               style={{
                 backgroundImage: `url(${normalizeAssetUrl(
-                  post.fields.cover)}?w=256&h=256&fit=fill)`,
+                  post.fields.cover
+                )}?w=256&h=256&fit=fill)`,
               }}
             />
             <div className={styles.text}>

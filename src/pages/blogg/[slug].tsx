@@ -71,7 +71,6 @@ export const getStaticProps: GetStaticProps<PageProps, Q> = async ({
       revalidate: 300,
     };
   } catch (error) {
-    console.log(error);
     return {
       props: {
         post: null,
