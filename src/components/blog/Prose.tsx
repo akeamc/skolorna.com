@@ -54,11 +54,18 @@ export const Prose: FunctionComponent<Props> = ({ text }) => {
 
         return null;
       },
-      [BLOCKS.HR]: () => (
-        <div className={styles.hrWrapper}>
-          <hr />
-        </div>
-      ),
+      // Remove paragraphs from list items.
+      [BLOCKS.LIST_ITEM]: (node) => {
+        const transformedChildren = documentToReactComponents(node as any, {
+          // renderMark: options.renderMark,
+          renderNode: {
+            [BLOCKS.PARAGRAPH]: (_, children) => children,
+            [BLOCKS.LIST_ITEM]: (_, children) => children,
+          },
+        });
+
+        return <li>{transformedChildren}</li>;
+      },
     },
   });
 

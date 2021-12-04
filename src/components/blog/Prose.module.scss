@@ -5,7 +5,6 @@
   margin-left: auto;
   margin-right: auto;
   max-width: 576px;
-  padding: 0 var(--page-gutter);
 
   @media (min-width: 1024px) {
     max-width: 640px;
@@ -15,6 +14,7 @@
 .proseContainer {
   margin: 0 auto;
   max-width: 692px;
+  padding: 0 var(--page-gutter);
 
   @media (min-width: 1024px) {
     max-width: 980px;
@@ -27,12 +27,13 @@
   p {
     font: 400 16px/1.5 var(--font-sans);
     letter-spacing: font.inter-tracking(16);
-    margin-bottom: 32px;
+    margin-block: 0 32px;
   }
 
   hr {
     border: 0;
     border-top: 1px solid var(--accents-4);
+    margin-block: 32px;
   }
 
   a {
@@ -43,10 +44,79 @@
       text-decoration: underline;
     }
   }
+
+  blockquote {
+    border-left: 4px solid var(--accents-4);
+    font-style: italic;
+    margin-block-end: 32px;
+    padding: 0;
+    padding-inline-start: 16px;
+  }
+
+  ul,
+  ol {
+    margin-block-end: 32px;
+    padding-inline-start: 24px;
+  }
+
+  ol {
+    list-style-type: decimal;
+  }
+
+  li {
+    margin-bottom: 10px;
+  }
+
+  ul li::before {
+    color: var(--accents-4);
+    content: "–";
+    display: inline-block;
+    margin-left: -15px;
+    position: absolute;
+  }
+
+  code {
+    background-color: var(--accents-3);
+    border-radius: 3px;
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+    font-size: 0.9em;
+    padding-block: 3px;
+    padding-inline: 3px;
+  }
+
+  h2 {
+    font: 500 24px/1 var(--font-sans);
+    letter-spacing: font.inter-tracking(24);
+    margin-block: 32px 0;
+  }
+
+  h3 {
+    font: 500 20px/1 var(--font-sans);
+    letter-spacing: font.inter-tracking(20);
+    margin-block: 32px 0;
+  }
+
+  h4 {
+    font: 600 16px/1 var(--font-sans);
+    letter-spacing: font.inter-tracking(16);
+    margin-block: 32px 0;
+  }
+
+  h5 {
+    font: 700 14px/1 var(--font-sans);
+    letter-spacing: font.inter-tracking(14);
+    margin-block: 32px 0;
+  }
+
+  h6 {
+    font: 700 12px/1 var(--font-sans);
+    letter-spacing: font.inter-tracking(12);
+    margin-block: 32px 0;
+  }
 }
 
 .wide {
-  margin: 48px 0;
+  margin: 48px calc(-1 * var(--page-gutter));
 
   img {
     width: 100%;
@@ -66,8 +136,4 @@
     font: 600 12px/16px var(--font-sans);
     margin-top: 16px;
   }
-}
-
-.hrWrapper {
-  margin: 32px 0;
 }
