@@ -6,6 +6,7 @@ import { ParsedUrlQuery } from "querystring";
 import React from "react";
 import { PostHeader } from "../../components/blog/PostHeader";
 import { Prose } from "../../components/blog/Prose";
+import { normalizeAssetUrl } from "../../components/contentful/ProgressiveImage";
 import Main from "../../components/layout/Main";
 import {
   BlogPost,
@@ -99,24 +100,35 @@ const BlogPostPage: NextPage<PageProps> = ({ post, placeholders }) => {
     return <NotFound />;
   }
 
+  const { cover } = post.fields;
+
   return (
     <PlaceholderContext.Provider value={placeholders ?? {}}>
-      <Main>
+      <Main title={post.fields.title}>
         <Head>
           <meta name="twitter:card" content="summary_large_image" />
           <meta property="og:type" content="article" />
           <meta
+            property="og:article:published_time"
+            content={post.sys.createdAt}
+          />
+          <meta
+            property="og:article:modified_time"
+            content={post.sys.updatedAt}
+          />
+          <meta
             property="og:image"
-            content={post.fields.cover?.fields.file.url}
+            content={`${normalizeAssetUrl(cover)}?w=1200`}
           />
           <meta
             property="og:image:width"
-            content={post.fields.cover?.fields.file.details.image?.width.toString()}
+            content={cover.fields.file.details.image?.width.toString()}
           />
           <meta
             property="og:image:height"
-            content={post.fields.cover?.fields.file.details.image?.height.toString()}
+            content={cover.fields.file.details.image?.height.toString()}
           />
+          <meta property="og:image:alt" content={cover.fields.description} />
         </Head>
         <PostHeader post={post} />
         <Prose text={post.fields.content} />

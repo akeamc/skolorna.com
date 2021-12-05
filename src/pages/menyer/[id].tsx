@@ -61,7 +61,7 @@ const MenuPage: NextPage<PageProps> = ({ menu }) => {
   }
 
   return (
-    <Main>
+    <Main title={menu?.title}>
       <Container>
         <StandardPageHeading>
           {menu?.title ?? <InlineSkeleton width="10em" count={2} />}
