@@ -15,6 +15,7 @@ const Main: FunctionComponent<Props> = ({ title, description, children }) => (
       <meta property="og:title" content={title} />
       <meta name="description" content={description} />
       <meta property="og:description" content={description} />
+      <meta property="og:site_name" content="Skolorna" />
     </Head>
     <Navbar />
     <div className={styles.container}>
