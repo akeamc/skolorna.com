@@ -5,12 +5,16 @@ import { Navbar } from "./Navbar";
 
 export interface Props {
   title?: string;
+  description?: string;
 }
 
-const Main: FunctionComponent<Props> = ({ title, children }) => (
+const Main: FunctionComponent<Props> = ({ title, description, children }) => (
   <div>
     <Head>
       <title>{title}</title>
+      <meta property="og:title" content={title} />
+      <meta name="description" content={description} />
+      <meta property="og:description" content={description} />
     </Head>
     <Navbar />
     <div className={styles.container}>

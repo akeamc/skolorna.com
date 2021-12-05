@@ -104,7 +104,7 @@ const BlogPostPage: NextPage<PageProps> = ({ post, placeholders }) => {
 
   return (
     <PlaceholderContext.Provider value={placeholders ?? {}}>
-      <Main title={post.fields.title}>
+      <Main title={post.fields.title} description={post.fields.description}>
         <Head>
           <meta name="twitter:card" content="summary_large_image" />
           <meta property="og:type" content="article" />
