@@ -3,27 +3,27 @@
 .searchBox {
   align-items: center;
   background-color: var(--accents-2);
-  border-radius: 6px;
+  border-radius: 12px;
   display: flex;
-  margin-block: 32px;
+  margin-bottom: 32px;
   transition: background-color 0.1s;
-
+  
   &.focused {
     background-color: var(--accents-3);
   }
-
+  
   svg {
     color: var(--accents-7);
     margin-inline: 8px;
-    width: 20px;
+    width: 14px;
   }
-
+  
   input {
     background: transparent;
     border: 0;
     color: var(--text-primary);
-    font: 400 18px/1 var(--font-sans);
-    letter-spacing: font.inter-tracking(18);
+    font: 500 14px/1 var(--font-sans);
+    letter-spacing: font.inter-tracking(14);
     outline: none !important;
     padding-block: 12px;
     padding-inline: 0;

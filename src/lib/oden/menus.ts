@@ -47,8 +47,19 @@ export async function getDays(menu: string): Promise<Day[]> {
 }
 
 export function useDays(menu?: string): SWRResponse<Day[], unknown> {
-  return useSWR(
-    () => `/menus/${menu}/days`,
-    () => getDays(menu ?? "")
+  return useSWR(menu ? `/menus/${menu}/days` : null, () =>
+    getDays(menu as string)
   );
+}
+
+export function useMenu(menu?: string): SWRResponse<Menu, unknown> {
+  return useSWR(menu ? `/menus/${menu}` : null, async () => {
+    const m = await getMenu(menu as string);
+
+    if (!m) {
+      throw new Error("menu not found");
+    }
+
+    return m;
+  });
 }

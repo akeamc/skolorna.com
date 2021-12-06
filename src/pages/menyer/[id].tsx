@@ -1,6 +1,6 @@
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import { ParsedUrlQuery } from "querystring";
-import React from "react";
+import React, { useEffect } from "react";
 import { useRouter } from "next/router";
 import { DateTime } from "luxon";
 import Main from "../../components/layout/Main";
@@ -11,6 +11,7 @@ import { DayBrowser } from "../../components/menu/DayBrowser";
 import { InlineSkeleton } from "../../components/skeleton/InlineSkeleton";
 import { StandardPageHeading } from "../../components/typography/Heading";
 import NotFound from "../404";
+import { useMenuHistory } from "../../lib/menu/history";
 
 export interface PageProps {
   menu: Menu | null;
@@ -55,6 +56,14 @@ export const getStaticPaths: GetStaticPaths = async () => ({
 
 const MenuPage: NextPage<PageProps> = ({ menu }) => {
   const { isFallback } = useRouter();
+  const history = useMenuHistory();
+
+  useEffect(() => {
+    if (menu?.id) {
+      history.add(menu.id);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [menu?.id]);
 
   if (!isFallback && !menu) {
     return <NotFound />;

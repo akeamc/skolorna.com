@@ -27,6 +27,7 @@
   --brand: hsl(239, 83%, 63%);
   --link-color: #06c;
   --emphasis: rgba(204, 0, 0, 0.2);
+  --transparent: rgba(255, 255, 255, 0);
 
   @media (min-width: 480px) {
     --page-gutter: 32px;
@@ -50,6 +51,7 @@
   --skeleton-fg: var(--accents-3);
   --link-color: #007fff;
   --emphasis: var(--danger);
+  --transparent: rgba(0, 0, 0, 0);
 }
 
 body {

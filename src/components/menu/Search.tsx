@@ -1,7 +1,7 @@
 import classNames from "classnames/bind";
 import Link from "next/link";
 import React, { FunctionComponent, useState } from "react";
-import { Search } from "react-feather";
+import { Search as SearchIcon } from "react-feather";
 import {
   connectInfiniteHits,
   connectSearchBox,
@@ -10,7 +10,7 @@ import {
 import { Highlight } from "react-instantsearch-dom";
 import { InstantMenuSearch } from "../../lib/oden/instantsearch";
 import { useDays } from "../../lib/oden/menus";
-import styles from "./MenuSearch.module.scss";
+import styles from "./Search.module.scss";
 
 const cx = classNames.bind(styles);
 
@@ -22,7 +22,7 @@ const Box: FunctionComponent<SearchBoxProvided> = ({
 
   return (
     <div className={cx("searchBox", { focused })}>
-      <Search />
+      <SearchIcon />
       <input
         type="search"
         value={currentRefinement}
@@ -77,7 +77,10 @@ const Hits = connectInfiniteHits(({ hits }) => (
   </div>
 ));
 
-export const MenuSearch: FunctionComponent = () => (
+/**
+ * Menu search.
+ */
+export const Search: FunctionComponent = () => (
   <InstantMenuSearch>
     <SearchBox />
     <Hits />

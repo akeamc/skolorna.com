@@ -1,14 +1,11 @@
 import React from "react";
 import { NextPage } from "next";
 import Main from "../../components/layout/Main";
-import Container from "../../components/layout/Container";
-import { MenuSearch } from "../../components/menu/MenuSearch";
+import { Discover } from "../../components/menu/Discover";
 
 const MenuIndex: NextPage = () => (
   <Main>
-    <Container>
-      <MenuSearch />
-    </Container>
+    <Discover />
   </Main>
 );
 
