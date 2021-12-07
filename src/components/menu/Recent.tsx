@@ -21,7 +21,7 @@ const Item: FunctionComponent<ItemProps> = ({ id, mealLimit = 3 }) => {
     <li className={styles.item}>
       <Link href={`/menyer/${id}`} prefetch>
         <a>
-          <h3>{menu?.title ?? <InlineSkeleton />}</h3>
+          <h3>{menu?.title ?? <InlineSkeleton count={2} />}</h3>
           <div className={styles.meta}>
             {shown ? (
               <>
