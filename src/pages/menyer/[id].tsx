@@ -3,6 +3,7 @@ import { ParsedUrlQuery } from "querystring";
 import React, { useEffect } from "react";
 import { useRouter } from "next/router";
 import { DateTime } from "luxon";
+import Head from "next/head";
 import Main from "../../components/layout/Main";
 import { getMenu, Menu } from "../../lib/oden/menus";
 import { UpdatedAt } from "../../components/menu/UpdatedAt";
@@ -71,6 +72,16 @@ const MenuPage: NextPage<PageProps> = ({ menu }) => {
 
   return (
     <Main title={menu?.title}>
+      <Head>
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta property="og:type" content="article" />
+        <meta
+          property="og:image"
+          content={`https://api-staging.skolorna.com/v1/opengraph/menus/${menu?.id}`}
+        />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="600" />
+      </Head>
       <Container>
         <StandardPageHeading>
           {menu?.title ?? <InlineSkeleton width="10em" count={2} />}
