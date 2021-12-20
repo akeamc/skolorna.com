@@ -7,9 +7,7 @@ export const Footer: FunctionComponent = () => (
   <footer className={styles.footer}>
     <Container>
       <div className={styles.row}>
-        <div className={styles.copyright}>
-          Skolorna © 2021
-        </div>
+        <div className={styles.copyright}>Skolorna © 2021</div>
         <a href="https://www.instagram.com/skolornapunktcom/" title="Instagram">
           <Instagram />
         </a>
