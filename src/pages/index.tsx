@@ -1,11 +1,11 @@
 import React from "react";
 import { NextPage } from "next";
 import Main from "../components/layout/Main";
-import { StandardPageHeading } from "../components/typography/Heading";
+import { HomeHero } from "../components/home/HomeHero";
 
 const Home: NextPage = () => (
   <Main>
-    <StandardPageHeading>Skolorna</StandardPageHeading>
+    <HomeHero />
   </Main>
 );
 
