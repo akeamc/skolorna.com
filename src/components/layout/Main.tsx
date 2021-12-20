@@ -1,5 +1,6 @@
 import Head from "next/head";
 import React, { FunctionComponent } from "react";
+import { Footer } from "./Footer";
 import styles from "./Main.module.scss";
 import { Navbar } from "./Navbar";
 
@@ -42,6 +43,7 @@ const Main: FunctionComponent<Props> = ({ title, description, children }) => (
     <div className={styles.container}>
       <main className={styles.main}>{children}</main>
     </div>
+    <Footer />
   </div>
 );
 
