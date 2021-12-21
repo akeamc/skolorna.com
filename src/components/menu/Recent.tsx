@@ -27,7 +27,7 @@ const Item: FunctionComponent<ItemProps> = ({ id, mealLimit = 3 }) => {
               <>
                 <ul>
                   {shown.map((meal) => (
-                    <li>{meal.value}</li>
+                    <li key={meal.value}>{meal.value}</li>
                   ))}
                 </ul>
                 {shown.length < meals!.length && (
