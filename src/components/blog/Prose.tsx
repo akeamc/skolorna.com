@@ -33,8 +33,10 @@ export const WideProseImage: FunctionComponent<WideProseImageProps> = ({
   const { description } = asset.fields;
 
   return (
-    <div className={styles.wide}>
-      <ProgressiveImage asset={asset} />
+    <div className={styles.media}>
+      <div className={styles.mediaContent}>
+        <ProgressiveImage asset={asset} />
+      </div>
       {description && (
         <figcaption className={styles.narrow}>{description}</figcaption>
       )}

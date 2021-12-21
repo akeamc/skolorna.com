@@ -115,25 +115,22 @@
   }
 }
 
-.wide {
-  margin: 48px calc(-1 * var(--page-gutter));
+.media {
+  margin-block: 48px;
 
-  img {
-    width: 100%;
-  }
-
-  @media (min-width: 690px) {
-    img,
-    picture {
+  .mediaContent {
+    margin: 0 calc(-1 * var(--page-gutter));
+    
+    @media (min-width: 690px) {
       border-radius: 12px;
       overflow: hidden;
     }
   }
 
   figcaption {
-    // letter-spacing: font.inter-tracking(12);
     color: var(--accents-7);
     font: 600 12px/16px var(--font-sans);
+    letter-spacing: font.inter-tracking(12);
     margin-top: 16px;
   }
 }
