@@ -1,3 +1,5 @@
+@use "../../styles/font";
+
 .date {
   color: var(--accents-7);
   font: 400 14px/1 var(--font-sans);
@@ -17,4 +19,81 @@
   border-bottom: 1px solid var(--accents-4);
   max-width: 960px;
   padding: 24px 0;
+}
+
+.toolbar {
+  align-items: center;
+  display: flex;
+
+  button {
+    background-color: transparent;
+    border: 0;
+    border-radius: 6px;
+    color: var(--text-primary);
+    cursor: pointer;
+    padding: 4px;
+    transition: all 0.1s;
+
+    &:hover {
+      background-color: var(--accents-2);
+    }
+
+    &:active {
+      background-color: var(--accents-4);
+      transform: scale(0.9);
+    }
+
+    svg {
+      display: block;
+      height: 16px;
+      width: 16px;
+
+      @media (min-width: 480px) {
+        height: 24px;
+        width: 24px;
+      }
+    }
+  }
+}
+
+.cursor {
+  align-items: center;
+  display: flex;
+  margin-left: 16px;
+}
+
+.month {
+  font: 500 20px/1 var(--font-sans);
+  letter-spacing: font.inter-tracking(20);
+  margin: 0;
+}
+
+.week {
+  background-color: var(--accents-2);
+  border-radius: 3px;
+  display: inline-block;
+  font: 500 12px/1 var(--font-sans);
+  letter-spacing: font.inter-tracking(12);
+  margin-left: 12px;
+  padding: 4px;
+}
+
+.spinner {
+  margin-left: 16px;
+}
+
+.empty {
+  align-items: center;
+  background-color: var(--accents-1);
+  border: 1px solid var(--accents-2);
+  border-radius: 12px;
+  color: var(--accents-7);
+  display: flex;
+  font: 400 14px/1 var(--font-sans);
+  justify-content: center;
+  letter-spacing: font.inter-tracking(14);
+  margin-top: 24px;
+  min-height: 300px;
+  padding: 24px;
+  text-align: center;
 }

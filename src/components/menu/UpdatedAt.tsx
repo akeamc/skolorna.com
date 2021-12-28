@@ -2,7 +2,7 @@ import classNames from "classnames/bind";
 import { DateTime } from "luxon";
 import React, { FunctionComponent } from "react";
 import { AlertCircle, Clock } from "react-feather";
-import { humanTimestamp } from "../../lib/utils/timestamp";
+import { relativelyRelativeTimestamp } from "../../lib/utils/human-date";
 import styles from "./UpdatedAt.module.scss";
 
 const cx = classNames.bind(styles);
@@ -33,7 +33,7 @@ export const UpdatedAt: FunctionComponent<Props> = ({ updatedAt }) => {
                   ?.setLocale("sv")
                   .toLocaleString(DateTime.DATETIME_MED_WITH_WEEKDAY)}
               >
-                Uppdaterades {humanTimestamp(updatedAt)}
+                Uppdaterades {relativelyRelativeTimestamp(updatedAt)}
               </time>
             )}
           </span>

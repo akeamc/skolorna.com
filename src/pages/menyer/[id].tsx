@@ -83,16 +83,23 @@ const MenuPage: NextPage<PageProps> = ({ menu }) => {
         <meta property="og:image:height" content="600" />
       </Head>
       <Container>
-        <StandardPageHeading>
-          {menu?.title ?? <InlineSkeleton width="10em" count={2} />}
-        </StandardPageHeading>
-        <UpdatedAt
-          updatedAt={
-            typeof menu?.updated_at === "string"
-              ? DateTime.fromISO(menu.updated_at)
-              : menu?.updated_at
-          }
-        />
+        <header>
+          <StandardPageHeading>
+            {menu?.title ?? <InlineSkeleton width="10em" count={2} />}
+          </StandardPageHeading>
+          <UpdatedAt
+            updatedAt={
+              typeof menu?.updated_at === "string"
+                ? DateTime.fromISO(menu.updated_at)
+                : menu?.updated_at
+            }
+          />
+          <style jsx>{`
+            header {
+              margin-bottom: 64px;
+            }
+          `}</style>
+        </header>
         <DayBrowser menu={menu?.id} />
       </Container>
     </Main>
