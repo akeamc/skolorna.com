@@ -8,7 +8,7 @@ export interface Props {
 }
 
 export const DayBrowser: FunctionComponent<Props> = ({ menu }) => {
-  const { data } = useDays(menu);
+  const { data } = useDays({ menu });
 
   return (
     <ol>

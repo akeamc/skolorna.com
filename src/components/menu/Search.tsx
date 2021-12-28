@@ -42,7 +42,7 @@ export interface HitProps<T = any> {
 }
 
 export const Hit: FunctionComponent<HitProps> = ({ hit }) => {
-  const { data } = useDays(hit.id);
+  const { data } = useDays({ menu: hit.id });
   const nextDay = data?.[0];
 
   return (

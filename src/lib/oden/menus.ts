@@ -1,4 +1,7 @@
+import { DateTime } from "luxon";
 import useSWR, { SWRResponse } from "swr";
+
+export const ODEN_ENDPOINT = "https://api-staging.skolorna.com/v0/oden";
 
 export interface Menu {
   id: string;
@@ -8,9 +11,7 @@ export interface Menu {
 }
 
 export async function getMenus(): Promise<Menu[]> {
-  return fetch("https://api-staging.skolorna.com/v0/oden/menus").then((res) =>
-    res.json()
-  );
+  return fetch(`${ODEN_ENDPOINT}/menus`).then((res) => res.json());
 }
 
 /**
@@ -18,9 +19,7 @@ export async function getMenus(): Promise<Menu[]> {
  * @param id
  */
 export async function getMenu(id: string): Promise<Menu | null> {
-  const res = await fetch(
-    `https://api-staging.skolorna.com/v0/oden/menus/${id}`
-  );
+  const res = await fetch(`${ODEN_ENDPOINT}/menus/${id}`);
 
   if (res.status === 404) {
     return null;
@@ -38,17 +37,35 @@ export interface Day {
   meals: Meal[];
 }
 
-export async function getDays(menu: string): Promise<Day[]> {
-  const res = await fetch(
-    `https://api-staging.skolorna.com/v0/oden/menus/${menu}/days`
-  );
-
-  return res.json();
+export interface ListDaysOptions {
+  menu?: string;
+  first?: DateTime;
+  last?: DateTime;
 }
 
-export function useDays(menu?: string): SWRResponse<Day[], unknown> {
-  return useSWR(menu ? `/menus/${menu}/days` : null, () =>
-    getDays(menu as string)
+function listDaysPath({
+  menu,
+  first = DateTime.now(),
+  last,
+}: ListDaysOptions): string | null {
+  if (!menu) {
+    return null;
+  }
+
+  // eslint-disable-next-line no-param-reassign
+  last = last ?? first.plus({ weeks: 4 });
+
+  const searchParams = new URLSearchParams({
+    first: first.toISODate(),
+    last: last.toISODate(),
+  });
+
+  return `/menus/${menu}/days?${searchParams.toString()}`;
+}
+
+export function useDays(opt: ListDaysOptions): SWRResponse<Day[], unknown> {
+  return useSWR(listDaysPath(opt), (path) =>
+    fetch(`${ODEN_ENDPOINT}/${path}`).then((res) => res.json())
   );
 }
 

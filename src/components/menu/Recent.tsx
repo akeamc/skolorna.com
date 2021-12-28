@@ -12,7 +12,7 @@ interface ItemProps {
 
 const Item: FunctionComponent<ItemProps> = ({ id, mealLimit = 3 }) => {
   const { data: menu } = useMenu(id);
-  const { data: days } = useDays(id);
+  const { data: days } = useDays({ menu: id });
   const nextDay = days?.[0];
   const meals = nextDay?.meals;
   const shown = meals?.slice(0, mealLimit);
