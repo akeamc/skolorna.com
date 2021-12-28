@@ -45,13 +45,8 @@
 
     svg {
       display: block;
-      height: 16px;
-      width: 16px;
-
-      @media (min-width: 480px) {
-        height: 24px;
-        width: 24px;
-      }
+      height: 24px;
+      width: 24px;
     }
   }
 }
@@ -59,13 +54,22 @@
 .cursor {
   align-items: center;
   display: flex;
-  margin-left: 16px;
+  margin-left: 8px;
+
+  @media (min-width: 480px) {
+    margin-left: 16px;
+  }
 }
 
 .month {
-  font: 500 20px/1 var(--font-sans);
-  letter-spacing: font.inter-tracking(20);
+  font: 500 16px/1 var(--font-sans);
+  letter-spacing: font.inter-tracking(16);
   margin: 0;
+
+  @media (min-width: 480px) {
+    font-size: 20px;
+    letter-spacing: font.inter-tracking(20);
+  }
 }
 
 .week {
@@ -79,7 +83,11 @@
 }
 
 .spinner {
-  margin-left: 16px;
+  margin-left: auto;
+
+  @media (min-width: 480px) {
+    margin-left: 16px;
+  }
 }
 
 .empty {

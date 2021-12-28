@@ -41,7 +41,25 @@ export const DayBrowser: FunctionComponent<Props> = ({ menu }) => {
         </button>
         <div className={styles.cursor}>
           <h2 className={styles.month}>{monthSpan(first, last)}</h2>
-          <span className={styles.week}>Vecka {cursor.weekNumber}</span>
+          <span className={styles.week}>
+            <span className="short">V.</span>
+            <span className="long">Vecka</span> {cursor.weekNumber}
+            <style jsx>{`
+              .long {
+                display: none;
+              }
+
+              @media (min-width: 480px) {
+                .long {
+                  display: inline;
+                }
+
+                .short {
+                  display: none;
+                }
+              }
+            `}</style>
+          </span>
         </div>
         {isValidating && <Spinner className={styles.spinner} />}
       </div>
