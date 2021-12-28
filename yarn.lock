@@ -1448,10 +1448,12 @@
   dependencies:
     "@contentful/rich-text-types" "^15.1.0"
 
-"@contentful/rich-text-types@^15.1.0":
-  version "15.1.0"
-  resolved "https://registry.yarnpkg.com/@contentful/rich-text-types/-/rich-text-types-15.1.0.tgz#5637452257e6c7c6fc406ec1ec6ab7fcc1158105"
-  integrity sha512-3PgQi/B5yKC3xXDar1Ry4i4l9jgt56PFZ40cOkE+oCNLmNlFtZolo6cTrf4VunuufSsCfjTs4iWovy7fbM1I8Q==
+"@contentful/rich-text-types@^15.1.0", "@contentful/rich-text-types@^15.11.0":
+  version "15.11.0"
+  resolved "https://registry.yarnpkg.com/@contentful/rich-text-types/-/rich-text-types-15.11.0.tgz#116b53d899544dc49c51ceadc732000ce1b4f504"
+  integrity sha512-1xVu5RCPfayA/QIoluhQfQwViyKVrmFqh/ue2JhMknaA4AD3QAfhuxvf2TKDaLXU1qS72sBPmVRU7po1GSl/6A==
+  dependencies:
+    ajv "^8.8.2"
 
 "@discoveryjs/json-ext@^0.5.3":
   version "0.5.5"
@@ -3603,10 +3605,10 @@ ajv@^6.1.0, ajv@^6.10.0, ajv@^6.10.2, ajv@^6.12.2, ajv@^6.12.4, ajv@^6.12.5:
     json-schema-traverse "^0.4.1"
     uri-js "^4.2.2"
 
-ajv@^8.0.1:
-  version "8.6.0"
-  resolved "https://registry.yarnpkg.com/ajv/-/ajv-8.6.0.tgz#60cc45d9c46a477d80d92c48076d972c342e5720"
-  integrity sha512-cnUG4NSBiM4YFBxgZIj/In3/6KX+rQ2l2YPRVcvAMQGWEPKuXoPIhxzwqh31jA3IPbI4qEOp/5ILI4ynioXsGQ==
+ajv@^8.0.1, ajv@^8.8.2:
+  version "8.8.2"
+  resolved "https://registry.yarnpkg.com/ajv/-/ajv-8.8.2.tgz#01b4fef2007a28bf75f0b7fc009f62679de4abbb"
+  integrity sha512-x9VuX+R/jcFj1DHo/fCp99esgGDWiHENrKxaCENuCxpoMCmAt/COCGVDwA7kleEpEzJjDnvh3yGoOuLu0Dtllw==
   dependencies:
     fast-deep-equal "^3.1.1"
     json-schema-traverse "^1.0.0"
