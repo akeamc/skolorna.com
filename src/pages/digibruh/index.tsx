@@ -33,7 +33,13 @@ const DigibruhIndex: NextPage<PageProps> = ({ articles }) => (
         {articles.map((article) => (
           <li key={article.sys.id}>
             <Link href={`/digibruh/${article.fields.slug}`}>
-              <a>{article.fields.title}</a>
+              <a>
+                <h3>{article.fields.title}</h3>
+                <img
+                  src={article.fields.cover.fields.file.url}
+                  alt={article.fields.cover.fields.description}
+                />
+              </a>
             </Link>
           </li>
         ))}
