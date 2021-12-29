@@ -60,7 +60,7 @@ export const Navbar: FunctionComponent = () => {
                     className={styles.indicator}
                     layoutId="indicator"
                     style={{
-                      borderRadius: 12, // Fix distortion by informing Framer about the border radius
+                      borderRadius: 12 // Fix distortion by informing Framer about the border radius
                     }}
                   />
                 )}
