@@ -2,18 +2,18 @@
 
 .searchBox {
   align-items: center;
-  background-color: var(--accents-2);
+  background-color: var(--cmp-search-background);
   border-radius: 12px;
   display: flex;
   margin-bottom: 32px;
   transition: background-color 0.1s;
   
   &.focused {
-    background-color: var(--accents-3);
+    background-color: var(--cmp-search-background-focused);
   }
   
   svg {
-    color: var(--accents-7);
+    color: var(--cmp-search-icon);
     margin-inline: 8px;
     width: 14px;
   }
@@ -21,7 +21,7 @@
   input {
     background: transparent;
     border: 0;
-    color: var(--text-primary);
+    color: var(--color-on-background);
     font: 500 14px/1 var(--font-sans);
     letter-spacing: font.inter-tracking(14);
     outline: none !important;
@@ -30,7 +30,7 @@
     width: 100%;
 
     &::placeholder {
-      color: var(--accents-7);
+      color: var(--cmp-search-placeholder);
     }
   }
 }
@@ -57,11 +57,11 @@
   }
 
   &:hover {
-    --bg: var(--accents-2);
+    --bg: var(--surface-elevation-1);
   }
 
   &:focus {
-    --bg: var(--accents-3);
+    --bg: var(--surface-elevation-2);
     outline: none;
   }
 
@@ -70,7 +70,7 @@
     margin-block: 0 4px;
 
     em {
-      background-color: var(--emphasis);
+      background-color: var(--color-emphasis);
       border-radius: 3px;
       font-style: normal;
     }
@@ -84,7 +84,7 @@
 }
 
 .hitMeta {
-  color: var(--accents-6);
+  color: var(--color-text-muted);
   font: 400 14px/1.25 var(--font-sans);
   overflow: hidden;
   text-overflow: ellipsis;

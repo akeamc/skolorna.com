@@ -2,11 +2,12 @@
 @use "../../styles/mixins";
 
 .updatedAt {
-  --bg: var(--success);
+  --bg: var(--color-primary-container);
+  --fg: var(--color-primary);
 
   align-items: center;
   border-radius: 9999px;
-  color: #fff;
+  color: var(--fg);
   display: inline-flex;
   font-size: 14px;
   height: 32px;
@@ -17,7 +18,8 @@
   }
 
   &.never {
-    --bg: var(--warning);
+    --bg: var(--color-warning-container);
+    --fg: var(--color-warning);
   }
 
   svg {

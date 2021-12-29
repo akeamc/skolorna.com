@@ -1,7 +1,7 @@
 @use "../../styles/font";
 
 .date {
-  color: var(--accents-7);
+  color: var(--color-text-muted);
   font: 400 14px/1 var(--font-sans);
   margin: 0;
 }
@@ -16,7 +16,7 @@
 }
 
 .day {
-  border-bottom: 1px solid var(--accents-4);
+  border-bottom: 1px solid var(--color-outline);
   max-width: 960px;
   padding: 24px 0;
 }
@@ -29,17 +29,17 @@
     background-color: transparent;
     border: 0;
     border-radius: 6px;
-    color: var(--text-primary);
+    color: var(--color-on-background);
     cursor: pointer;
     padding: 4px;
     transition: all 0.1s;
 
     &:hover {
-      background-color: var(--accents-2);
+      background-color: var(--surface-elevation-1);
     }
 
     &:active {
-      background-color: var(--accents-4);
+      background-color: var(--surface-elevation-2);
       transform: scale(0.9);
     }
 
@@ -73,7 +73,7 @@
 }
 
 .week {
-  background-color: var(--accents-2);
+  background-color: var(--color-neutral-container);
   border-radius: 3px;
   display: inline-block;
   font: 500 12px/1 var(--font-sans);
@@ -92,10 +92,10 @@
 
 .empty {
   align-items: center;
-  background-color: var(--accents-1);
-  border: 1px solid var(--accents-2);
+  background-color: var(--cmp-empty-background);
+  border: 1px solid var(--color-outline);
   border-radius: 12px;
-  color: var(--accents-7);
+  color: var(--color-text-muted);
   display: flex;
   font: 400 14px/1 var(--font-sans);
   justify-content: center;

@@ -1,14 +1,6 @@
 import { Entry } from "contentful";
-import React, {
-  AnchorHTMLAttributes,
-  DetailedHTMLProps,
-  forwardRef,
-  Fragment,
-  FunctionComponent,
-  useState,
-} from "react";
+import React, { Fragment, FunctionComponent } from "react";
 import { DateTime } from "luxon";
-import { motion } from "framer-motion";
 import { BlogPost } from "../../lib/blog/post";
 import { StandardPageHeading } from "../typography/Heading";
 import { Narrow, ProseContainer, WideProseImage } from "./Prose";
@@ -18,46 +10,6 @@ import { Author } from "../../lib/blog/author";
 export interface Props {
   post: Entry<BlogPost>;
 }
-
-export const FancyLink = forwardRef<
-  HTMLAnchorElement,
-  DetailedHTMLProps<AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement>
->(({ children, ...props }, ref) => {
-  const [hovered, setHovered] = useState(false);
-
-  return (
-    <a style={{ position: "relative" }} ref={ref} {...props}>
-      <span
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
-      >
-        {children}
-      </span>
-      <motion.div
-        style={{
-          position: "absolute",
-          bottom: 0,
-          left: 0,
-          right: 0,
-          zIndex: -1,
-          pointerEvents: "none",
-        }}
-        variants={{
-          hidden: {
-            height: 1,
-            background: "var(--accents-4)",
-          },
-          visible: {
-            height: "100%",
-            background: "var(--accents-3)",
-          },
-        }}
-        animate={hovered ? "visible" : "hidden"}
-        transition={{ duration: 0.2 }}
-      />
-    </a>
-  );
-});
 
 export const Authors: FunctionComponent<{
   authors: Entry<Author>[];

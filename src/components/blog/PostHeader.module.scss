@@ -1,7 +1,7 @@
 @use "../../styles/font";
 
 .description {
-  color: var(--accents-10);
+  color: var(--color-on-background);
   font: 500 20px/24px var(--font-sans);
   letter-spacing: font.inter-tracking(20);
   margin: 24px 0;
@@ -14,7 +14,7 @@
 }
 
 .byline {
-  color: var(--accents-6);
+  color: var(--color-text-muted);
   font: 500 13px/16px var(--font-sans);
   letter-spacing: font.inter-tracking(13);
   margin: 16px 0;

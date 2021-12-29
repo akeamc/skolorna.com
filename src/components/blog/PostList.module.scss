@@ -10,7 +10,7 @@
   }
 
   li {
-    border-bottom: 1px solid var(--accents-4);
+    border-bottom: 1px solid var(--color-outline);
   }
 }
 
@@ -67,7 +67,7 @@
     }
 
     time {
-      color: var(--accents-6);
+      color: var(--color-text-muted);
       display: inline-block;
       font: 500 13px/1 var(--font-sans);
       letter-spacing: font.inter-tracking(13);

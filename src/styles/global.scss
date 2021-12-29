@@ -1,3 +1,5 @@
+@use "./color";
+
 @import url("https://rsms.me/inter/inter.css");
 @import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800&display=swap");
@@ -7,26 +9,7 @@
   --font-sans: "Inter", sans-serif;
   --font-display: "Space Grotesk", var(--font-sans);
   --font-mono: "JetBrains Mono", monospace;
-  --bg-primary: #fff;
-  --text-primary: #000;
-  --accents-1: #fafafa;
-  --accents-2: #f2f2f2;
-  --accents-3: #eaeaea;
-  --accents-4: #ddd;
-  --accents-5: #aaa;
-  --accents-6: #888;
-  --accents-7: #666;
-  --accents-8: #444;
-  --accents-9: #333;
-  --accents-10: #111;
-  --skeleton-bg: var(--accents-2);
-  --skeleton-fg: var(--accents-1);
-  --success: #48e069;
-  --danger: #e00;
-  --warning: #f7a829;
-  --brand: hsl(239, 83%, 63%);
   --link-color: #06c;
-  --emphasis: rgba(204, 0, 0, 0.2);
   --transparent: rgba(255, 255, 255, 0);
 
   @media (min-width: 480px) {
@@ -35,28 +18,13 @@
 }
 
 .dark {
-  --bg-primary: #111;
-  --text-primary: #fff;
-  --accents-10: #fafafa;
-  --accents-9: #eaeaea;
-  --accents-8: #999;
-  --accents-7: #888;
-  --accents-6: #777;
-  --accents-5: #666;
-  --accents-4: #555;
-  --accents-3: #444;
-  --accents-2: #333;
-  --accents-1: #222;
-  --skeleton-bg: var(--accents-2);
-  --skeleton-fg: var(--accents-3);
   --link-color: #007fff;
-  --emphasis: var(--danger);
   --transparent: rgba(0, 0, 0, 0);
 }
 
 body {
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
+  background-color: var(--color-background);
+  color: var(--color-on-background);
   font-family: var(--font-sans);
   margin: 0;
 }

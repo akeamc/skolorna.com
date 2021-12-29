@@ -1,14 +1,14 @@
 @use "../../styles/font";
 
 .footer {
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
+  background-color: var(--color-background);
+  color: var(--color-on-background);
   margin: 32px 0;
 }
 
 .copyright {
   align-items: center;
-  color: var(--accents-7);
+  color: var(--color-text-muted);
   display: flex;
   font: 500 12px/1 var(--font-sans);
   letter-spacing: font.inter-tracking(12);
@@ -21,13 +21,13 @@
   justify-content: space-between;
   
   a {
-    color: var(--accents-7);
+    color: var(--color-text-muted);
     display: block;
     margin-left: 16px;
     transition: color 0.1s;
 
     &:hover {
-      color: var(--text-primary);
+      color: var(--color-on-background);
     }
   }
   

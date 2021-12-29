@@ -10,11 +10,11 @@
 
 .skeleton-bg {
   animation: skeleton 1.5s ease-in-out infinite;
-  background-color: var(--skeleton-bg);
+  background-color: var(--cmp-skeleton-background);
   background-image: linear-gradient(270deg,
-  var(--skeleton-bg),
-  var(--skeleton-fg),
-  var(--skeleton-bg));
+  var(--cmp-skeleton-background),
+  var(--cmp-skeleton-foreground),
+  var(--cmp-skeleton-background));
   background-repeat: no-repeat;
   background-size: 100vw 100%;
 }
