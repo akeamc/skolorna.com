@@ -65,3 +65,7 @@ button,
 textarea {
   font: inherit;
 }
+
+::selection {
+  background-color: var(--color-emphasis);
+}
