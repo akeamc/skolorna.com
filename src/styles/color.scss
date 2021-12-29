@@ -96,8 +96,6 @@ $primary: map.get($palette, "primary", 40);
 
   $surface: map.get($palette, "neutral", 99);
 
-  @debug $surface;
-
   @include surface-elevation-vars($surface, $primary);
 }
 
