@@ -40,7 +40,7 @@ $elevation-weights: 5%, 8%, 11%, 12%, 14%;
 $palette: (
   neutral: tonal-palette(#000),
   primary: tonal-palette(#0400ff),
-  secondary: tonal-palette(#d4c600),
+  secondary: tonal-palette(#3432b8),
   tertiary: tonal-palette(#d1352a),
   error: tonal-palette(#f44336),
   warning: tonal-palette(#f7a829),
@@ -108,7 +108,7 @@ $primary: map.get($palette, "primary", 40);
 
   --color-text-muted: var(--palette-neutral60);
 
-  --color-emphasis: var(--palette-secondary20);
+  --color-emphasis: var(--palette-secondary30);
 
   --cmp-blockquote-accent: var(--palette-neutral30);
   --cmp-code-background: var(--palette-neutral20);
