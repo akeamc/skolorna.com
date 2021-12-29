@@ -5,7 +5,7 @@ import { BlogPost } from "../../lib/blog/post";
 import { StandardPageHeading } from "../typography/Heading";
 import { Narrow, ProseContainer, WideProseImage } from "./Prose";
 import styles from "./PostHeader.module.scss";
-import { Author } from "../../lib/blog/author";
+import { Author } from "../../lib/contentful/author";
 
 export interface Props {
   post: Entry<BlogPost>;

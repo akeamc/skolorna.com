@@ -27,6 +27,11 @@ const items: Item[] = [
     label: "Blogg",
     highlightSubpaths: true,
   },
+  {
+    href: "/digibruh",
+    label: "Digibruh™",
+    highlightSubpaths: true,
+  },
 ];
 
 export const Navbar: FunctionComponent = () => {
@@ -60,8 +65,11 @@ export const Navbar: FunctionComponent = () => {
                     className={styles.indicator}
                     layoutId="indicator"
                     style={{
-                      borderRadius: 12 // Fix distortion by informing Framer about the border radius
+                      borderRadius: 12, // Fix distortion by informing Framer about the border radius
+                      opacity: 0,
                     }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
                   />
                 )}
               </li>

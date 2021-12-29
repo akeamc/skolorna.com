@@ -23,7 +23,7 @@ export const getStaticProps: GetStaticProps<PageProps> = async () => {
 };
 
 const BlogIndex: NextPage<PageProps> = ({ posts }) => (
-  <Main>
+  <Main title="Blogg">
     <Container>
       <StandardPageHeading>Blogg</StandardPageHeading>
       <PostList posts={posts} />

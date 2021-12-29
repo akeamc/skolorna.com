@@ -1,28 +1,26 @@
+import React from "react";
 import { Asset, Entry } from "contentful";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import Head from "next/head";
 import { ParsedUrlQuery } from "querystring";
-import React from "react";
-import { PostHeader } from "../../components/blog/PostHeader";
 import { Prose } from "../../components/blog/Prose";
 import { normalizeAssetUrl } from "../../components/contentful/ProgressiveImage";
 import Main from "../../components/layout/Main";
-import {
-  BlogPost,
-  listBlogPosts,
-  getBlogPost,
-  getPreviewBlogPost,
-} from "../../lib/blog/post";
 import {
   extractAssets,
   generatePlaceholders,
   PlaceholderContext,
   PlaceholderTable,
 } from "../../lib/contentful/placeholder";
+import {
+  DigibruhArticle,
+  getDigibruhArticle,
+  listDigibruhArticles,
+} from "../../lib/digibruh/article";
 import NotFound from "../404";
 
 interface PageProps {
-  post: Entry<BlogPost> | null;
+  article: Entry<DigibruhArticle> | null;
   placeholders: PlaceholderTable | null;
 }
 
@@ -32,7 +30,6 @@ interface Q extends ParsedUrlQuery {
 
 export const getStaticProps: GetStaticProps<PageProps, Q> = async ({
   params,
-  preview,
 }) => {
   const slug = params?.slug;
 
@@ -41,24 +38,18 @@ export const getStaticProps: GetStaticProps<PageProps, Q> = async ({
   }
 
   try {
-    let post;
-
-    if (preview) {
-      post = await getPreviewBlogPost(slug);
-    } else {
-      post = await getBlogPost(slug);
-    }
+    const article = await getDigibruhArticle(slug);
 
     const assets: Asset[] = [
-      post.fields.cover,
-      ...extractAssets(post.fields.content),
+      article.fields.cover,
+      ...extractAssets(article.fields.content),
     ];
 
     const placeholders = await generatePlaceholders(assets);
 
     return {
       props: {
-        post,
+        article,
         placeholders,
       },
       revalidate: 300,
@@ -66,7 +57,7 @@ export const getStaticProps: GetStaticProps<PageProps, Q> = async ({
   } catch (error) {
     return {
       props: {
-        post: null,
+        article: null,
         placeholders: null,
       },
       revalidate: 60,
@@ -75,38 +66,41 @@ export const getStaticProps: GetStaticProps<PageProps, Q> = async ({
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const posts = await listBlogPosts();
+  const articles = await listDigibruhArticles();
 
   return {
-    paths: posts.map((post) => ({
+    paths: articles.map((article) => ({
       params: {
-        slug: post.fields.slug,
+        slug: article.fields.slug,
       },
     })),
     fallback: "blocking",
   };
 };
 
-const BlogPostPage: NextPage<PageProps> = ({ post, placeholders }) => {
-  if (!post) {
+const DigibruhArticlePage: NextPage<PageProps> = ({
+  article,
+  placeholders,
+}) => {
+  if (!article) {
     return <NotFound />;
   }
 
-  const { cover } = post.fields;
+  const { title, description, cover, content } = article.fields;
 
   return (
     <PlaceholderContext.Provider value={placeholders ?? {}}>
-      <Main title={post.fields.title} description={post.fields.description}>
+      <Main title={title} description={description}>
         <Head>
           <meta name="twitter:card" content="summary_large_image" />
           <meta property="og:type" content="article" />
           <meta
             property="og:article:published_time"
-            content={post.sys.createdAt}
+            content={article.sys.createdAt}
           />
           <meta
             property="og:article:modified_time"
-            content={post.sys.updatedAt}
+            content={article.sys.updatedAt}
           />
           <meta
             property="og:image"
@@ -115,11 +109,11 @@ const BlogPostPage: NextPage<PageProps> = ({ post, placeholders }) => {
           <meta property="og:image:width" content="1200" />
           <meta property="og:image:alt" content={cover.fields.description} />
         </Head>
-        <PostHeader post={post} />
-        <Prose text={post.fields.content} />
+        <h1>{title}</h1>
+        <Prose text={content} />
       </Main>
     </PlaceholderContext.Provider>
   );
 };
 
-export default BlogPostPage;
+export default DigibruhArticlePage;

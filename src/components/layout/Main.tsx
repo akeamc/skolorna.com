@@ -9,7 +9,11 @@ export interface Props {
   description?: string;
 }
 
-const Main: FunctionComponent<Props> = ({ title, description, children }) => (
+const Main: FunctionComponent<Props> = ({
+  title = "Skolorna",
+  description,
+  children,
+}) => (
   <div>
     <Head>
       <title>{title}</title>

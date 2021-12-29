@@ -4,7 +4,7 @@ import Main from "../../components/layout/Main";
 import { Discover } from "../../components/menu/Discover";
 
 const MenuIndex: NextPage = () => (
-  <Main>
+  <Main title="Menyer">
     <Discover />
   </Main>
 );

@@ -1,6 +1,6 @@
 import { Asset, Entry, EntryFields } from "contentful";
 import { client, previewClient } from "../utils/contentful";
-import { Author } from "./author";
+import { Author } from "../contentful/author";
 
 export interface BlogPost {
   title: EntryFields.Text;

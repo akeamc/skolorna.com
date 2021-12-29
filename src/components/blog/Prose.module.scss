@@ -64,6 +64,7 @@
   }
 
   li {
+    line-height: 1.5;
     margin-bottom: 10px;
   }
 
@@ -87,7 +88,7 @@
   h2 {
     font: 500 24px/1 var(--font-sans);
     letter-spacing: font.inter-tracking(24);
-    margin-block: 32px 0;
+    margin-block: 32px 16px;
   }
 
   h3 {
