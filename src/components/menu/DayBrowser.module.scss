@@ -10,8 +10,14 @@
   margin-bottom: 16px;
 
   li {
-    font: 500 18px/1.4 var(--font-sans);
+    font: 500 16px/1.4 var(--font-sans);
+    letter-spacing: font.inter-tracking(16);
     margin-bottom: 8px;
+
+    @media (min-width: 480px) {
+      font-size: 18px;
+      letter-spacing: font.inter-tracking(18);
+    }
   }
 }
 
