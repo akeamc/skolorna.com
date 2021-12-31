@@ -48,7 +48,6 @@
     height: auto;
     padding: 0;
   }
-	
 }
 
 .media {
@@ -87,7 +86,6 @@
 }
 
 .heading {
-	
   @include card {
     margin-block-end: var(--padding);
   }	
@@ -98,7 +96,6 @@
 	
   @include card {
     margin: 0;
-    margin-top: auto;
     padding: var(--padding);
   }
 
