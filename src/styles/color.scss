@@ -2,7 +2,7 @@
 @use "sass:color";
 @use "sass:list";
 
-$tones: 0, 10, 20, 25, 30, 35, 40, 50, 60, 70, 80, 90, 95, 98, 99, 100;
+$tones: 0, 5, 8, 10, 15, 20, 25, 30, 35, 40, 50, 60, 70, 80, 90, 95, 98, 99, 100;
 
 @function tonal-palette($key) {
   $out: ();
@@ -39,6 +39,8 @@ $elevation-weights: 5%, 8%, 11%, 12%, 14%;
 
 $light-tone: 40;
 $dark-tone: 80;
+$light-surface-tone: 98;
+$dark-surface-tone: 10;
 
 $palette: (
   neutral: tonal-palette(#000),
@@ -68,6 +70,10 @@ $palette: (
 :root {
   --color-background: var(--palette-neutral99);
   --color-on-background: var(--palette-neutral10);
+  
+  --color-surface: var(--palette-neutral#{$light-surface-tone});
+  --color-on-surface: var(--palette-neutral10);
+
   --color-outline: var(--palette-neutral80);
 
   --color-text-muted: var(--palette-neutral50);
@@ -95,44 +101,53 @@ $palette: (
   --cmp-spinner-background: var(--palette-neutral80);
   --cmp-spinner-foreground: var(--palette-neutral50);
 
+  --cmp-article-list-background: var(--color-surface);
+
   $primary: map.get($palette, "primary", $light-tone);
-  $surface: map.get($palette, "neutral", 99);
+  $surface: map.get($palette, "neutral", $light-surface-tone);
 
   @include surface-elevation-vars($surface, $primary);
 }
 
 .dark {
-  --color-background: var(--palette-neutral10);
+  --color-background: var(--palette-neutral8);
   --color-on-background: var(--palette-neutral90);
+
+  --color-surface: var(--palette-neutral#{$dark-surface-tone});
+  --color-on-surface: var(--palette-neutral90);
+  
   --color-outline: var(--palette-neutral30);
 
   --color-text-muted: var(--palette-neutral60);
-
+  
   --color-emphasis: var(--palette-secondary30);
-
+  
   --cmp-blockquote-accent: var(--palette-neutral30);
   --cmp-code-background: var(--palette-neutral20);
   --cmp-li-bullet: var(--palette-neutral30);
-
+  
   --cmp-search-background: var(--palette-neutral20);
   --cmp-search-background-focused: var(--palette-neutral25);
   --cmp-search-placeholder: var(--palette-neutral70);
   --cmp-search-icon: var(--palette-neutral70);
-
+  
   --cmp-empty-background: var(--palette-neutral20);
-
+  
   --cmp-navbar-indicator: var(--surface-elevation-3);
-
+  
   --cmp-page-progress: var(--palette-primary60);
-
+  
   --cmp-skeleton-background: var(--palette-neutral20);
   --cmp-skeleton-foreground: var(--palette-neutral30);
-
+  
   --cmp-spinner-background: var(--palette-neutral30);
   --cmp-spinner-foreground: var(--palette-neutral50);
   
+  --cmp-article-list-background: var(--color-surface);
+  
   $primary: map.get($palette, "primary", $dark-tone);
-  $surface: map.get($palette, "neutral", 10);
+  $surface: map.get($palette, "neutral", $dark-surface-tone);
+  
 
   @include surface-elevation-vars($surface, $primary);
 }
