@@ -1,18 +1,12 @@
-import { NextPage } from "next";
 import React from "react";
+import { NextPage } from "next";
 import Main from "../../components/layout/Main";
-import Container from "../../components/layout/Container";
-import MenuSearch from "../../components/menu/MenuSearch";
+import { Discover } from "../../components/menu/Discover";
 
-const MenusPage: NextPage = () => (
-  <Main
-    title="Menyer"
-    description="Sök bland över 7000 olika skolor och se vad det blir till lunch."
-  >
-    <Container>
-      <MenuSearch />
-    </Container>
+const MenuIndex: NextPage = () => (
+  <Main title="Menyer">
+    <Discover />
   </Main>
 );
 
-export default MenusPage;
+export default MenuIndex;

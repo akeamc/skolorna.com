@@ -1,24 +1,52 @@
-import React, { FunctionComponent, ReactNode } from "react";
-import Footer from "./Footer";
-import Nav from "./Nav";
+import Head from "next/head";
+import React, { FunctionComponent } from "react";
+import { Footer } from "./Footer";
 import styles from "./Main.module.scss";
-import Seo, { SeoProps } from "../Seo";
+import { Navbar } from "./Navbar";
 
-export interface MainProps extends SeoProps {
-  before?: ReactNode;
+export interface Props {
+  title?: string;
+  description?: string;
 }
 
-const Main: FunctionComponent<MainProps> = ({
+const Main: FunctionComponent<Props> = ({
+  title = "Skolorna",
+  description,
   children,
-  before,
-  ...seoProps
 }) => (
-  <div className={styles.container}>
-    {before}
-    {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-    <Seo {...seoProps} />
-    <Nav />
-    <main className={styles.main}>{children}</main>
+  <div>
+    <Head>
+      <title>{title}</title>
+      <meta property="og:title" content={title} />
+      <meta name="description" content={description} />
+      <meta property="og:description" content={description} />
+      <meta property="og:site_name" content="Skolorna" />
+
+      <link
+        rel="apple-touch-icon"
+        sizes="180x180"
+        href="/apple-touch-icon.png"
+      />
+      <link
+        rel="icon"
+        type="image/png"
+        sizes="32x32"
+        href="/favicon-32x32.png"
+      />
+      <link
+        rel="icon"
+        type="image/png"
+        sizes="16x16"
+        href="/favicon-16x16.png"
+      />
+      <link rel="manifest" href="/site.webmanifest" />
+      <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#000000" />
+      <meta name="theme-color" content="#ffffff" />
+    </Head>
+    <Navbar />
+    <div className={styles.container}>
+      <main className={styles.main}>{children}</main>
+    </div>
     <Footer />
   </div>
 );

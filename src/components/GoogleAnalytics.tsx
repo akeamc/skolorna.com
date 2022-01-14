@@ -1,8 +1,10 @@
-import Head from "next/head";
+import { useRouter } from "next/router";
+import Script from "next/script";
 import React, { FunctionComponent, useEffect } from "react";
 
 export interface GoogleAnalyticsProps {
   trackingId: string;
+  enable?: boolean;
 }
 
 /**
@@ -14,23 +16,28 @@ export interface GoogleAnalyticsProps {
  */
 const GoogleAnalytics: FunctionComponent<GoogleAnalyticsProps> = ({
   trackingId,
+  enable = process.env.ENABLE_GOOGLE_ANALYTICS,
 }) => {
-  const enable = process.env.ENABLE_GOOGLE_ANALYTICS;
+  const router = useRouter();
 
   useEffect(() => {
-    /* eslint-disable @typescript-eslint/no-explicit-any */
-    (window as any).dataLayer = (window as any).dataLayer || [];
-    // eslint-disable-next-line func-names
-    (window as any).gtag = function () {
-      // eslint-disable-next-line prefer-rest-params
-      (window as any).dataLayer.push(arguments);
+    const handleRouteChange = (url: string) => {
+      if ((window as any).gtag) {
+        (window as any).gtag("config", trackingId, {
+          page_path: url,
+        });
+      } else {
+        // eslint-disable-next-line no-console
+        console.warn(`Failed to log page view for ${url}`);
+      }
     };
 
-    // Required for GA to function, as per the snippet.
-    (window as any).gtag("js", new Date());
-    (window as any).gtag("config", trackingId);
-    /* eslint-enable @typescript-eslint/no-explicit-any */
-  }, [trackingId]);
+    router.events.on("routeChangeComplete", handleRouteChange);
+
+    return () => {
+      router.events.off("routeChangeComplete", handleRouteChange);
+    };
+  }, [router.events, trackingId]);
 
   useEffect(() => {
     if (!enable) {
@@ -39,16 +46,32 @@ const GoogleAnalytics: FunctionComponent<GoogleAnalyticsProps> = ({
     }
   }, [enable]);
 
+  if (!enable) {
+    return null;
+  }
+
   return (
-    <Head>
-      {/* Global site tag (gtag.js) - Google Analytics */}
-      {enable && (
-        <script
-          async
-          src={`https://www.googletagmanager.com/gtag/js?id=${trackingId}`}
-        />
-      )}
-    </Head>
+    <>
+      <Script
+        async
+        strategy="afterInteractive"
+        src={`https://www.googletagmanager.com/gtag/js?id=${trackingId}`}
+      />
+      <Script
+        id="gtag-init"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{
+          __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${trackingId}', {
+              page_path: window.location.pathname,
+            });
+          `,
+        }}
+      />
+    </>
   );
 };
 

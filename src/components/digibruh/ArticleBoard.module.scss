@@ -1,0 +1,114 @@
+@use "sass:math";
+@use "../../styles/font";
+
+@mixin card {
+  @media (min-width: 480px) {
+    @content;
+  }
+}
+
+.container {
+  --border-radius: 12px;
+  --article-spacing: 16px;
+
+  @include card {
+    display: grid;
+    gap: var(--article-spacing);
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  }
+
+  @media (min-width: 480px) {
+    --article-spacing: 24px;
+  }
+}
+
+.articleWrapper {
+  border-radius: var(--border-radius);
+  display: flex;
+  margin-bottom: var(--article-spacing);
+
+  @include card {
+    margin: 0;
+  }
+}
+
+.article {
+  --padding: 16px;
+
+  background-color: var(--color-surface);
+  border-radius: var(--border-radius);
+  color: var(--color-on-surface);
+  display: flex;
+  flex: 1;
+  padding: var(--padding);
+	
+  @include card {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    flex-direction: column-reverse;
+    height: auto;
+    padding: 0;
+  }
+}
+
+.media {
+  border-radius: 8px;
+  flex: 0 0 96px;
+  height: 96px;
+  margin-left: auto;
+  overflow: hidden;
+  position: relative;
+	
+  @include card {
+    border-radius: var(--border-radius);
+    flex-basis: 256px;
+    margin: 0;
+    width: 100%;
+  }
+	
+  img {
+    height: 100%;
+    object-fit: cover;
+    transition: all 0.2s;
+    width: 100%;
+  }
+}
+
+.article:hover {
+  background-color: var(--surface-elevation-1);
+}
+
+.articleWrapper:focus .article {
+  background-color: var(--surface-elevation-2);
+}
+
+.article:hover .media img {
+  transform: scale(1.05);
+}
+
+.heading {
+  @include card {
+    margin-block-end: var(--padding);
+  }	
+}
+
+.text {
+  margin-right: var(--padding);
+	
+  @include card {
+    margin: 0;
+    padding: var(--padding);
+  }
+
+  h3 {
+    font: 500 20px/1 var(--font-sans);
+    letter-spacing: font.inter-tracking(20);
+    margin: 0;
+  }
+		
+  p {
+    color: var(--color-text-muted);
+    font: 400 14px/1.25 var(--font-sans);
+    letter-spacing: font.inter-tracking(14);
+    margin-block: 8px 0;
+  }
+}

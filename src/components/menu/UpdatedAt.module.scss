@@ -1,0 +1,54 @@
+@use "../../styles/font";
+
+.updatedAt {
+  --bg: var(--color-primary-container);
+  --fg: var(--color-primary);
+
+  align-items: center;
+  border-radius: 9999px;
+  color: var(--fg);
+  display: inline-flex;
+  height: 24px;
+  padding: 0 8px;
+
+  @media (min-width: 480px) {
+    height: 32px;
+    padding: 0 12px;
+  }
+
+  &:not(.skeleton) {
+    background-color: var(--bg);
+  }
+
+  &.never {
+    --bg: var(--color-warning-container);
+    --fg: var(--color-warning);
+  }
+
+  svg {
+    height: 12px;
+    width: 12px;
+
+    @media (min-width: 480px) {
+      height: 16px;
+      width: 16px;
+    }
+  }
+
+  span {
+    font: 500 12px/1 var(--font-sans);
+    letter-spacing: font.inter-tracking(12);
+    margin-left: 6px;
+
+    @media (min-width: 480px) {
+      font-size: 14px;
+      letter-spacing: font.inter-tracking(14);
+    }
+  }
+}
+
+.skeleton {
+  composes: skeleton-bg from "../skeleton/Skeleton.module.scss";
+  max-width: 100%;
+  width: 20em;
+}

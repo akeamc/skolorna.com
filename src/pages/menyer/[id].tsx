@@ -2,16 +2,17 @@ import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import { ParsedUrlQuery } from "querystring";
 import React, { useEffect } from "react";
 import { useRouter } from "next/router";
+import { DateTime } from "luxon";
 import Head from "next/head";
 import Main from "../../components/layout/Main";
+import { getMenu, Menu } from "../../lib/oden/menus";
+import { UpdatedAt } from "../../components/menu/UpdatedAt";
 import Container from "../../components/layout/Container";
-import { fetchMenu } from "../../lib/menu/menu";
-import { Menu } from "../../lib/menu/types";
-import PageHeading from "../../components/typography/PageHeading";
-import InlineSkeleton from "../../components/skeleton/InlineSkeleton";
-import DayListSection from "../../components/menu/DayListSection";
-import { useMenuHistory } from "../../lib/menu/history";
+import { DayBrowser } from "../../components/menu/DayBrowser";
+import { InlineSkeleton } from "../../components/skeleton/InlineSkeleton";
+import { StandardPageHeading } from "../../components/typography/Heading";
 import NotFound from "../404";
+import { useMenuHistory } from "../../lib/menu/history";
 
 export interface PageProps {
   menu: Menu | null;
@@ -31,12 +32,13 @@ export const getStaticProps: GetStaticProps<PageProps, Q> = async ({
   }
 
   try {
-    const menu = await fetchMenu(id);
+    const menu = await getMenu(id);
+
     return {
       props: {
         menu,
       },
-      revalidate: 86400,
+      revalidate: menu ? 86400 : 300, // menu is null if it doesn't exist
     };
   } catch (error) {
     return {
@@ -50,7 +52,7 @@ export const getStaticProps: GetStaticProps<PageProps, Q> = async ({
 
 export const getStaticPaths: GetStaticPaths = async () => ({
   paths: [],
-  fallback: "blocking",
+  fallback: true,
 });
 
 const MenuPage: NextPage<PageProps> = ({ menu }) => {
@@ -69,33 +71,36 @@ const MenuPage: NextPage<PageProps> = ({ menu }) => {
   }
 
   return (
-    <Main
-      title={menu?.title}
-      description={
-        menu?.title
-          ? `Visa matsedeln för ${menu.title} på skolorna.com istället för din skolas dåliga intranät. #hataskolplattformen`
-          : undefined
-      }
-    >
+    <Main title={menu?.title}>
       <Head>
         <meta name="twitter:card" content="summary_large_image" />
-        <meta property="og:type" content="object" />
+        <meta property="og:type" content="article" />
         <meta
           property="og:image"
-          content={
-            menu?.id
-              ? `https://api.skolorna.com/v1/opengraph/menus/${menu.id}`
-              : undefined
-          }
+          content={`https://api.skolorna.com/v1/opengraph/menus/${menu?.id}`}
         />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="600" />
       </Head>
       <Container>
-        <PageHeading>
-          {menu?.title ?? <InlineSkeleton width="16em" count={2} />}
-        </PageHeading>
-        <DayListSection menu={menu?.id} />
+        <header>
+          <StandardPageHeading>
+            {menu?.title ?? <InlineSkeleton width="10em" count={2} />}
+          </StandardPageHeading>
+          <UpdatedAt
+            updatedAt={
+              typeof menu?.updated_at === "string"
+                ? DateTime.fromISO(menu.updated_at)
+                : menu?.updated_at
+            }
+          />
+          <style jsx>{`
+            header {
+              margin-bottom: 64px;
+            }
+          `}</style>
+        </header>
+        <DayBrowser menu={menu?.id} />
       </Container>
     </Main>
   );

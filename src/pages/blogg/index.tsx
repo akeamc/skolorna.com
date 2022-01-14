@@ -1,11 +1,11 @@
-import { Entry } from "contentful";
-import { GetStaticProps, NextPage } from "next";
 import React from "react";
-import PostGrid from "../../components/blog/PostGrid";
-import Container from "../../components/layout/Container";
+import { GetStaticProps, NextPage } from "next";
+import { Entry } from "contentful";
 import Main from "../../components/layout/Main";
-import PageHeading from "../../components/typography/PageHeading";
 import { BlogPost, listBlogPosts } from "../../lib/blog/post";
+import Container from "../../components/layout/Container";
+import { StandardPageHeading } from "../../components/typography/Heading";
+import { PostList } from "../../components/blog/PostList";
 
 interface PageProps {
   posts: Entry<BlogPost>[];
@@ -22,13 +22,13 @@ export const getStaticProps: GetStaticProps<PageProps> = async () => {
   };
 };
 
-const BlogHome: NextPage<PageProps> = ({ posts }) => (
+const BlogIndex: NextPage<PageProps> = ({ posts }) => (
   <Main title="Blogg">
     <Container>
-      <PageHeading>Blogg</PageHeading>
-      <PostGrid posts={posts} />
+      <StandardPageHeading>Blogg</StandardPageHeading>
+      <PostList posts={posts} />
     </Container>
   </Main>
 );
 
-export default BlogHome;
+export default BlogIndex;

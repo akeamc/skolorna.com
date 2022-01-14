@@ -1,5 +1,5 @@
-import { useHistory } from "../history/history";
+import { useHistory } from "../utils/history";
 
 export function useMenuHistory() {
-  return useHistory("menuHistory");
+  return useHistory("menu_history");
 }

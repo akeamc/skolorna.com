@@ -1,19 +1,29 @@
-import { Entry } from "contentful";
+import { Asset, Entry } from "contentful";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import Head from "next/head";
 import { ParsedUrlQuery } from "querystring";
 import React from "react";
-import BlogPostView from "../../components/blog/BlogPostView";
+import { PostHeader } from "../../components/blog/PostHeader";
+import { Prose } from "../../components/blog/Prose";
+import { normalizeAssetUrl } from "../../components/contentful/ProgressiveImage";
 import Main from "../../components/layout/Main";
 import {
   BlogPost,
   listBlogPosts,
-  getBlogPostBySlug,
+  getBlogPost,
+  getPreviewBlogPost,
 } from "../../lib/blog/post";
+import {
+  extractAssets,
+  generatePlaceholders,
+  PlaceholderContext,
+  PlaceholderTable,
+} from "../../lib/contentful/placeholder";
 import NotFound from "../404";
 
 interface PageProps {
   post: Entry<BlogPost> | null;
+  placeholders: PlaceholderTable | null;
 }
 
 interface Q extends ParsedUrlQuery {
@@ -22,6 +32,7 @@ interface Q extends ParsedUrlQuery {
 
 export const getStaticProps: GetStaticProps<PageProps, Q> = async ({
   params,
+  preview,
 }) => {
   const slug = params?.slug;
 
@@ -30,11 +41,25 @@ export const getStaticProps: GetStaticProps<PageProps, Q> = async ({
   }
 
   try {
-    const post = await getBlogPostBySlug(slug);
+    let post;
+
+    if (preview) {
+      post = await getPreviewBlogPost(slug);
+    } else {
+      post = await getBlogPost(slug);
+    }
+
+    const assets: Asset[] = [
+      post.fields.cover,
+      ...extractAssets(post.fields.content),
+    ];
+
+    const placeholders = await generatePlaceholders(assets);
 
     return {
       props: {
         post,
+        placeholders,
       },
       revalidate: 300,
     };
@@ -42,6 +67,7 @@ export const getStaticProps: GetStaticProps<PageProps, Q> = async ({
     return {
       props: {
         post: null,
+        placeholders: null,
       },
       revalidate: 60,
     };
@@ -61,31 +87,38 @@ export const getStaticPaths: GetStaticPaths = async () => {
   };
 };
 
-const BlogPostPage: NextPage<PageProps> = ({ post }) => {
+const BlogPostPage: NextPage<PageProps> = ({ post, placeholders }) => {
   if (!post) {
     return <NotFound />;
   }
 
+  const { cover } = post.fields;
+
   return (
-    <Main title={post.fields.title} description={post.fields.description}>
-      <Head>
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta property="og:type" content="article" />
-        <meta
-          property="og:image"
-          content={post.fields.cover?.fields.file.url}
-        />
-        <meta
-          property="og:image:width"
-          content={post.fields.cover?.fields.file.details.image?.width.toString()}
-        />
-        <meta
-          property="og:image:height"
-          content={post.fields.cover?.fields.file.details.image?.height.toString()}
-        />
-      </Head>
-      <BlogPostView post={post} />
-    </Main>
+    <PlaceholderContext.Provider value={placeholders ?? {}}>
+      <Main title={post.fields.title} description={post.fields.description}>
+        <Head>
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta property="og:type" content="article" />
+          <meta
+            property="og:article:published_time"
+            content={post.sys.createdAt}
+          />
+          <meta
+            property="og:article:modified_time"
+            content={post.sys.updatedAt}
+          />
+          <meta
+            property="og:image"
+            content={`${normalizeAssetUrl(cover)}?w=1200`}
+          />
+          <meta property="og:image:width" content="1200" />
+          <meta property="og:image:alt" content={cover.fields.description} />
+        </Head>
+        <PostHeader post={post} />
+        <Prose text={post.fields.content} />
+      </Main>
+    </PlaceholderContext.Provider>
   );
 };
 

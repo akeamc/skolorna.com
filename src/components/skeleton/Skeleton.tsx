@@ -25,7 +25,7 @@ export interface SkeletonProps
  *
  * @returns {React.ReactElement} The skeleton.
  */
-const Skeleton: FunctionComponent<SkeletonProps> = ({
+export const Skeleton: FunctionComponent<SkeletonProps> = ({
   className,
   width,
   height,
@@ -65,5 +65,3 @@ const Skeleton: FunctionComponent<SkeletonProps> = ({
     />
   );
 };
-
-export default Skeleton;

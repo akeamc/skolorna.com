@@ -1,19 +1,11 @@
-import classNames from "classnames";
-import React, {
-  DetailedHTMLProps,
-  FunctionComponent,
-  HTMLAttributes,
-} from "react";
+import React, { FunctionComponent } from "react";
+import classNames from "classnames/bind";
+import { HTMLMotionProps, motion } from "framer-motion";
 import styles from "./Spinner.module.scss";
 
-export type SpinnerProps = DetailedHTMLProps<
-  HTMLAttributes<HTMLDivElement>,
-  HTMLDivElement
->;
+const cx = classNames.bind(styles);
 
-const Spinner: FunctionComponent<SpinnerProps> = ({ className, ...props }) => (
-  // eslint-disable-next-line react/jsx-props-no-spreading
-  <div {...props} className={classNames(styles.spinner, className)} />
-);
-
-export default Spinner;
+export const Spinner: FunctionComponent<HTMLMotionProps<"div">> = ({
+  className,
+  ...props
+}) => <motion.div className={cx("spinner", className)} {...props} />;

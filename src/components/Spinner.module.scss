@@ -1,9 +1,10 @@
 .spinner {
-  animation: spin 1s linear infinite;
-  border: 2px solid var(--accents-3);
-  border-radius: 50%;
-  border-top-color: var(--accents-6);
-  position: relative;
+  animation: spin 1s ease-in-out infinite;
+  border: 2px solid var(--cmp-spinner-background);
+  border-radius: 100%;
+  border-top-color: var(--cmp-spinner-foreground);
+  height: var(--size, 20px);
+  width: var(--size, 20px);
 }
 
 @keyframes spin {

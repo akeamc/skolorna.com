@@ -1,13 +1,15 @@
-import React from "react";
 import { NextPage } from "next";
-import Matrix from "../components/canvas/Matrix";
-import Seo from "../components/Seo";
+import React from "react";
+import Container from "../components/layout/Container";
+import Main from "../components/layout/Main";
+import { StandardPageHeading } from "../components/typography/Heading";
 
 const NotFound: NextPage = () => (
-  <>
-    <Seo title="Sidan finns inte" />
-    <Matrix target="ERROR 404" />
-  </>
+  <Main title="Sidan hittades inte">
+    <Container>
+      <StandardPageHeading>Sidan hittades inte</StandardPageHeading>
+    </Container>
+  </Main>
 );
 
 export default NotFound;
