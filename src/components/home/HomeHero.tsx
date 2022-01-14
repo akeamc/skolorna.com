@@ -1,23 +1,20 @@
 import React, { FunctionComponent } from "react";
-import { Canvas } from "@react-three/fiber";
-import { Box, OrbitControls } from "@react-three/drei";
+import Container from "../layout/Container";
 import styles from "./HomeHero.module.scss";
 
-interface Props {}
-
-const Scene: FunctionComponent<Props> = () => (
-  <Canvas camera={{ position: [2, 2, 2], fov: 50 }}>
-    <OrbitControls />
-    <Box>
-      <meshBasicMaterial attach="material" wireframe />
-    </Box>
-  </Canvas>
-);
-
-export const HomeHero: FunctionComponent<Props> = (props) => (
-  <header className={styles.container}>
-    <div className={styles.scene}>
-      <Scene {...props} />
+export const HomeHero: FunctionComponent = () => (
+  <Container>
+    <div className={styles.text}>
+      <h1 className={styles.heading}>
+        Vi vet vad det blir till lunch<sup>*</sup>
+      </h1>
+      <p className={styles.description}>
+        Med sofistikerade algoritmer analyserar vi skolmaten i över 7&nbsp;000
+        skolor i hela Sverige.
+      </p>
+      <p className={styles.note}>
+        <sup>*</sup>Förutom när vi inte vet.
+      </p>
     </div>
-  </header>
+  </Container>
 );

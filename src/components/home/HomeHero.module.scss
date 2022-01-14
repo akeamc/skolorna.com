@@ -1,28 +1,37 @@
+@use "../../styles/font";
 
-.container {
-  // background-color: #fafafa;
+.text {
+  margin-block: 64px;
+  max-width: 700px;
+
+  @media (min-width: 768px) {
+    margin-block: 128px;
+  }
 }
 
 .heading {
   font-size: 56px;
-  font-weight: 700;
-  letter-spacing: -0.022em;
-  line-height: 64px;
-
-  // @media (min-width: 792px) {
-  //   font-size: 96px;
-  // }
-}
-
-.num {
-  font-feature-settings: "ss01";
-  font-size: 50vh;
   font-weight: 500;
-  // text-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  // color: #fff;
+  letter-spacing: font.inter-tracking(56);
+  line-height: 64px;
+  line-height: 1;
+  margin-block: 0.5em;
+
+  @media (min-width: 768px) {
+    font-size: 96px;
+    letter-spacing: font.inter-tracking(96);
+  }
 }
 
-.scene {
-  // background-color: #000;
-  height: 400px;
+.description {
+  font: 400 20px/1.5 var(--font-sans);
+  letter-spacing: font.inter-tracking(20);
+  margin: 0;
+}
+
+.note {
+  color: var(--color-text-muted);
+  font: 400 12px/1 var(--font-sans);
+  letter-spacing: font.inter-tracking(12);
+  margin-block: 64px 0;
 }

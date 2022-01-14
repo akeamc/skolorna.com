@@ -27,11 +27,11 @@ const items: Item[] = [
     label: "Blogg",
     highlightSubpaths: true,
   },
-  {
-    href: "/digibruh",
-    label: "Digibruh™",
-    highlightSubpaths: true,
-  },
+  // {
+  //   href: "/digibruh",
+  //   label: "Digibruh™",
+  //   highlightSubpaths: true,
+  // },
 ];
 
 export const Navbar: FunctionComponent = () => {
