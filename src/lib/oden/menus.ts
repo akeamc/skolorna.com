@@ -65,7 +65,7 @@ function listDaysPath({
 
 export function useDays(opt: ListDaysOptions): SWRResponse<Day[], unknown> {
   return useSWR(listDaysPath(opt), (path) =>
-    fetch(`${ODEN_ENDPOINT}/${path}`).then((res) => res.json())
+    fetch(`${ODEN_ENDPOINT}${path}`).then((res) => res.json())
   );
 }
 
