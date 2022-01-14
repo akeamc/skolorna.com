@@ -77,7 +77,7 @@ const MenuPage: NextPage<PageProps> = ({ menu }) => {
         <meta property="og:type" content="article" />
         <meta
           property="og:image"
-          content={`https://api-staging.skolorna.com/v1/opengraph/menus/${menu?.id}`}
+          content={`https://api.skolorna.com/v1/opengraph/menus/${menu?.id}`}
         />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="600" />

@@ -1,7 +1,7 @@
 import { DateTime } from "luxon";
 import useSWR, { SWRResponse } from "swr";
 
-export const ODEN_ENDPOINT = "https://api-staging.skolorna.com/v0/oden";
+export const ODEN_ENDPOINT = "https://api.skolorna.com/v0/oden";
 
 export interface Menu {
   id: string;
