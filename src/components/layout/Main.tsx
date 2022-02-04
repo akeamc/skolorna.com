@@ -14,7 +14,7 @@ const Main: FunctionComponent<Props> = ({
   description,
   children,
 }) => (
-  <div>
+  <>
     <Head>
       <title>{title}</title>
       <meta property="og:title" content={title} />
@@ -48,7 +48,7 @@ const Main: FunctionComponent<Props> = ({
       <main className={styles.main}>{children}</main>
     </div>
     <Footer />
-  </div>
+  </>
 );
 
 export default Main;
