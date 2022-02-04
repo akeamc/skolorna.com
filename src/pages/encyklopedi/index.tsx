@@ -4,18 +4,18 @@ import { GetStaticProps, NextPage } from "next";
 import Container from "../../components/layout/Container";
 import Main from "../../components/layout/Main";
 import {
-  DigibruhArticle,
-  listDigibruhArticles,
-} from "../../lib/digibruh/article";
+  EncyclopediaArticle,
+  listEncyclopediaArticles,
+} from "../../lib/encyclopedia/article";
 import { StandardPageHeading } from "../../components/typography/Heading";
-import { ArticleBoard } from "../../components/digibruh/ArticleBoard";
+import { ArticleBoard } from "../../components/encyclopedia/ArticleBoard";
 
 interface PageProps {
-  articles: Entry<DigibruhArticle>[];
+  articles: Entry<EncyclopediaArticle>[];
 }
 
 export const getStaticProps: GetStaticProps<PageProps> = async () => {
-  const articles = await listDigibruhArticles();
+  const articles = await listEncyclopediaArticles();
 
   return {
     props: {
@@ -25,13 +25,13 @@ export const getStaticProps: GetStaticProps<PageProps> = async () => {
   };
 };
 
-const DigibruhIndex: NextPage<PageProps> = ({ articles }) => (
-  <Main title="Digibruh™">
+const EncyclopediaIndex: NextPage<PageProps> = ({ articles }) => (
+  <Main title="Skolornas Encyclopedi">
     <Container>
-      <StandardPageHeading>Digibruh™</StandardPageHeading>
+      <StandardPageHeading>Skolornas Encyklopedi</StandardPageHeading>
       <ArticleBoard articles={articles} />
     </Container>
   </Main>
 );
 
-export default DigibruhIndex;
+export default EncyclopediaIndex;

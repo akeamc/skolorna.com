@@ -3,7 +3,7 @@ import { client } from "../utils/contentful";
 
 export const CONTENTFUL_TYPE = "digibruh";
 
-export interface DigibruhArticle {
+export interface EncyclopediaArticle {
   title: EntryFields.Text;
   slug: EntryFields.Text;
   description: EntryFields.Text;
@@ -11,20 +11,20 @@ export interface DigibruhArticle {
   content: EntryFields.RichText;
 }
 
-export async function listDigibruhArticles(): Promise<
-  Entry<DigibruhArticle>[]
+export async function listEncyclopediaArticles(): Promise<
+  Entry<EncyclopediaArticle>[]
 > {
-  const res = await client.getEntries<DigibruhArticle>({
+  const res = await client.getEntries<EncyclopediaArticle>({
     content_type: CONTENTFUL_TYPE,
     order: "-sys.createdAt",
   });
   return res.items;
 }
 
-export async function getDigibruhArticle(
+export async function getEncyclopediaArticle(
   slug: string
-): Promise<Entry<DigibruhArticle>> {
-  const res = await client.getEntries<DigibruhArticle>({
+): Promise<Entry<EncyclopediaArticle>> {
+  const res = await client.getEntries<EncyclopediaArticle>({
     content_type: CONTENTFUL_TYPE,
     "fields.slug": slug,
   });

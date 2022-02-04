@@ -13,14 +13,15 @@ import {
   PlaceholderTable,
 } from "../../lib/contentful/placeholder";
 import {
-  DigibruhArticle,
-  getDigibruhArticle,
-  listDigibruhArticles,
-} from "../../lib/digibruh/article";
+  EncyclopediaArticle,
+  getEncyclopediaArticle,
+  listEncyclopediaArticles,
+} from "../../lib/encyclopedia/article";
 import NotFound from "../404";
+import { ArticleHeading } from "../../components/encyclopedia/ArticleHeading";
 
 interface PageProps {
-  article: Entry<DigibruhArticle> | null;
+  article: Entry<EncyclopediaArticle> | null;
   placeholders: PlaceholderTable | null;
 }
 
@@ -38,7 +39,7 @@ export const getStaticProps: GetStaticProps<PageProps, Q> = async ({
   }
 
   try {
-    const article = await getDigibruhArticle(slug);
+    const article = await getEncyclopediaArticle(slug);
 
     const assets: Asset[] = [
       article.fields.cover,
@@ -66,7 +67,7 @@ export const getStaticProps: GetStaticProps<PageProps, Q> = async ({
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const articles = await listDigibruhArticles();
+  const articles = await listEncyclopediaArticles();
 
   return {
     paths: articles.map((article) => ({
@@ -78,7 +79,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
   };
 };
 
-const DigibruhArticlePage: NextPage<PageProps> = ({
+const EncyclopediaArticlePage: NextPage<PageProps> = ({
   article,
   placeholders,
 }) => {
@@ -109,11 +110,11 @@ const DigibruhArticlePage: NextPage<PageProps> = ({
           <meta property="og:image:width" content="1200" />
           <meta property="og:image:alt" content={cover.fields.description} />
         </Head>
-        <h1>{title}</h1>
+        <ArticleHeading article={article} />
         <Prose text={content} />
       </Main>
     </PlaceholderContext.Provider>
   );
 };
 
-export default DigibruhArticlePage;
+export default EncyclopediaArticlePage;
