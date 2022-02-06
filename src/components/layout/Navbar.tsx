@@ -1,10 +1,19 @@
-import React, { FunctionComponent, useState } from "react";
+import React, { FunctionComponent, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { AnimateSharedLayout, motion } from "framer-motion";
+import {
+  AnimatePresence,
+  AnimateSharedLayout,
+  motion,
+  Variants,
+} from "framer-motion";
+import classNames from "classnames/bind";
 import Container from "./Container";
 import styles from "./Navbar.module.scss";
 import { LogoIcon } from "../brand/Icon";
+import useMediaQuery from "../../lib/utils/media-query";
+
+const cx = classNames.bind(styles);
 
 interface Item {
   href: string;
@@ -34,6 +43,92 @@ const items: Item[] = [
   },
 ];
 
+const drawerVariants: Variants = {
+  open: {
+    opacity: 1,
+    width: "auto",
+    height: "auto",
+    transition: {
+      staggerChildren: 0.05,
+      delayChildren: 0.2,
+    },
+  },
+  closed: {
+    opacity: 0,
+    width: "var(--button-size)",
+    height: "var(--button-size)",
+  },
+};
+
+const drawerItemVariants: Variants = {
+  open: {
+    opacity: 1,
+    y: 0,
+  },
+  closed: {
+    opacity: 0,
+    y: 10,
+  },
+};
+
+const Drawer: FunctionComponent = () => {
+  const [open, setOpen] = useState(false);
+  const isDesktop = useMediaQuery("(min-width: 768px)");
+
+  useEffect(() => {
+    if (isDesktop) {
+      setOpen(false);
+    }
+  }, [isDesktop]);
+
+  return (
+    <motion.div className={cx("drawerContainer", { open })}>
+      {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/control-has-associated-label, jsx-a11y/interactive-supports-focus */}
+      <div
+        className={cx("overlay")}
+        onClick={() => setOpen(false)}
+        role="button"
+        title="Stäng"
+      />
+      <button
+        className={styles.toggle}
+        onClick={() => setOpen(!open)}
+        type="button"
+      >
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <motion.line x1="4" y1="7" x2="20" y2="7" />
+          <line x1="4" y1="12" x2="20" y2="12" />
+          <line x1="4" y1="17" x2="20" y2="17" />
+        </svg>
+      </button>
+      <AnimatePresence>
+        {open && (
+          <motion.ul
+            variants={drawerVariants}
+            initial="closed"
+            animate="open"
+            exit="closed"
+            className={styles.drawer}
+          >
+            {items.map(({ href, label }) => (
+              <motion.li key={href} variants={drawerItemVariants}>
+                <Link href={href}>
+                  <a>{label}</a>
+                </Link>
+              </motion.li>
+            ))}
+          </motion.ul>
+        )}
+      </AnimatePresence>
+    </motion.div>
+  );
+};
+
 export const Navbar: FunctionComponent = () => {
   const router = useRouter();
   const [highlighted, setHighlighted] = useState(router.asPath);
@@ -41,7 +136,7 @@ export const Navbar: FunctionComponent = () => {
   return (
     <nav className={styles.nav}>
       <Container>
-        <ul>
+        <ul className={styles.horizontal}>
           <Link href="/">
             <a className={styles.logo}>
               <LogoIcon />
@@ -75,6 +170,7 @@ export const Navbar: FunctionComponent = () => {
               </li>
             ))}
           </AnimateSharedLayout>
+          <Drawer />
         </ul>
       </Container>
     </nav>

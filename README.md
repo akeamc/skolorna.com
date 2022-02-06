@@ -12,7 +12,7 @@ papperstallrikar i några dagar (nedan).
 
 26 mars. Falafel med fullkornsbulgur och vitlöks- och oreganoyoghurt.  
 26 mars. Pannkakor med sylt.  
-27 mars. Tacobuffé med klassiska tillbehör.  
+27 mars. Tacobuffé med klassiska tillbehör.
 
 Vi har även skrivit lite om skolans digitala enheter på bloggen. Efter ett stort
 antal uppsatser – skrivna i Word på en iPad – saknar vi Word på Windows enormt

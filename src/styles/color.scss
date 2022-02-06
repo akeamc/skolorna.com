@@ -103,6 +103,9 @@ $palette: (
 
   --cmp-article-list-background: var(--color-surface);
 
+  --cmp-drawer-background: var(--color-surface);
+  --cmp-drawer-foreground: var(--palette-on-surface);
+
   $primary: map.get($palette, "primary", $light-tone);
   $surface: map.get($palette, "neutral", $light-surface-tone);
 
@@ -144,10 +147,12 @@ $palette: (
   --cmp-spinner-foreground: var(--palette-neutral50);
   
   --cmp-article-list-background: var(--color-surface);
+
+  --cmp-drawer-background: var(--color-surface);
+  --cmp-drawer-foreground: var(--palette-on-surface);
   
   $primary: map.get($palette, "primary", $dark-tone);
   $surface: map.get($palette, "neutral", $dark-surface-tone);
-  
 
   @include surface-elevation-vars($surface, $primary);
 }

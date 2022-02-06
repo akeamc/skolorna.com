@@ -5,14 +5,14 @@
   --item-spacing: 12px;
 
   height: var(--navbar-height);
+}
 
-  ul {
-    align-items: center;
-    display: flex;
-    height: var(--navbar-height);
-    margin: 0;
-    padding: 0;
-  }
+.horizontal {
+  align-items: center;
+  display: flex;
+  height: var(--navbar-height);
+  margin: 0;
+  padding: 0;
 }
 
 .item {
@@ -20,6 +20,11 @@
   letter-spacing: font.inter-tracking(14);
   margin: 0 var(--item-spacing);
   position: relative;
+  display: none;
+
+  @media (min-width: 768px) {
+    display: block;
+  }
   
   a {
     display: inline-block;
@@ -46,4 +51,89 @@
   right: 0;
   top: 0;
   z-index: -1;
+}
+
+.drawerContainer {
+  --button-size: 40px;
+  --border-radius: 20px;
+
+  margin-left: auto;
+  position: relative;
+  width: var(--button-size);
+  height: var(--button-size);
+  border-radius: var(--border-radius);
+
+  @media (min-width: 768px) {
+    display: none;
+  }
+
+  .overlay {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    pointer-events: none;
+  }
+
+  &.open .overlay {
+    pointer-events: initial;
+  }
+
+  .toggle {
+    width: var(--button-size);
+    height: var(--button-size);
+    border: 0;
+    color: inherit;
+    background-color: transparent;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+
+  .toggle:hover {
+    background-color: var(--surface-elevation-1);
+  }
+
+  .toggle svg {
+    stroke: currentColor;
+    stroke-width:2px;
+    stroke-linecap: round;
+  }
+}
+
+.drawerToggle {
+  @media (min-width: 768px) {
+    display: none;
+  }
+}
+
+.drawer {
+  background-color: var(--cmp-drawer-background);
+  color: var(--cmp-drawer-foreground);
+  border-radius: var(--border-radius);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 8px;
+  overflow: hidden;
+  
+  li a {
+    transition: background-color 0.1s;
+    padding: 12px;
+    padding-right: calc(12px + var(--button-size));
+    border-radius: 8px;
+    display: inline-block;
+    width: 100%;
+    font: 500 14px/1 var(--font-sans);
+    letter-spacing: font.inter-tracking(14);
+
+    &:hover {
+      background-color: var(--surface-elevation-2);
+    }
+  }
 }
