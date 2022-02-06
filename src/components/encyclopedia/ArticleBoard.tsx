@@ -1,18 +1,18 @@
 import { Entry } from "contentful";
 import Link from "next/link";
 import React, { FunctionComponent } from "react";
-import { DigibruhArticle } from "../../lib/digibruh/article";
+import { EncyclopediaArticle } from "../../lib/encyclopedia/article";
 import { ProgressiveImage } from "../contentful/ProgressiveImage";
 import styles from "./ArticleBoard.module.scss";
 
 interface Props {
-  articles: Entry<DigibruhArticle>[];
+  articles: Entry<EncyclopediaArticle>[];
 }
 
 export const ArticleBoard: FunctionComponent<Props> = ({ articles }) => (
   <div className={styles.container}>
     {articles.map((article) => (
-      <Link href={`/digibruh/${article.fields.slug}`} passHref>
+      <Link href={`/encyklopedi/${article.fields.slug}`} passHref>
         <a className={styles.articleWrapper}>
           <article key={article.sys.id} className={styles.article}>
             <div className={styles.text}>
