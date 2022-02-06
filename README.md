@@ -48,7 +48,7 @@ vi nu den nya och överlägsna plattformen Digibruh. Det är ett digitalt
 som en dålig idé och barnarbete, är det inte det förstnämnda. Våra
 artiklar är gratis och är tillgängliga överallt.
 
-Bruh
+Bruh  
 Digibruh-teamet
 
 ## Distansundervisning dag 10 (12 mars 2021)
