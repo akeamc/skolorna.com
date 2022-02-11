@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@contentful/rich-text-react-renderer": "^15.2.0",
-    "@contentful/rich-text-types": "^15.1.0",
+    "@contentful/rich-text-types": "^15.11.1",
     "@meilisearch/instant-meilisearch": "^0.5.9",
     "@react-three/drei": "^7.22.6",
     "@react-three/fiber": "^7.0.19",
@@ -67,7 +67,7 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.22.0",
     "eslint-plugin-jsx-a11y": "^6.3.1",
-    "eslint-plugin-react": "^7.20.3",
+    "eslint-plugin-react": "^7.28.0",
     "eslint-plugin-react-hooks": "^4.0.8",
     "prettier": "^2.4.0",
     "sass": "^1.38.1",
@@ -78,6 +78,6 @@
     "stylelint-config-standard": "^22.0.0",
     "stylelint-order": "^4.1.0",
     "typescript": "4.5.5",
-    "webpack": "^5.51.1"
+    "webpack": "^5.68.0"
   }
 }
