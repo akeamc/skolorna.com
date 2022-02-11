@@ -12,6 +12,7 @@ import Container from "./Container";
 import styles from "./Navbar.module.scss";
 import { LogoIcon } from "../brand/Icon";
 import useMediaQuery from "../../lib/utils/media-query";
+import { Menu } from "react-feather";
 
 const cx = classNames.bind(styles);
 
@@ -95,16 +96,7 @@ const Drawer: FunctionComponent = () => {
         onClick={() => setOpen(!open)}
         type="button"
       >
-        <svg
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <motion.line x1="4" y1="7" x2="20" y2="7" />
-          <line x1="4" y1="12" x2="20" y2="12" />
-          <line x1="4" y1="17" x2="20" y2="17" />
-        </svg>
+        <Menu />
       </button>
       <AnimatePresence>
         {open && (
