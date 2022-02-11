@@ -8,11 +8,11 @@ import {
   Variants,
 } from "framer-motion";
 import classNames from "classnames/bind";
+import { Menu } from "react-feather";
 import Container from "./Container";
 import styles from "./Navbar.module.scss";
 import { LogoIcon } from "../brand/Icon";
 import useMediaQuery from "../../lib/utils/media-query";
-import { Menu } from "react-feather";
 
 const cx = classNames.bind(styles);
 
