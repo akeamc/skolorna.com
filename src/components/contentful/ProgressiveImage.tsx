@@ -53,6 +53,7 @@ export const ProgressiveImage: FunctionComponent<Props> = ({
       `}</style>
       <source srcSet={srcSet(base, "webp", sizes)} type="image/webp" />
       <source srcSet={srcSet(base, "jpeg", sizes)} type="image/jpeg" />
+      {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={`${base}?w=400`}
         alt={description}
