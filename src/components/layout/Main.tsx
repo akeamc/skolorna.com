@@ -11,7 +11,7 @@ export interface Props {
 
 const Main: FunctionComponent<Props> = ({
   title = "Skolorna",
-  description,
+  description = "Vi vet vad det blir till lunch.",
   children,
 }) => (
   <>
