@@ -12,7 +12,11 @@ interface Props {
 export const ArticleBoard: FunctionComponent<Props> = ({ articles }) => (
   <div className={styles.container}>
     {articles.map((article) => (
-      <Link href={`/encyklopedi/${article.fields.slug}`} key={article.sys.id} passHref>
+      <Link
+        href={`/encyklopedi/${article.fields.slug}`}
+        key={article.sys.id}
+        passHref
+      >
         <a className={styles.articleWrapper}>
           <article key={article.sys.id} className={styles.article}>
             <div className={styles.text}>
