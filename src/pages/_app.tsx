@@ -3,6 +3,7 @@ import dynamic from "next/dynamic";
 import Script from "next/script";
 import React from "react";
 import GoogleAnalytics from "../components/GoogleAnalytics";
+import { Sanction } from "../components/Sanction";
 import { AuthProvider } from "../lib/auth/context";
 import { ThemeProvider } from "../lib/utils/theme";
 import "../styles/global.scss";
@@ -15,6 +16,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <AuthProvider>
       <ThemeProvider>
+        <Sanction />
         <GoogleAnalytics trackingId="G-FY7502K4VH" />
         <Script
           async
