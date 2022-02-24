@@ -87,7 +87,7 @@ export const Sanction = () => {
                 Skolorna fördömer å det starkaste Rysslands invasion av Ukraina.
                 Vi har infört effektiva sanktioner mot president Vladimir Putin.
               </p>
-              <p>Är du President Putin?</p>
+              <p>Är du president Putin?</p>
               <div className={styles.actions}>
                 <button
                   onClick={() => setPutin(true)}
