@@ -1,7 +1,6 @@
 import { disableBodyScroll, enableBodyScroll } from "body-scroll-lock";
 import { motion, Variants } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
-import createPersistedState from "use-persisted-state";
 import styles from "./Sanction.module.scss";
 
 const overlayVariants: Variants = {
@@ -31,8 +30,6 @@ const modalVariants: Variants = {
     },
   },
 };
-
-const useSussyStatus = createPersistedState("not-sus");
 
 export const Sanction = () => {
   const sus = !(typeof window !== "undefined"

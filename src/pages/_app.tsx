@@ -16,7 +16,6 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <AuthProvider>
       <ThemeProvider>
-        <Sanction />
         <GoogleAnalytics trackingId="G-FY7502K4VH" />
         <Script
           async
@@ -24,6 +23,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           crossOrigin="anonymous"
           strategy="afterInteractive"
         />
+        <Sanction />
         <PageProgress />
         {/* eslint-disable-next-line react/jsx-props-no-spreading */}
         <Component {...pageProps} />
