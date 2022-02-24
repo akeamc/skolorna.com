@@ -16,8 +16,11 @@
 
 .modal {
   align-items: center;
+  align-items: center;
   background-color: var(--color-surface);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
   height: 100%;
   -webkit-overflow-scrolling: touch;
   overflow-y: auto;
@@ -41,7 +44,11 @@
     height: auto;
     margin: var(--page-gutter);
     max-height: calc(100vh - 2 * var(--page-gutter));
-    max-width: 60ch;
+    width: 70ch;
+
+    .main {
+      margin: 0;
+    }
 
     h2 {
       font-size: 64px;
