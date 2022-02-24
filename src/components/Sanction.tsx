@@ -67,21 +67,21 @@ export const Sanction = () => {
         transition={{ duration: 0.5 }}
         ref={modalRef}
       >
-        {putin ? (
-          <div className={styles.frame}>
-            <iframe
-              src="https://metro.co.uk/video/embed/2622711"
-              title="Metro Embed Video Player"
-              width="540"
-              height="353"
-              scrolling="no"
-              frameBorder="0"
-              allowFullScreen
-            />
-          </div>
-        ) : (
-          <>
-            <section className={styles.main}>
+        <section className={styles.main}>
+          {putin ? (
+            <div className={styles.frame}>
+              <iframe
+                src="https://metro.co.uk/video/embed/2622711"
+                title="Metro Embed Video Player"
+                width="540"
+                height="353"
+                scrolling="no"
+                frameBorder="0"
+                allowFullScreen
+              />
+            </div>
+          ) : (
+            <div className={styles.body}>
               <h2>Привет. Heter du Vladimir Putin?</h2>
               <p>
                 Skolorna fördömer å det starkaste Rysslands invasion av Ukraina.
@@ -105,13 +105,13 @@ export const Sanction = () => {
                   Нет
                 </button>
               </div>
-            </section>
-          </>
-        )}
-        <p className={styles.note}>
+            </div>
+          )}
+        </section>
+        <footer>
           Vi vet att denna låtsassanktion kan tolkas som ett hån mot modern
           diplomati. Det har aldrig varit vår avsikt.
-        </p>
+        </footer>
       </motion.div>
     </motion.div>
   );
