@@ -15,7 +15,7 @@
     "@contentful/rich-text-types": "^15.11.1",
     "@meilisearch/instant-meilisearch": "^0.5.9",
     "@react-three/drei": "^7.22.6",
-    "@react-three/fiber": "^7.0.19",
+    "@react-three/fiber": "^7.0.26",
     "body-scroll-lock": "^4.0.0-beta.0",
     "classnames": "^2.3.1",
     "contentful": "^8.5.0",
