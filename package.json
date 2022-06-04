@@ -13,7 +13,7 @@
   "dependencies": {
     "@contentful/rich-text-react-renderer": "^15.2.0",
     "@contentful/rich-text-types": "^15.11.1",
-    "@meilisearch/instant-meilisearch": "^0.5.9",
+    "@meilisearch/instant-meilisearch": "^0.7.1",
     "@react-three/drei": "^7.22.6",
     "@react-three/fiber": "^7.0.19",
     "body-scroll-lock": "^4.0.0-beta.0",
@@ -24,7 +24,7 @@
     "fuse.js": "^6.4.6",
     "jsonwebtoken": "^8.5.1",
     "luxon": "^1.27.0",
-    "meilisearch": "^0.23.0",
+    "meilisearch": "^0.25.1",
     "next": "^12.1.0",
     "nprogress": "^0.2.0",
     "polished": "^4.1.3",
