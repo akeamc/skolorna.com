@@ -1,8 +1,8 @@
 import { MeiliSearch } from "meilisearch";
 
-export const HOST_URL = "https://api-staging.skolorna.com/v0/search";
+export const HOST_URL = "https://api.skolorna.com/v0/search";
 export const API_KEY =
-  "Bx550HX6f1da372c436f80be564bfdea7ce136cf98576766c23580f0a92114ad0aecd558";
+  "dgvIqsOt4f126af064837d0110acdfa5f9d93fbaed88e4f59e3f6055a0c98660816b17fa";
 export const INDEX_NAME = "menus";
 
 export const searchClient = new MeiliSearch({
