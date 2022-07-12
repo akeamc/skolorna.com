@@ -21,7 +21,6 @@
     "contentful": "^8.5.0",
     "formik": "^2.2.9",
     "framer-motion": "^4.1.17",
-    "fuse.js": "^6.4.6",
     "jsonwebtoken": "^8.5.1",
     "luxon": "^1.27.0",
     "meilisearch": "^0.23.0",
