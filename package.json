@@ -58,7 +58,7 @@
     "@types/use-persisted-state": "^0.3.0",
     "@typescript-eslint/eslint-plugin": "^5.28.0",
     "babel-loader": "^8.2.2",
-    "css-loader": "^6.4.0",
+    "css-loader": "^6.7.1",
     "eslint": "^7.32.0",
     "eslint-config-next": "12.1.0",
     "prettier": "^2.4.0",
