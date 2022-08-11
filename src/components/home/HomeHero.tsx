@@ -1,11 +1,6 @@
 import { PresentationControls } from "@react-three/drei";
 import { Canvas, useFrame } from "@react-three/fiber";
-import React, {
-  FunctionComponent,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { FunctionComponent, useEffect, useRef, useState } from "react";
 import { Group, Object3D } from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import { MenuStats } from "../../lib/oden/stats";
@@ -60,8 +55,8 @@ export const HomeHero: FunctionComponent<{ stats: MenuStats }> = ({
       </h1>
       <p className={styles.description}>
         Med sofistikerade algoritmer analyserar vi skolmaten i{" "}
-        {stats.menus.toLocaleString("sv")} skolor. Hittills har vi samlat in{" "}
-        {stats.days.toLocaleString("sv")} luncher.
+        {stats.menus.toLocaleString("sv")} skolor. Hittills har vi samlat in
+        data om {stats.days.toLocaleString("sv")} luncher.
       </p>
       <p className={styles.note}>
         <sup>*</sup>Förutom när vi inte vet.

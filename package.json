@@ -13,7 +13,7 @@
   "dependencies": {
     "@contentful/rich-text-react-renderer": "^15.2.0",
     "@contentful/rich-text-types": "^15.11.1",
-    "@meilisearch/instant-meilisearch": "^0.5.9",
+    "@meilisearch/instant-meilisearch": "^0.8.1",
     "@react-three/drei": "^9.17.1",
     "@react-three/fiber": "^8.1.0",
     "body-scroll-lock": "^4.0.0-beta.0",
@@ -22,7 +22,7 @@
     "formik": "^2.2.9",
     "framer-motion": "^4.1.17",
     "luxon": "^1.27.0",
-    "meilisearch": "^0.23.0",
+    "meilisearch": "^0.27.0",
     "next": "^12.2.2",
     "nprogress": "^0.2.0",
     "polished": "^4.1.3",
