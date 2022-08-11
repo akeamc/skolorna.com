@@ -15,7 +15,7 @@ export const getMenus = () => request<Menu[]>("/menus");
  * Fetch a menu from Oden.
  * @param id
  */
-export const getMenu = (id: string) => requestOpt<Menu[]>(`/menus/${id}`);
+export const getMenu = (id: string) => requestOpt<Menu>(`/menus/${id}`);
 
 export interface Meal {
   value: string;
