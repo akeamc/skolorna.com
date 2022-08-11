@@ -1,7 +1,6 @@
 import { DateTime } from "luxon";
 import useSWR, { SWRResponse } from "swr";
-
-export const ODEN_ENDPOINT = "https://api.skolorna.com/v0/oden";
+import { request, requestOpt } from "./client";
 
 export interface Menu {
   id: string;
@@ -10,23 +9,13 @@ export interface Menu {
   updated_at: string | null;
 }
 
-export async function getMenus(): Promise<Menu[]> {
-  return fetch(`${ODEN_ENDPOINT}/menus`).then((res) => res.json());
-}
+export const getMenus = () => request<Menu[]>("/menus");
 
 /**
  * Fetch a menu from Oden.
  * @param id
  */
-export async function getMenu(id: string): Promise<Menu | null> {
-  const res = await fetch(`${ODEN_ENDPOINT}/menus/${id}`);
-
-  if (res.status === 404) {
-    return null;
-  }
-
-  return res.json();
-}
+export const getMenu = (id: string) => requestOpt<Menu>(`/menus/${id}`);
 
 export interface Meal {
   value: string;
@@ -64,19 +53,9 @@ function listDaysPath({
 }
 
 export function useDays(opt: ListDaysOptions): SWRResponse<Day[], unknown> {
-  return useSWR(listDaysPath(opt), (path) =>
-    fetch(`${ODEN_ENDPOINT}${path}`).then((res) => res.json())
-  );
+  return useSWR(listDaysPath(opt), (path) => request(path));
 }
 
 export function useMenu(menu?: string): SWRResponse<Menu, unknown> {
-  return useSWR(menu ? `/menus/${menu}` : null, async () => {
-    const m = await getMenu(menu as string);
-
-    if (!m) {
-      throw new Error("menu not found");
-    }
-
-    return m;
-  });
+  return useSWR(menu ? `/menus/${menu}` : null, (path) => request(path));
 }
