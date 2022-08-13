@@ -18,8 +18,8 @@
     em {
       padding-inline: 0.3ch;
       font-style: normal;
-      background-color: rgba($color: red, $alpha: 0.1);
-      color: red;
+      background-color: var(--cmp-hero-em-bg);
+      color: var(--cmp-hero-em-fg);
       border-radius: 0.2em;
     }
   }

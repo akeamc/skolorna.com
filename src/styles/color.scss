@@ -107,6 +107,9 @@ $palette: (
   --cmp-drawer-background: var(--color-surface);
   --cmp-drawer-foreground: var(--palette-on-surface);
 
+  --cmp-hero-em-fg: red;
+  --cmp-hero-em-bg: rgba(255, 0, 0, 0.1);
+
   $primary: map.get($palette, "primary", $light-tone);
   $surface: map.get($palette, "neutral", $light-surface-tone);
 
@@ -152,6 +155,9 @@ $palette: (
 
   --cmp-drawer-background: var(--color-surface);
   --cmp-drawer-foreground: var(--palette-on-surface);
+
+  // --cmp-hero-em-fg: var(--color-background);
+  // --cmp-hero-em-bg: red;
   
   $primary: map.get($palette, "primary", $dark-tone);
   $surface: map.get($palette, "neutral", $dark-surface-tone);

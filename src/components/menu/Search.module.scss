@@ -107,7 +107,7 @@
   }
 }
 
-.results > *:last-child .hit {
+.results > *:last-child li:last-child > .hit {
   border-bottom: none;
 }
 
