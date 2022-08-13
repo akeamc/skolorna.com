@@ -6,6 +6,7 @@ import { StandardPageHeading } from "../typography/Heading";
 import { Narrow, ProseContainer, WideProseImage } from "./Prose";
 import styles from "./PostHeader.module.scss";
 import { Author } from "../../lib/contentful/author";
+import { useRouter } from "next/router";
 
 export interface Props {
   post: Entry<BlogPost>;
@@ -30,6 +31,7 @@ export const Authors: FunctionComponent<{
 
 export const PostHeader: FunctionComponent<Props> = ({ post }) => {
   const { title, description, cover, authors } = post.fields;
+  const { locale } = useRouter();
 
   return (
     <header>
@@ -46,7 +48,7 @@ export const PostHeader: FunctionComponent<Props> = ({ post }) => {
                 day: "numeric",
                 month: "short",
                 year: "numeric",
-                locale: "sv",
+                locale,
               })}
             </time>
           </div>

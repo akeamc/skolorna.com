@@ -1,5 +1,6 @@
 import classNames from "classnames/bind";
 import { DateTime } from "luxon";
+import { useRouter } from "next/router";
 import React, { FunctionComponent } from "react";
 import { AlertCircle, Clock } from "react-feather";
 import { relativelyRelativeTimestamp } from "../../lib/utils/human-date";
@@ -17,6 +18,7 @@ export interface Props {
 export const UpdatedAt: FunctionComponent<Props> = ({ updatedAt }) => {
   const skeleton = typeof updatedAt === "undefined";
   const never = updatedAt === null;
+  const { locale = "sv" } = useRouter();
 
   return (
     <span className={cx("updatedAt", { never, skeleton })}>
@@ -30,7 +32,7 @@ export const UpdatedAt: FunctionComponent<Props> = ({ updatedAt }) => {
               <time
                 dateTime={updatedAt?.toISO()}
                 title={updatedAt
-                  ?.setLocale("sv")
+                  ?.setLocale(locale)
                   .toLocaleString(DateTime.DATETIME_MED_WITH_WEEKDAY)}
               >
                 Uppdaterades {relativelyRelativeTimestamp(updatedAt)}

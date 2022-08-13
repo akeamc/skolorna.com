@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import React, { FunctionComponent } from "react";
 import { MenuStats } from "../../lib/oden/stats";
 import Container from "../layout/Container";
@@ -5,20 +6,21 @@ import styles from "./HomeHero.module.scss";
 
 export const HomeHero: FunctionComponent<{ stats: MenuStats }> = ({
   stats,
-}) => (
-  <Container>
-    <div className={styles.text}>
-      <h1 className={styles.heading}>
-        Vi vet vad det blir till lunch<sup>*</sup>
-      </h1>
-      <p className={styles.description}>
-        Med sofistikerade algoritmer analyserar vi skolmaten i{" "}
-        {stats.menus.toLocaleString("sv")} skolor. Hittills har vi samlat in
-        data om {stats.days.toLocaleString("sv")} luncher.
-      </p>
-      <p className={styles.note}>
-        <sup>*</sup>Förutom när vi inte vet.
-      </p>
-    </div>
-  </Container>
-);
+}) => {
+  const { locale } = useRouter();
+
+  return (
+    <Container>
+      <div className={styles.hero}>
+        <h1>
+          Vi vet vad det blir till lunch på{" "}
+          <em>{stats.menus.toLocaleString(locale)}</em> ställen
+        </h1>
+        <p>
+          Hittills har vi arkiverat {stats.days.toLocaleString(locale)}{" "}
+          måltider.
+        </p>
+      </div>
+    </Container>
+  );
+};
