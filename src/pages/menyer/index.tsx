@@ -1,12 +1,7 @@
 import React from "react";
 import { NextPage } from "next";
 import Main from "../../components/layout/Main";
-import { Discover } from "../../components/menu/Discover";
 
-const MenuIndex: NextPage = () => (
-  <Main title="Menyer">
-    <Discover />
-  </Main>
-);
+const MenuIndex: NextPage = () => <Main title="Menyer"></Main>;
 
 export default MenuIndex;

@@ -1,88 +1,121 @@
-import classNames from "classnames/bind";
-import Link from "next/link";
-import React, { FunctionComponent, useState } from "react";
 import { Search as SearchIcon } from "react-feather";
-import {
-  connectInfiniteHits,
-  connectSearchBox,
-  SearchBoxProvided,
-} from "react-instantsearch-core";
-import { Highlight } from "react-instantsearch-dom";
-import { InstantMenuSearch } from "../../lib/oden/instantsearch";
-import { useDays } from "../../lib/oden/menus";
+import { SearchProvider, useSearch } from "../../lib/oden/search";
+import { Menu, useMenu } from "../../lib/oden/menus";
+import { FunctionComponent, useState } from "react";
+import Link from "next/link";
 import styles from "./Search.module.scss";
+import { useRouter } from "next/router";
+import { useMenuHistory } from "../../lib/menu/history";
+import { Skeleton } from "../skeleton/Skeleton";
 
-const cx = classNames.bind(styles);
-
-const Box: FunctionComponent<SearchBoxProvided> = ({
-  refine,
-  currentRefinement,
-}) => {
-  const [focused, setFocused] = useState(false);
+const SearchBox: FunctionComponent = () => {
+  const { query, refine } = useSearch();
 
   return (
-    <div className={cx("searchBox", { focused })}>
+    <div className={styles.searchBox}>
       <SearchIcon />
       <input
         type="search"
-        value={currentRefinement}
+        value={query}
         onChange={(event) => refine(event.currentTarget.value)}
-        placeholder="Sök bland tusentals menyer ..."
-        onFocus={() => setFocused(true)}
-        onBlur={() => setFocused(false)}
+        placeholder="Sök bland tusentals menyer"
       />
     </div>
   );
 };
 
-export const SearchBox = connectSearchBox(Box);
+const Hit: FunctionComponent<{ hit?: Menu }> = ({ hit }) => {
+  const inner = (
+    <a className={styles.hit} title={hit?.title}>
+      {hit?.title ?? <Skeleton />}
+    </a>
+  );
 
-export interface HitProps<T = any> {
-  hit: T;
-}
+  if (hit) {
+    return <Link href={`/menyer/${hit.id}`}>{inner}</Link>;
+  } else {
+    return inner;
+  }
+};
 
-export const Hit: FunctionComponent<HitProps> = ({ hit }) => {
-  const { data } = useDays({ menu: hit.id });
-  const nextDay = data?.[0];
+const RecentMenu: FunctionComponent<{ id: string }> = ({ id }) => {
+  const { data } = useMenu(id);
+
+  return <Hit hit={data} />;
+};
+
+const Landing: FunctionComponent = () => {
+  const { stack } = useMenuHistory();
+  const { limit } = useSearch();
+
+  if (stack.length === 0) {
+    return null;
+  }
 
   return (
-    <Link href={`/menyer/${hit.id}`}>
-      <a className={styles.hit}>
-        <div className={styles.hitContent}>
-          <h3>
-            <Highlight hit={hit} attribute="title" />
-          </h3>
-          <div className={styles.hitMeta}>
-            {nextDay ? (
-              <span>{nextDay.meals.map((meal) => meal.value).join("; ")}</span>
-            ) : (
-              <span>Ingen information</span>
-            )}
-          </div>
-        </div>
-      </a>
-    </Link>
+    <ul>
+      {stack.slice(0, limit).map(({ key }) => (
+        <li key={key}>
+          <RecentMenu id={key} />
+        </li>
+      ))}
+    </ul>
   );
 };
 
-const Hits = connectInfiniteHits(({ hits }) => (
-  <div className={styles.hits}>
-    <ol>
-      {hits.map((hit) => (
-        <li key={hit.id}>
-          <Hit hit={hit} />
-        </li>
-      ))}
-    </ol>
-  </div>
-));
+const Result: FunctionComponent = () => {
+  const { query, result } = useSearch();
+  const { locale } = useRouter();
 
-/**
- * Menu search.
- */
-export const Search: FunctionComponent = () => (
-  <InstantMenuSearch>
-    <SearchBox />
-    <Hits />
-  </InstantMenuSearch>
-);
+  if (query === "") {
+    return (
+      <div className={styles.results}>
+        <Landing />
+      </div>
+    );
+  }
+
+  if (!result) return null;
+
+  const totalHits = result.estimatedTotalHits ?? (result as any).nbHits; // backwards compatibility
+  const processingTime = Math.max(result.processingTimeMs, 1) / 1000; // seconds
+
+  return (
+    <div className={styles.results}>
+      <ol
+        className={styles.hits}
+        onClick={() => (document.activeElement as HTMLElement | null)?.blur()}
+      >
+        {result.hits.map((hit) => (
+          <li key={hit.id}>
+            <Hit hit={hit} />
+          </li>
+        ))}
+      </ol>
+      {result?.hits.length === 0 ? (
+        <div className={styles.info}>
+          <div className={styles.art}>(╯°□°)╯︵ ┻━┻ </div>
+          <p>Inga menyer hittades.</p>
+        </div>
+      ) : (
+        <div className={styles.meta}>
+          {totalHits} resultat ({processingTime.toLocaleString(locale)}{" "}
+          sekunder)
+        </div>
+      )}
+    </div>
+  );
+};
+
+const Search: FunctionComponent = () => {
+  return (
+    <div className={styles.search}>
+      <SearchProvider>
+        <SearchBox />
+        <Result />
+      </SearchProvider>
+    </div>
+  );
+};
+
+export default Search;

@@ -60,10 +60,10 @@
 .cursor {
   align-items: center;
   display: flex;
-  margin-left: 8px;
+  margin-inline-start: 8px;
 
   @media (min-width: 480px) {
-    margin-left: 16px;
+    margin-inline-start: 16px;
   }
 }
 
@@ -84,15 +84,15 @@
   display: inline-block;
   font: 500 12px/1 var(--font-sans);
   letter-spacing: font.inter-tracking(12);
-  margin-left: 12px;
+  margin-inline-start: 12px;
   padding: 4px;
 }
 
 .spinner {
-  margin-left: auto;
+  margin-inline-start: auto;
 
   @media (min-width: 480px) {
-    margin-left: 16px;
+    margin-inline-start: 16px;
   }
 }
 

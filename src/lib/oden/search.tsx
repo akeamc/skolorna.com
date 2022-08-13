@@ -8,7 +8,6 @@ import {
   useState,
 } from "react";
 import useSWR from "swr";
-import { string } from "yup";
 import { ODEN_ENDPOINT } from "./client";
 import { Menu } from "./menus";
 
@@ -33,32 +32,36 @@ export interface SearchContextData {
   refine: (query: string) => void;
   query: string;
   result?: SearchResponse<Menu>;
+  limit: number;
 }
 
 export const SearchContext = createContext<SearchContextData>({
   refine: () => {},
   query: "",
+  limit: 10,
 });
 
-export const SearchProvider: FunctionComponent = ({ children }) => {
+export const SearchProvider: FunctionComponent<{ limit?: number }> = ({
+  children,
+  limit = 10,
+}) => {
   const ms = useSearchClient();
   const index = ms.index(INDEX_NAME);
   const [query, refine] = useState("");
 
   const [result, setResult] = useState<SearchResponse<Menu>>();
-  const { data } = useSWR(`${HOST_URL}/${INDEX_NAME}?q=${query}`, async () => {
-    const res = await index.search(query);
-    return res;
-  });
+  const { data } = useSWR([HOST_URL, INDEX_NAME, query, limit], () =>
+    index.search<Menu>(query, { limit })
+  );
 
   useEffect(() => {
     if (data) {
-      setResult(data as SearchResponse<Menu>);
+      setResult(data);
     }
   }, [data]);
 
   return (
-    <SearchContext.Provider value={{ refine, query, result }}>
+    <SearchContext.Provider value={{ refine, query, result, limit }}>
       {children}
     </SearchContext.Provider>
   );

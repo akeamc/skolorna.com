@@ -1,5 +1,5 @@
 import { DateTime } from "luxon";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 // TODO: Make this SSR-safe - the stored value should never be returned on the first render
 import createPersistedState from "use-persisted-state";
 
@@ -23,6 +23,9 @@ export function useHistory(localStorageKey: string): UseHistoryMap {
     [localStorageKey]
   );
   const [values, setValues] = usePersistedState<HistoryMap>({});
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => setMounted(true), []);
 
   return {
     add: (key, timestamp = DateTime.now()) => {
@@ -33,11 +36,13 @@ export function useHistory(localStorageKey: string): UseHistoryMap {
       setValues({ ...values });
     },
     clear: () => setValues({}),
-    stack: Object.entries(values)
-      .map(([key, visitedAt]) => ({
-        key,
-        visitedAt: DateTime.fromISO(visitedAt),
-      }))
-      .sort((a, b) => +b.visitedAt - +a.visitedAt),
+    stack: mounted
+      ? Object.entries(values)
+          .map(([key, visitedAt]) => ({
+            key,
+            visitedAt: DateTime.fromISO(visitedAt),
+          }))
+          .sort((a, b) => +b.visitedAt - +a.visitedAt)
+      : [],
   };
 }
