@@ -19,7 +19,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         async
         src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1944185766034883"
         crossOrigin="anonymous"
-        strategy="afterInteractive"
+        strategy="beforeInteractive"
       />
       <Sanction />
       <PageProgress />
