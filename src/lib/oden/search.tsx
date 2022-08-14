@@ -1,4 +1,6 @@
 import { MeiliSearch, SearchResponse } from "meilisearch";
+import { useRouter } from "next/router";
+import { useCallback } from "react";
 import {
   createContext,
   FunctionComponent,
@@ -8,6 +10,8 @@ import {
   useState,
 } from "react";
 import useSWR from "swr";
+import { useMenuHistory } from "../menu/history";
+import { HistoryItem } from "../utils/history";
 import { ODEN_ENDPOINT } from "./client";
 import { Menu } from "./menus";
 
@@ -22,6 +26,9 @@ export const useSearchKey = () =>
 
 export const useSearchClient = () => {
   const { data: key } = useSearchKey();
+
+  if (typeof key === "undefined") return undefined;
+
   return new MeiliSearch({
     host: HOST_URL,
     apiKey: key,
@@ -31,14 +38,20 @@ export const useSearchClient = () => {
 export interface SearchContextData {
   refine: (query: string) => void;
   query: string;
-  result?: SearchResponse<Menu>;
+  response?: SearchResponse<Menu>;
   limit: number;
+  focusedHit: number;
+  focusHit: (i: number) => void;
+  recent: HistoryItem[];
 }
 
 export const SearchContext = createContext<SearchContextData>({
   refine: () => {},
   query: "",
   limit: 10,
+  focusedHit: 0,
+  focusHit: () => {},
+  recent: [],
 });
 
 export const SearchProvider: FunctionComponent<{ limit?: number }> = ({
@@ -46,22 +59,33 @@ export const SearchProvider: FunctionComponent<{ limit?: number }> = ({
   limit = 10,
 }) => {
   const ms = useSearchClient();
-  const index = ms.index(INDEX_NAME);
   const [query, refine] = useState("");
+  const [focusedHit, focusHit] = useState(0);
+  const { stack } = useMenuHistory();
 
-  const [result, setResult] = useState<SearchResponse<Menu>>();
+  const [response, setResponse] = useState<SearchResponse<Menu>>();
   const { data } = useSWR([HOST_URL, INDEX_NAME, query, limit], () =>
-    index.search<Menu>(query, { limit })
+    ms?.index(INDEX_NAME).search<Menu>(query, { limit })
   );
 
   useEffect(() => {
     if (data) {
-      setResult(data);
+      setResponse(data);
     }
   }, [data]);
 
   return (
-    <SearchContext.Provider value={{ refine, query, result, limit }}>
+    <SearchContext.Provider
+      value={{
+        refine,
+        query,
+        response: response,
+        limit,
+        focusedHit,
+        focusHit,
+        recent: stack.slice(0, limit),
+      }}
+    >
       {children}
     </SearchContext.Provider>
   );

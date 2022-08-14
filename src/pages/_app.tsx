@@ -23,7 +23,6 @@ function MyApp({ Component, pageProps }: AppProps) {
       />
       <Sanction />
       <PageProgress />
-      {/* eslint-disable-next-line react/jsx-props-no-spreading */}
       <Component {...pageProps} />
     </ThemeProvider>
   );

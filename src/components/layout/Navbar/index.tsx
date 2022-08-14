@@ -1,25 +1,11 @@
 import React, { FunctionComponent } from "react";
-import Container from "./Container";
+import Container from "../Container";
 import styles from "./Navbar.module.scss";
-import Search from "../menu/Search";
-import { LogoIcon } from "../brand/Icon";
+import Search from "../../menu/Search";
+import { LogoIcon } from "../../brand/Icon";
 import Link from "next/link";
-
-interface Item {
-  label: string;
-  href: string;
-}
-
-const items: Item[] = [
-  {
-    label: "Menyer",
-    href: "/menyer",
-  },
-  {
-    label: "Blogg",
-    href: "/blogg",
-  },
-];
+import { items } from "./items";
+import Drawer from "./Drawer";
 
 export const Navbar: FunctionComponent = () => {
   return (
@@ -40,6 +26,7 @@ export const Navbar: FunctionComponent = () => {
             ))}
           </ul>
         </nav>
+        <Drawer />
       </div>
     </Container>
   );

@@ -57,6 +57,7 @@
   font: 500 14px/1 var(--font-sans);
   letter-spacing: font.inter-tracking(14);
   color: var(--color-text-muted);
+  z-index: 1;
 
   --pad-block: 16px;
   --pad-inline: 12px;
@@ -74,7 +75,6 @@
   display: block;
   pointer-events: auto;
 }
-
 
 .hits {
   padding: 0;
@@ -97,13 +97,9 @@
     background-color: var(--surface-elevation-1);
   }
 
-  &:focus {
+  &.focused {
     background-color: var(--surface-elevation-3);
     outline: none;
-  }
-
-  &:active {
-    background-color: var(--surface-elevation-5);
   }
 }
 
