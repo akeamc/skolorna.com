@@ -68,45 +68,49 @@ export const Sanction = () => {
         ref={modalRef}
       >
         <section className={styles.main}>
-          {putin ? (
-            <div className={styles.frame}>
-              <iframe
-                src="https://metro.co.uk/video/embed/2622711"
-                title="Metro Embed Video Player"
-                width="540"
-                height="353"
-                scrolling="no"
-                frameBorder="0"
-                allowFullScreen
-              />
-            </div>
-          ) : (
-            <div className={styles.body}>
-              <h2>Привет. Heter du Vladimir Putin?</h2>
-              <p>
-                Skolorna fördömer å det starkaste Rysslands invasion av Ukraina.
-                Vi har infört effektiva sanktioner mot president Vladimir Putin.
-              </p>
-              <p>Är du president Putin?</p>
-              <div className={styles.actions}>
-                <button
-                  onClick={() => setPutin(true)}
-                  title="Ja, jag heter Vladimir Putin."
-                >
-                  Да
-                </button>
-                <button
-                  onClick={() => {
-                    localStorage.setItem("not-sus", "not putin");
-                    setVisible(false);
-                  }}
-                  title="Nej, jag heter inte Vladimir Putin"
-                >
-                  Нет
-                </button>
-              </div>
-            </div>
-          )}
+          <div className={styles.body}>
+            {putin ? (
+              <>
+                <h2>Sanktionerad!</h2>
+                <div className={styles.actions}>
+                  <button
+                    onClick={() => {
+                      setPutin(false);
+                    }}
+                  >
+                    Försök igen
+                  </button>
+                </div>
+              </>
+            ) : (
+              <>
+                <h2>Привет. Heter du Vladimir Putin?</h2>
+                <p>
+                  Skolorna fördömer å det starkaste Rysslands invasion av
+                  Ukraina. Vi har infört effektiva sanktioner mot president
+                  Vladimir Putin.
+                </p>
+                <p>Är du president Putin?</p>
+                <div className={styles.actions}>
+                  <button
+                    onClick={() => setPutin(true)}
+                    title="Ja, jag heter Vladimir Putin."
+                  >
+                    Ja (Да)
+                  </button>
+                  <button
+                    onClick={() => {
+                      localStorage.setItem("not-sus", "not putin");
+                      setVisible(false);
+                    }}
+                    title="Nej, jag heter inte Vladimir Putin"
+                  >
+                    Nej (Нет)
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
         </section>
         <footer>
           Vi vet att denna låtsassanktion kan tolkas som ett hån mot modern
