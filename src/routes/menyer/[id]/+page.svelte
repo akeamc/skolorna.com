@@ -5,4 +5,4 @@
 </script>
 
 <h1>{data.title}</h1>
-<div>{@html data.data}</div>
+<code>{data.id}</code>

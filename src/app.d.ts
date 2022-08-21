@@ -3,12 +3,8 @@
 // and what to do when importing types
 declare namespace App {
 	// interface Locals {}
-
 	// interface Platform {}
-
 	// interface PrivateEnv {}
-
 	// interface PublicEnv {}
-
 	// interface Session {}
 }
