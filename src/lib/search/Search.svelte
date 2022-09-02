@@ -5,7 +5,7 @@
 
 	import { getKey, search, type SearchResponse } from "./client";
 
-	let query: string = "";
+	let query = "";
 	let key: string;
 	let response: SearchResponse<Menu>;
 	let focusedHit = 0;
@@ -31,7 +31,7 @@
 				e.currentTarget.blur();
 				break;
 			case "Enter":
-				const hit = response?.hits[focusedHit];
+				let hit = response?.hits[focusedHit];
 				if (hit) {
 					goto(`/menyer/${hit.id}`);
 				}
@@ -42,9 +42,7 @@
 				break;
 			case "ArrowDown":
 				e.preventDefault(); // don't move the cursor
-				// const numOptions =
-				//   query === "" ? recent.length : response?.hits.length || 0; // show recent
-				const numOptions = response?.hits.length || 0;
+				let numOptions = response?.hits.length || 0;
 				focusedHit = Math.min(numOptions - 1, focusedHit + 1);
 				break;
 		}
@@ -98,7 +96,6 @@
 
 	input {
 		background: var(--surface1);
-		border: 0;
 		font: 500 14px/1 var(--font-sans);
 		letter-spacing: -0.006em;
 		block-size: 36px;
@@ -107,7 +104,7 @@
 		width: 100%;
 		border: 1px solid var(--outline);
 		border-radius: var(--border-radius);
-		color: var(--text1);
+		color: var(--text0);
 	}
 
 	input:focus {

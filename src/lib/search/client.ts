@@ -15,8 +15,15 @@ export interface SearchResponse<T> {
 	query: string;
 }
 
+type SortableAttribute = "updated_at";
+
+type Direction = "asc" | "desc";
+
+type Sort = `${SortableAttribute}:${Direction}`;
+
 export interface SearchRequest {
 	q: string;
+	sort?: Sort[];
 }
 
 export async function search<T>(req: SearchRequest, key: string): Promise<SearchResponse<T>> {
