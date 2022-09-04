@@ -34,6 +34,7 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"jose": "^4.9.2"
+		"jose": "^4.9.2",
+		"svelte-feather-icons": "^4.0.0"
 	}
 }

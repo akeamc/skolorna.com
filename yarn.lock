@@ -1718,6 +1718,13 @@ svelte-check@^2.7.1:
     svelte-preprocess "^4.0.0"
     typescript "*"
 
+svelte-feather-icons@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/svelte-feather-icons/-/svelte-feather-icons-4.0.0.tgz#fdffcce3a81782008f7e621cb37a29d041630aef"
+  integrity sha512-4ieUsjp+VYa1r6y80jDt9zRiRUZyJNbESpRdHdJJhiBubyuXX96A7f1UZSK4olxzP6Qsg5ZAuyZlnmvD+/swAA==
+  dependencies:
+    svelte "^3.38.2"
+
 svelte-hmr@^0.14.12:
   version "0.14.12"
   resolved "https://registry.yarnpkg.com/svelte-hmr/-/svelte-hmr-0.14.12.tgz#a127aec02f1896500b10148b2d4d21ddde39973f"
@@ -1734,6 +1741,11 @@ svelte-preprocess@^4.0.0, svelte-preprocess@^4.10.6:
     magic-string "^0.25.7"
     sorcery "^0.10.0"
     strip-indent "^3.0.0"
+
+svelte@^3.38.2:
+  version "3.50.0"
+  resolved "https://registry.yarnpkg.com/svelte/-/svelte-3.50.0.tgz#d11a7a6bd1e084ec051d55104a9af8bccf54461f"
+  integrity sha512-zXeOUDS7+85i+RxLN+0iB6PMbGH7OhEgjETcD1fD8ZrhuhNFxYxYEHU41xuhkHIulJavcu3PKbPyuCrBxdxskQ==
 
 svelte@^3.46.0:
   version "3.49.0"

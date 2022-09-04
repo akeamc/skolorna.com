@@ -3,8 +3,8 @@
 
 	export let data: PageData;
 
-	const menus = data?.menus.toLocaleString() ?? "jättemånga";
-	const days = data?.days.toLocaleString() ?? "jättemånga";
+	const menus = data?.menus.toLocaleString("sv") ?? "jättemånga";
+	const days = data?.days.toLocaleString("sv") ?? "ett astronomiskt antal";
 </script>
 
 <section class="hero">
@@ -16,6 +16,9 @@
 	.hero {
 		margin-block: 4rem;
 		text-align: center;
+		max-width: var(--content-width);
+		padding: 0 var(--page-gutter);
+		margin-inline: auto;
 
 		@media (min-width: 768px) {
 			margin-block: 8rem;

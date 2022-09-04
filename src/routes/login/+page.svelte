@@ -47,6 +47,6 @@
 			{$authenticating ? "Loggar in …" : "Logga in"}
 		</Button>
 
-		<p>Har du inget konto? <a href={`/registrera?next=${next}`}>Skapa ett</a></p>
+		<p>Har du inget konto? <a href={`/register?next=${next}`}>Skapa ett</a></p>
 	</form>
 </FormCard>

@@ -12,7 +12,7 @@
 
 	--brand-light: hsl(var(--brand-hue) var(--brand-saturation) var(--brand-lightness));
 	--text0-light: hsl(var(--brand-hue) var(--brand-saturation) 10%);
-	--text0-muted-light: hsl(var(--brand-hue) 25% 50%);
+	--text0-muted-light: hsl(var(--brand-hue) 10% 50%);
 	--surface0-light: hsl(var(--brand-hue) 25% 97%);
 	--surface1-light: hsl(var(--brand-hue) 25% 95%);
 	--outline-light: hsl(var(--brand-hue) 25% 85%);
@@ -23,7 +23,7 @@
 
 	--brand-dark: hsl(var(--brand-hue) calc(var(--brand-saturation) / 2) var(--brand-lightness));
 	--text0-dark: hsl(var(--brand-hue) 15% 85%);
-	--text0-muted-dark: hsl(var(--brand-hue) 10% 50%);
+	--text0-muted-dark: hsl(var(--brand-hue) 5% 50%);
 	--surface0-dark: hsl(var(--brand-hue) 10% 10%);
 	--surface1-dark: hsl(var(--brand-hue) 10% 13%);
 	--outline-dark: hsl(var(--brand-hue) 10% 30%);

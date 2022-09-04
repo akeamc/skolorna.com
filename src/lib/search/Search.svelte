@@ -1,9 +1,8 @@
 <script lang="ts">
 	import { goto } from "$app/navigation";
-
-	import type { Menu } from "$lib/oden/types";
-
 	import { getKey, search, type SearchResponse } from "./client";
+	import { SearchIcon } from "svelte-feather-icons";
+	import type { Menu } from "$lib/oden";
 
 	let query = "";
 	let key: string;
@@ -26,12 +25,13 @@
 	}
 
 	const handleKeyDown: svelte.JSX.KeyboardEventHandler<HTMLInputElement> = (e) => {
+		const hit = response?.hits[focusedHit];
+
 		switch (e.key) {
 			case "Escape":
 				e.currentTarget.blur();
 				break;
 			case "Enter":
-				let hit = response?.hits[focusedHit];
 				if (hit) {
 					goto(`/menyer/${hit.id}`);
 				}
@@ -42,8 +42,7 @@
 				break;
 			case "ArrowDown":
 				e.preventDefault(); // don't move the cursor
-				let numOptions = response?.hits.length || 0;
-				focusedHit = Math.min(numOptions - 1, focusedHit + 1);
+				focusedHit = Math.min((response?.hits.length || 0) - 1, focusedHit + 1);
 				break;
 		}
 	};
@@ -51,7 +50,13 @@
 
 <div class="search">
 	<div class="box">
-		<input type="search" placeholder="Sök ..." bind:value={query} on:keydown={handleKeyDown} />
+		<SearchIcon />
+		<input
+			type="search"
+			placeholder="Sök efter menyer …"
+			bind:value={query}
+			on:keydown={handleKeyDown}
+		/>
 	</div>
 	{#if response}
 		<div class="response">
@@ -62,6 +67,7 @@
 							href={`/menyer/${hit.id}`}
 							sveltekit:prefetch
 							class:focus={i === focusedHit}
+							tabindex="-1"
 							on:mousemove={() => (focusedHit = i)}
 						>
 							{hit.title}</a
@@ -94,17 +100,34 @@
 		position: relative;
 	}
 
+	.box {
+		--box-block-size: 2.25rem;
+	}
+
+	.box :global(svg) {
+		position: absolute;
+		inset-block-start: calc((var(--box-block-size) - 1rem) / 2);
+		inset-inline-start: 0.6rem;
+		color: var(--text0-muted);
+		width: 1rem;
+		height: 1rem;
+	}
+
 	input {
 		background: var(--surface1);
 		font: 500 14px/1 var(--font-sans);
 		letter-spacing: -0.006em;
-		block-size: 36px;
-		padding-inline-start: 32px;
-		padding-inline-end: 16px;
+		block-size: var(--box-block-size);
+		padding-inline-start: 2rem;
+		padding-inline-end: 1rem;
 		width: 100%;
 		border: 1px solid var(--outline);
 		border-radius: var(--border-radius);
 		color: var(--text0);
+	}
+
+	input::placeholder {
+		color: var(--text0-muted);
 	}
 
 	input:focus {
