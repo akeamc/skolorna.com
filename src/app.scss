@@ -12,6 +12,7 @@
 
 	--brand-light: hsl(var(--brand-hue) var(--brand-saturation) var(--brand-lightness));
 	--text0-light: hsl(var(--brand-hue) var(--brand-saturation) 10%);
+	--text0-muted-light: hsl(var(--brand-hue) 25% 50%);
 	--surface0-light: hsl(var(--brand-hue) 25% 97%);
 	--surface1-light: hsl(var(--brand-hue) 25% 95%);
 	--outline-light: hsl(var(--brand-hue) 25% 85%);
@@ -22,6 +23,7 @@
 
 	--brand-dark: hsl(var(--brand-hue) calc(var(--brand-saturation) / 2) var(--brand-lightness));
 	--text0-dark: hsl(var(--brand-hue) 15% 85%);
+	--text0-muted-dark: hsl(var(--brand-hue) 10% 50%);
 	--surface0-dark: hsl(var(--brand-hue) 10% 10%);
 	--surface1-dark: hsl(var(--brand-hue) 10% 13%);
 	--outline-dark: hsl(var(--brand-hue) 10% 30%);
@@ -32,6 +34,7 @@
 
 	--brand: var(--brand-light);
 	--text0: var(--text0-light);
+	--text0-muted: var(--text0-muted-light);
 	--surface0: var(--surface0-light);
 	--surface1: var(--surface1-light);
 	--outline: var(--outline-light);
@@ -43,6 +46,7 @@
 	@media (prefers-color-scheme: dark) {
 		--brand: var(--brand-dark);
 		--text0: var(--text0-dark);
+		--text0-muted: var(--text0-muted-dark);
 		--surface0: var(--surface0-dark);
 		--surface1: var(--surface1-dark);
 		--outline: var(--outline-dark);

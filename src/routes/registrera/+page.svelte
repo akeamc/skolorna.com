@@ -1,16 +1,12 @@
 <script lang="ts">
 	import { goto } from "$app/navigation";
 	import { page } from "$app/stores";
-	import { authenticate, authenticating, authenticated } from "$lib/auth";
+	import { authenticating, authenticated, register } from "$lib/auth";
 	import Button from "$lib/Button.svelte";
 	import FormCard from "$lib/FormCard.svelte";
 
-	let next: string;
-
-	$: next = $page.url.searchParams.get("next") ?? "/";
-
 	$: if ($authenticated) {
-		goto(next);
+		goto($page.url.searchParams.get("next") || "/");
 	}
 
 	const handleSubmit: svelte.JSX.EventHandler<SubmitEvent, HTMLFormElement> = async ({
@@ -18,25 +14,29 @@
 	}) => {
 		const data = new FormData(target as HTMLFormElement);
 
+		const name = data.get("name")?.toString();
 		const email = data.get("email")?.toString();
 		const password = data.get("password")?.toString();
 
-		if (!email || !password) {
+		if (!name || !email || !password) {
 			return;
 		}
 
-		await authenticate({
-			grant_type: "password",
-			username: email,
+		await register({
+			full_name: name,
+			email,
 			password
 		});
 	};
 </script>
 
 <FormCard>
-	<h1>Logga in</h1>
+	<h1>Skapa konto</h1>
 
 	<form on:submit|preventDefault={handleSubmit}>
+		<label for="name">Namn</label>
+		<input name="name" id="name" type="text" />
+
 		<label for="email">E-postadress</label>
 		<input name="email" id="email" type="email" />
 
@@ -44,9 +44,9 @@
 		<input name="password" id="password" type="password" />
 
 		<Button type="submit" disabled={$authenticating}>
-			{$authenticating ? "Loggar in …" : "Logga in"}
+			{$authenticating ? "Skapar konto …" : "Fortsätt"}
 		</Button>
 
-		<p>Har du inget konto? <a href={`/registrera?next=${next}`}>Skapa ett</a></p>
+		<p>Har du redan ett konto? <a href="/login">Logga in</a></p>
 	</form>
 </FormCard>

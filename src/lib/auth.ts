@@ -1,5 +1,6 @@
 import { browser } from "$app/env";
-import { derived, writable } from "svelte/store";
+import { decodeJwt } from "jose";
+import { derived, get, writable } from "svelte/store";
 
 interface PasswordTokenRequest {
 	grant_type: "password";
@@ -41,13 +42,24 @@ accessToken.subscribe((v) => {
 	}
 });
 
+export const authenticating = writable(false);
+export const authenticated = derived([accessToken], ([token]) => !!token);
+
 derived([refreshToken, accessToken], (v) => v).subscribe(([refresh, access]) => {
 	if (refresh && !access) {
-		authorize({ grant_type: "refresh_token", refresh_token: refresh });
+		authenticate({ grant_type: "refresh_token", refresh_token: refresh });
 	}
 });
 
-export async function authorize(req: TokenRequest): Promise<void> {
+function ingestTokenResponse(response: TokenResponse) {
+	accessToken.set(response.access_token);
+
+	if (response.refresh_token) refreshToken.set(response.refresh_token);
+}
+
+export async function authenticate(req: TokenRequest): Promise<TokenResponse> {
+	authenticating.set(true);
+
 	const res = await fetch("https://api-staging.skolorna.com/v0/auth/token", {
 		method: "POST",
 		headers: {
@@ -57,16 +69,74 @@ export async function authorize(req: TokenRequest): Promise<void> {
 	});
 
 	if (!res.ok) {
-		throw new Error(await res.text());
+		const e = await res.text();
+		authenticating.set(false);
+		throw new Error(e);
 	}
 
 	const data: TokenResponse = await res.json();
 
-	accessToken.set(data.access_token);
+	ingestTokenResponse(data);
+	authenticating.set(false);
 
-	if (data.refresh_token) {
-		refreshToken.set(data.refresh_token);
+	return data;
+}
+
+export interface RegistrationRequest {
+	email: string;
+	password: string;
+	full_name: string;
+}
+
+export async function register(req: RegistrationRequest) {
+	authenticating.set(true);
+
+	const res = await fetch("https://api-staging.skolorna.com/v0/auth/users", {
+		method: "POST",
+		headers: {
+			"content-type": "application/json"
+		},
+		body: JSON.stringify(req)
+	});
+
+	if (!res.ok) {
+		const e = await res.text();
+		authenticating.set(false);
+		throw new Error(e);
 	}
+
+	ingestTokenResponse(await res.json());
+	authenticating.set(false);
+}
+
+export async function getAccessToken(minimumValidity = 5): Promise<string | null> {
+	const token = get(accessToken);
+
+	if (token) {
+		const { exp = 0 } = decodeJwt(token);
+		const now = Math.floor(Date.now() / 1000);
+
+		if (exp > now + minimumValidity) {
+			console.log("using existing access token");
+			return token;
+		}
+	}
+
+	accessToken.set(null); // trigger refresh
+
+	if (get(authenticating)) {
+		console.log("AUTENTICATING");
+		return new Promise<string>((resolve) => {
+			const unsubscribe = accessToken.subscribe((v) => {
+				if (v) {
+					unsubscribe();
+					resolve(v);
+				}
+			});
+		});
+	}
+
+	return null;
 }
 
 export function logout(): void {

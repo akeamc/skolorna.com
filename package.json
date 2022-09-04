@@ -33,5 +33,7 @@
 		"vite": "^3.0.0"
 	},
 	"type": "module",
-	"dependencies": {}
+	"dependencies": {
+		"jose": "^4.9.2"
+	}
 }
