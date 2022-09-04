@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { browser } from "$app/env";
 	import Search from "$lib/search/Search.svelte";
-	import { authenticated, logout } from "./auth";
+	import { authenticated, user } from "./auth";
 	import Button from "./Button.svelte";
 
 	let scrollY: number;
@@ -11,15 +11,18 @@
 	<div class="container">
 		<Search />
 		<ul>
+			<hr />
 			{#if browser}
 				{#if $authenticated}
-					<li><Button on:click={logout}>Logga ut</Button></li>
+					<li>
+						<a href="/account">Konto ({$user?.full_name || "…"})</a>
+					</li>
 				{:else}
 					<li><a href="/login">Logga in</a></li>
 					<li><Button href="/register">Skapa konto</Button></li>
 				{/if}
 			{:else}
-				...
+				…
 			{/if}
 		</ul>
 	</div>
@@ -65,5 +68,12 @@
 		&:hover {
 			color: var(--text0);
 		}
+	}
+
+	hr {
+		block-size: 1.25rem;
+		inline-size: 1px;
+		border: none;
+		background-color: var(--outline);
 	}
 </style>

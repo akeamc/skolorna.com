@@ -1,4 +1,5 @@
 import { browser } from "$app/env";
+import { goto } from "$app/navigation";
 import { decodeJwt } from "jose";
 import { derived, get, writable } from "svelte/store";
 
@@ -50,6 +51,12 @@ derived([refreshToken, accessToken], (v) => v).subscribe(([refresh, access]) => 
 		authenticate({ grant_type: "refresh_token", refresh_token: refresh });
 	}
 });
+
+export function logout(next?: string): void {
+	if (next) goto(next);
+	refreshToken.set(null);
+	accessToken.set(null);
+}
 
 function ingestTokenResponse(response: TokenResponse) {
 	accessToken.set(response.access_token);
@@ -117,7 +124,6 @@ export async function getAccessToken(minimumValidity = 5): Promise<string | null
 		const now = Math.floor(Date.now() / 1000);
 
 		if (exp > now + minimumValidity) {
-			console.log("using existing access token");
 			return token;
 		}
 	}
@@ -125,7 +131,6 @@ export async function getAccessToken(minimumValidity = 5): Promise<string | null
 	accessToken.set(null); // trigger refresh
 
 	if (get(authenticating)) {
-		console.log("AUTENTICATING");
 		return new Promise<string>((resolve) => {
 			const unsubscribe = accessToken.subscribe((v) => {
 				if (v) {
@@ -139,7 +144,33 @@ export async function getAccessToken(minimumValidity = 5): Promise<string | null
 	return null;
 }
 
-export function logout(): void {
-	refreshToken.set(null);
-	accessToken.set(null);
+interface User {
+	id: string;
+	email: string;
+	full_name: string;
+	verified: boolean;
+}
+
+export const user = writable<User | null>(null);
+
+authenticated.subscribe(async (v) => {
+	if (!v) return user.set(null);
+
+	user.set(await getUser());
+});
+
+export async function getUser(): Promise<User> {
+	const token = await getAccessToken();
+
+	if (!token) throw new Error("Not authenticated");
+
+	const res = await fetch("https://api-staging.skolorna.com/v0/auth/users/@me", {
+		headers: {
+			authorization: `Bearer ${token}`
+		}
+	});
+
+	if (!res.ok) throw new Error(await res.text());
+
+	return res.json();
 }
