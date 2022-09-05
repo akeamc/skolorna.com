@@ -6,8 +6,7 @@ export const load: PageLoad = async ({ params, setHeaders }) => {
 	const res = await getMenu(params.id);
 
 	setHeaders({
-		age: res.headers.get("age"),
-		"cache-control": res.headers.get("cache-control")
+		"cache-control": "public, max-age=3600"
 	});
 
 	if (res.ok) return (await res.json()) as Menu;
