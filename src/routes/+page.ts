@@ -12,5 +12,6 @@ export const load: PageLoad = async ({ setHeaders }) => {
 		return stats;
 	} catch (e) {
 		console.error(e);
+		return null;
 	}
 };
