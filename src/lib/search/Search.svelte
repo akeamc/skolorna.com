@@ -70,8 +70,8 @@
 							tabindex="-1"
 							on:mousemove={() => (focusedHit = i)}
 						>
-							{hit.title}</a
-						>
+							{hit.title}
+						</a>
 					</li>
 				{/each}
 			</ol>

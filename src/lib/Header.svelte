@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { browser } from "$app/env";
+	import { page } from "$app/stores";
 	import Search from "$lib/search/Search.svelte";
 	import { authenticated, user } from "./auth";
 	import Button from "./Button.svelte";
@@ -18,8 +19,8 @@
 						<a href="/account">Konto ({$user?.full_name || "…"})</a>
 					</li>
 				{:else}
-					<li><a href="/login">Logga in</a></li>
-					<li><Button href="/register">Skapa konto</Button></li>
+					<li><a href={`/login?next=${$page.url.pathname}`}>Logga in</a></li>
+					<li><Button href={`/register?next=${$page.url.pathname}`}>Skapa konto</Button></li>
 				{/if}
 			{:else}
 				…
