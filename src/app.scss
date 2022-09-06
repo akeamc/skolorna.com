@@ -2,7 +2,7 @@
 	--font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu,
 		Cantarell, "Helvetica Neue", sans-serif;
 
-	--page-gutter: 1.5rem;
+	--page-gutter: 1rem;
 	--header-height: 4rem;
 	--content-width: 1440px;
 
@@ -54,6 +54,10 @@
 		--theme-hover: var(--theme-hover-dark);
 		--theme-active: var(--theme-active-dark);
 		--on-theme: var(--on-theme-dark);
+	}
+
+	@media (min-width: 480px) {
+		--page-gutter: 1.5rem;
 	}
 
 	font-family: var(--font-sans);

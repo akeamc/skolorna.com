@@ -35,8 +35,10 @@
 		em {
 			padding-inline: 0.3ch;
 			font-style: normal;
-			background-color: var(--brand);
-			color: var(--on-theme);
+			background-color: hsla(
+				var(--brand-hue) var(--brand-saturation) var(--brand-lightness) / 0.15
+			);
+			color: var(--brand);
 			border-radius: 0.2em;
 		}
 	}

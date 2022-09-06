@@ -137,8 +137,8 @@
 	}
 
 	.response {
-		--pad-block: 16px;
-		--pad-inline: 12px;
+		--pad-block: 12px;
+		--pad-inline: 8px;
 
 		display: none;
 		pointer-events: none;
@@ -151,12 +151,10 @@
 		overflow: hidden;
 		font: 500 14px/1 var(--font-sans);
 		letter-spacing: -0.006em;
-		color: var(--color-text-muted);
 		z-index: 1;
 
 		@media (min-width: 480px) {
 			--pad-block: 10px;
-			--pad-inline: 8px;
 
 			font-size: 12px;
 			letter-spacing: 0;
@@ -190,6 +188,7 @@
 		&.focus {
 			background-color: var(--theme-hover);
 			color: var(--on-theme);
+			outline: none;
 		}
 
 		&:active {
@@ -227,6 +226,6 @@
 	.stats {
 		padding-block: var(--pad-block);
 		padding-inline: var(--pad-inline);
-		color: #777;
+		color: var(--text0-muted);
 	}
 </style>
