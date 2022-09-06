@@ -1,16 +1,23 @@
 <script lang="ts">
 	import { ChevronLeftIcon, ChevronRightIcon } from "svelte-feather-icons";
+	import Skeleton from "$lib/Skeleton.svelte";
 	import { DateTime } from "luxon";
 	import { spanfmt } from "./date";
-	import { getDays } from "./oden";
+	import { getDays, type Day } from "./oden";
+	import { browser } from "$app/env";
 
 	export let menu: string;
 
-	let cursor = DateTime.now();
+	let cursor = browser ? DateTime.now() : null;
 
-	$: first = cursor.startOf("week");
-	$: last = cursor.endOf("week");
-	$: days = getDays(menu, first, last);
+	$: first = cursor?.startOf("week");
+	$: last = cursor?.endOf("week");
+	$: days =
+		first && last
+			? getDays(menu, first, last)
+			: new Promise<Day[]>(() => {
+					// never resolve
+			  });
 
 	function dayfmt(date: string) {
 		return new Date(date).toLocaleString("sv", {
@@ -27,23 +34,25 @@
 <section>
 	<div class="toolbar">
 		<div class="buttons">
-			<button on:click={() => (cursor = cursor.minus({ weeks: 1 }))}>
+			<button on:click={() => cursor && (cursor = cursor.minus({ weeks: 1 }))}>
 				<ChevronLeftIcon />
 			</button>
 			<button class="wide" on:click={() => (cursor = DateTime.now())}> Idag </button>
-			<button on:click={() => (cursor = cursor.plus({ weeks: 1 }))}>
+			<button on:click={() => cursor && (cursor = cursor.plus({ weeks: 1 }))}>
 				<ChevronRightIcon />
 			</button>
 		</div>
 		<h2>
-			{spanfmt(first.toJSDate(), last.toJSDate(), "sv")}
+			{#if first && last}
+				{spanfmt(first.toJSDate(), last.toJSDate(), "sv")}
+			{:else}
+				<Skeleton width="10ch" />
+			{/if}
 		</h2>
 	</div>
 
 	<div class="result">
-		{#await days}
-			<!-- <p>Laddar...</p> -->
-		{:then days}
+		{#await days then days}
 			<ol>
 				{#each days as day (day.date)}
 					<li class="day">
@@ -59,7 +68,9 @@
 				{/each}
 			</ol>
 			{#if days.length == 0}
-				<div class="void">Vi vet inte vad det {+last > +now ? "blir" : "blev"} till lunch.</div>
+				<div class="void">
+					Vi vet inte vad det {+(last || 0) > +now ? "blir" : "blev"} till lunch.
+				</div>
 			{/if}
 		{:catch error}
 			<code>{error.message}</code>

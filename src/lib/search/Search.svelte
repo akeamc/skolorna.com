@@ -20,6 +20,7 @@
 			if (r.query == query) {
 				// prevent race condition
 				response = r;
+				focusedHit = 0;
 			}
 		});
 	}

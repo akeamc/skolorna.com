@@ -1,24 +1,36 @@
 <script lang="ts">
+	import { browser } from "$app/env";
+
 	import MenuViewer from "$lib/MenuViewer.svelte";
+	import Skeleton from "$lib/Skeleton.svelte";
+	import { DateTime } from "luxon";
 	import type { PageData } from "./$types";
 
 	export let data: PageData;
 
-	const now = new Date();
-	const updatedAt = new Date(data.updated_at);
-	const updatedAtText = updatedAt.toLocaleString("sv", {
-		year: updatedAt.getFullYear() != now.getFullYear() ? "numeric" : undefined,
-		month: "long",
-		day: "numeric",
-		hour: "numeric",
-		minute: "numeric"
-	});
+	const now = DateTime.now();
+	const updatedAt = DateTime.fromISO(data.updated_at);
+	const updatedAtText = browser
+		? updatedAt.setLocale("sv").toLocaleString({
+				year: updatedAt.year != now.year ? "numeric" : undefined,
+				month: "long",
+				day: "numeric",
+				hour: "numeric",
+				minute: "numeric"
+		  })
+		: null;
 </script>
 
 <div class="container">
 	<header>
 		<h1>{data.title}</h1>
-		<p>Uppdaterades {updatedAtText}.</p>
+		<p class="updated-at">
+			{#if updatedAtText}
+				Uppdaterad {updatedAtText}.
+			{:else}
+				<Skeleton width="25ch" />
+			{/if}
+		</p>
 	</header>
 
 	<MenuViewer menu={data.id} />

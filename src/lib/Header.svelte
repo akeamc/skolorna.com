@@ -4,6 +4,7 @@
 	import Search from "$lib/search/Search.svelte";
 	import { authenticated, user } from "./auth";
 	import Button from "./Button.svelte";
+	import Skeleton from "./Skeleton.svelte";
 
 	let scrollY: number;
 </script>
@@ -16,14 +17,20 @@
 			{#if browser}
 				{#if $authenticated}
 					<li>
-						<a href="/account">Konto ({$user?.full_name || "…"})</a>
+						<a href="/account">
+							{#if $user?.full_name}
+								{$user?.full_name}
+							{:else}
+								Konto
+							{/if}
+						</a>
 					</li>
 				{:else}
 					<li><a href={`/login?next=${$page.url.pathname}`}>Logga in</a></li>
 					<li><Button href={`/register?next=${$page.url.pathname}`}>Skapa konto</Button></li>
 				{/if}
 			{:else}
-				…
+				<Skeleton width="12rem" height="3rem" />
 			{/if}
 		</ul>
 	</div>
