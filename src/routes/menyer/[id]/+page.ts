@@ -5,11 +5,12 @@ import type { PageLoad } from "./$types";
 export const load: PageLoad = async ({ params, setHeaders }) => {
 	const res = await getMenu(params.id);
 
-	setHeaders({
-		"cache-control": "public, max-age=3600"
-	});
-
-	if (res.ok) return (await res.json()) as Menu;
+	if (res.ok) {
+		setHeaders({
+			"cache-control": "public, max-age=3600"
+		});
+		return (await res.json()) as Menu;
+	}
 
 	throw error(res.status, await res.text());
 };
