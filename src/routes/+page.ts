@@ -5,7 +5,8 @@ export const load: PageLoad = async ({ setHeaders }) => {
 	try {
 		const res = await getStats();
 		setHeaders({
-			"cache-control": "public, max-age=3600, stale-while-revalidate=86400, stale-if-error=604800"
+			age: res.headers.get("age"),
+			"cache-control": res.headers.get("cache-control")
 		});
 		const stats: Stats = await res.json();
 		return stats;
