@@ -10,6 +10,7 @@
 		flex-direction: column;
 		align-items: center;
 		min-height: calc(100vh - var(--header-height));
+		padding-inline: var(--page-gutter);
 	}
 
 	.card {
