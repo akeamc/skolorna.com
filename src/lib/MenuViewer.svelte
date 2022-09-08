@@ -111,6 +111,7 @@
 				cursor: pointer;
 				font: 500 0.875rem/1 var(--font-sans);
 				letter-spacing: -0.006em;
+				margin: 0;
 
 				&:hover {
 					background-color: var(--theme-hover);
