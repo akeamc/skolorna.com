@@ -1,5 +1,7 @@
+import { get as getOden } from "$lib/oden";
+
 export async function getKey(): Promise<string> {
-	const res = await fetch("https://api.skolorna.com/v0/oden/key");
+	const res = await getOden("/key");
 	return res.text();
 }
 

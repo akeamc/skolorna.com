@@ -2,6 +2,7 @@ import { browser } from "$app/env";
 import { goto } from "$app/navigation";
 import { decodeJwt } from "jose";
 import { derived, get, writable } from "svelte/store";
+import { authedFetch } from "./client";
 
 interface PasswordTokenRequest {
 	grant_type: "password";
@@ -160,15 +161,7 @@ authenticated.subscribe(async (v) => {
 });
 
 export async function getUser(): Promise<User> {
-	const token = await getAccessToken();
-
-	if (!token) throw new Error("Not authenticated");
-
-	const res = await fetch("https://api-staging.skolorna.com/v0/auth/users/@me", {
-		headers: {
-			authorization: `Bearer ${token}`
-		}
-	});
+	const res = await authedFetch("https://api-staging.skolorna.com/v0/auth/users/@me");
 
 	if (!res.ok) throw new Error(await res.text());
 

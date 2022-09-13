@@ -3,6 +3,7 @@
 	import { page } from "$app/stores";
 	import { authenticate, authenticating, authenticated } from "$lib/auth";
 	import Button from "$lib/Button.svelte";
+	import Field from "$lib/form/Field.svelte";
 	import FormCard from "$lib/FormCard.svelte";
 
 	let next: string;
@@ -37,11 +38,13 @@
 	<h1>Logga in</h1>
 
 	<form on:submit|preventDefault={handleSubmit}>
-		<label for="email">E-postadress</label>
-		<input name="email" id="email" type="email" />
+		<Field inputId="email" label="E-postadress">
+			<input name="email" id="email" type="email" required />
+		</Field>
 
-		<label for="password">Lösenord</label>
-		<input name="password" id="password" type="password" />
+		<Field inputId="password" label="Lösenord">
+			<input name="password" id="password" type="password" required />
+		</Field>
 
 		<Button type="submit" disabled={$authenticating}>
 			{$authenticating ? "Loggar in …" : "Logga in"}

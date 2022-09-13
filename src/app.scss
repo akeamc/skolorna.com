@@ -1,6 +1,7 @@
 :root {
 	--font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu,
 		Cantarell, "Helvetica Neue", sans-serif;
+	--font-mono: monospace;
 
 	--page-gutter: 1rem;
 	--header-height: 4rem;
@@ -10,12 +11,17 @@
 	--brand-saturation: 75%;
 	--brand-lightness: 50%;
 
+	--error-hue: 34;
+
 	--brand-light: hsl(var(--brand-hue) var(--brand-saturation) var(--brand-lightness));
 	--text0-light: hsl(var(--brand-hue) var(--brand-saturation) 10%);
 	--text0-muted-light: hsl(var(--brand-hue) 10% 50%);
 	--surface0-light: hsl(var(--brand-hue) 25% 97%);
 	--surface1-light: hsl(var(--brand-hue) 25% 95%);
 	--outline-light: hsl(var(--brand-hue) 25% 85%);
+
+	--surface0-error-light: hsl(var(--error-hue), 96%, 82%);
+	--text0-error-light: hsl(var(--error-hue), 96%, 30%);
 
 	--theme-hover-light: hsl(var(--brand-hue) var(--brand-saturation) 45%);
 	--theme-active-light: hsl(var(--brand-hue) 75% 40%);
@@ -28,6 +34,9 @@
 	--surface1-dark: hsl(var(--brand-hue) 10% 13%);
 	--outline-dark: hsl(var(--brand-hue) 10% 30%);
 
+	--surface0-error-dark: hsl(var(--error-hue), 50%, 12%);
+	--text0-error-dark: hsl(var(--error-hue), 96%, 30%);
+
 	--theme-hover-dark: hsl(var(--brand-hue) 50% 65%);
 	--theme-active-dark: hsl(var(--brand-hue) 75% 70%);
 	--on-theme-dark: hsl(var(--brand-hue) 90% 5%);
@@ -38,6 +47,9 @@
 	--surface0: var(--surface0-light);
 	--surface1: var(--surface1-light);
 	--outline: var(--outline-light);
+
+	--surface0-error: var(--surface0-error-light);
+	--text0-error: var(--text0-error-light);
 
 	--theme-hover: var(--theme-hover-light);
 	--theme-active: var(--theme-active-light);
@@ -51,6 +63,9 @@
 		--surface1: var(--surface1-dark);
 		--surface2: var(--surface2-dark);
 		--outline: var(--outline-dark);
+
+		--surface0-error: var(--surface0-error-dark);
+		--text0-error: var(--text0-error-dark);
 
 		--theme-hover: var(--theme-hover-dark);
 		--theme-active: var(--theme-active-dark);
@@ -86,4 +101,12 @@ a {
 	&:focus {
 		outline: var(--theme-hover) solid 2px;
 	}
+}
+
+code {
+	font-family: var(--font-mono);
+	padding-inline: 0.4em;
+	padding-block: 0.2em;
+	border-radius: 0.25rem;
+	background-color: var(--surface1);
 }

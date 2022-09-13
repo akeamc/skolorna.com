@@ -4,6 +4,8 @@
 	import { goto } from "$app/navigation";
 	import { authenticated, logout, user } from "$lib/auth";
 	import Button from "$lib/Button.svelte";
+	import Credentials from "$lib/skool/Credentials.svelte";
+	import Skeleton from "$lib/Skeleton.svelte";
 
 	$: if (browser && !$authenticated && !$navigating) {
 		goto("/login?next=/account");
@@ -11,11 +13,15 @@
 </script>
 
 <div class="root">
-	<h1>{$user?.full_name}</h1>
+	<h1>
+		{#if $user}{$user.full_name}{:else}<Skeleton width="10ch" />{/if}
+	</h1>
 
 	{#if !$user?.verified}
 		<p>Du har inte bekräftat din e-postadress ({$user?.email}).</p>
 	{/if}
+
+	<Credentials />
 
 	<Button on:click={() => logout("/")}>Logga ut</Button>
 </div>
