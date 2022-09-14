@@ -2,6 +2,7 @@
 	export let disabled = false;
 	export let type: "button" | "submit" | "reset" = "button";
 	export let href: string | undefined = undefined;
+	export let variant: "primary" | "secondary" = "primary";
 </script>
 
 {#if href}
@@ -9,7 +10,7 @@
 		<slot />
 	</a>
 {:else}
-	<button {type} class="button" {disabled} on:click>
+	<button {type} class={`button ${variant}`} {disabled} on:click>
 		<slot />
 	</button>
 {/if}
@@ -25,7 +26,7 @@
 		height: 3rem;
 		font-size: 14px;
 		font-weight: 500;
-		line-height: 1;
+		line-height: 1.1;
 		cursor: pointer;
 		transition: background-color 0.1s;
 		padding-inline: 1.5rem;
@@ -46,6 +47,20 @@
 
 		&:active {
 			background-color: var(--theme-active);
+		}
+
+		&.secondary {
+			background-color: transparent;
+			color: var(--brand);
+			border: 1px solid var(--brand);
+
+			&:hover {
+				background-color: var(--brand-transparent);
+			}
+
+			&:active {
+				background-color: var(--brand-transparent-active);
+			}
 		}
 	}
 

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { browser } from "$app/env";
+	import { browser } from "$app/environment";
 	import { page } from "$app/stores";
 	import Search from "$lib/search/Search.svelte";
 	import { authenticated, user } from "./auth";

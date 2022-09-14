@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Button from "$lib/Button.svelte";
 	import Field from "$lib/form/Field.svelte";
+	import Skeleton from "$lib/Skeleton.svelte";
 	import { DateTime } from "luxon";
 	import { deleteCredentials, getCredentials, putCredentials } from "./client";
 
@@ -59,7 +60,9 @@
 <div class="root">
 	<h2>Inloggningsuppgifter till Skolplattformen</h2>
 
-	{#await credentials then credentials}
+	{#await credentials}
+		<p class="status"><Skeleton width="25ch" /></p>
+	{:then credentials}
 		<p class="status">
 			{#if credentials}
 				Du är inloggad som <code>{credentials.username}</code>.
@@ -109,10 +112,12 @@
 				{/if}
 			</Button>
 
-			<Button type="button" on:click={handleDelete} disabled={!interactive}>Ta bort</Button>
+			<Button type="button" on:click={handleDelete} disabled={!interactive} variant="secondary"
+				>Logga ut från Skolplattformen</Button
+			>
 		</form>
 	{:catch error}
-		<p>error: {error}</p>
+		<p class="error">{error}</p>
 	{/await}
 </div>
 
@@ -121,6 +126,11 @@
 		border-radius: 0.5rem;
 		border: 1px solid var(--outline);
 		padding: 1rem;
+		margin-block: 2rem;
+	}
+
+	input {
+		max-width: 20rem;
 	}
 
 	#username {

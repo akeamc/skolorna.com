@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { browser } from "$app/env";
+	import { browser } from "$app/environment";
 
 	import MenuViewer from "$lib/MenuViewer.svelte";
 	import Skeleton from "$lib/Skeleton.svelte";

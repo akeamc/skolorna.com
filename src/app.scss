@@ -1,3 +1,18 @@
+@mixin brand-alpha($name, $light, $dark) {
+	--#{$name}-light: hsla(
+		var(--brand-hue) var(--brand-saturation) var(--brand-lightness) / #{$light}
+	);
+	--#{$name}-dark: hsla(
+		var(--brand-hue) calc(var(--brand-saturation) / 2) var(--brand-lightness) / #{$dark}
+	);
+
+	--#{$name}: var(--#{$name}-light);
+
+	@media (prefers-color-scheme: dark) {
+		--#{$name}: var(--#{$name}-dark);
+	}
+}
+
 :root {
 	--font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu,
 		Cantarell, "Helvetica Neue", sans-serif;
@@ -13,7 +28,10 @@
 
 	--error-hue: 34;
 
-	--brand-light: hsl(var(--brand-hue) var(--brand-saturation) var(--brand-lightness));
+	@include brand-alpha("brand", 1, 1);
+	@include brand-alpha("brand-transparent", 0.2, 0.1);
+	@include brand-alpha("brand-transparent-active", 0.25, 0.15);
+
 	--text0-light: hsl(var(--brand-hue) var(--brand-saturation) 10%);
 	--text0-muted-light: hsl(var(--brand-hue) 10% 50%);
 	--surface0-light: hsl(var(--brand-hue) 25% 97%);
@@ -27,7 +45,6 @@
 	--theme-active-light: hsl(var(--brand-hue) 75% 40%);
 	--on-theme-light: hsl(var(--brand-hue) 90% 98%);
 
-	--brand-dark: hsl(var(--brand-hue) calc(var(--brand-saturation) / 2) var(--brand-lightness));
 	--text0-dark: hsl(var(--brand-hue) 15% 85%);
 	--text0-muted-dark: hsl(var(--brand-hue) 5% 50%);
 	--surface0-dark: hsl(var(--brand-hue) 10% 10%);
@@ -41,7 +58,6 @@
 	--theme-active-dark: hsl(var(--brand-hue) 75% 70%);
 	--on-theme-dark: hsl(var(--brand-hue) 90% 5%);
 
-	--brand: var(--brand-light);
 	--text0: var(--text0-light);
 	--text0-muted: var(--text0-muted-light);
 	--surface0: var(--surface0-light);
@@ -56,7 +72,6 @@
 	--on-theme: var(--on-theme-light);
 
 	@media (prefers-color-scheme: dark) {
-		--brand: var(--brand-dark);
 		--text0: var(--text0-dark);
 		--text0-muted: var(--text0-muted-dark);
 		--surface0: var(--surface0-dark);

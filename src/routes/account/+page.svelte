@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { browser } from "$app/env";
+	import { browser } from "$app/environment";
 	import { navigating } from "$app/stores";
 	import { goto } from "$app/navigation";
 	import { authenticated, logout, user } from "$lib/auth";

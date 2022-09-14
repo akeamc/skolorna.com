@@ -30,6 +30,7 @@
 	}
 
 	label {
+		display: block;
 		font: 500 14px var(--font-sans);
 	}
 </style>

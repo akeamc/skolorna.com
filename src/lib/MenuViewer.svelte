@@ -4,7 +4,7 @@
 	import { DateTime } from "luxon";
 	import { spanfmt } from "./date";
 	import { getDays, type Day } from "./oden";
-	import { browser } from "$app/env";
+	import { browser } from "$app/environment";
 
 	export let menu: string;
 
