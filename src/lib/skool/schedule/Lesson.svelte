@@ -6,57 +6,53 @@
 
 	export let lesson: Lesson;
 
-	const { tableDialog } = getScheduleContext();
+	const { lessonDialog } = getScheduleContext();
 
 	const [start, end] = lesson.seconds();
 	const color = lesson.color ? chroma(lesson.color) : null;
 	const hue = color?.get("hsl.h") || 0;
-
-	const onClick: svelte.JSX.MouseEventHandler<HTMLButtonElement> = ({ target }) => {
-		const rect = (target as HTMLButtonElement).getBoundingClientRect();
-		tableDialog.set({ lesson, rect });
-	};
-
-	const onBlur = () =>
-		tableDialog.update((d) => {
-			if (d?.lesson.id == lesson.id) return null;
-			return d;
-		});
 </script>
 
-<button class="lesson" style:--start={start} style:--end={end} style:--hue={hue} on:click={onClick}>
-	<h3>{lesson.course}</h3>
-	<p>
-		{lesson.start.setLocale("sv").toLocaleString(DateTime.TIME_SIMPLE)}
-		{#if lesson.teacher}<span>{lesson.teacher}</span>{/if}
-		{#if lesson.location}<span>{lesson.location}</span>{/if}
-	</p>
-</button>
+<div class="lesson" style:--start={start} style:--end={end} style:--hue={hue}>
+	<button class:compact={end - start <= 2700} on:click={() => lessonDialog.set(lesson.id)}>
+		<h3>{lesson.course}</h3>
+		<p>
+			{lesson.start.setLocale("sv").toLocaleString(DateTime.TIME_SIMPLE)}
+			{#if lesson.teacher}<span>{lesson.teacher}</span>{/if}
+			{#if lesson.location}<span>{lesson.location}</span>{/if}
+		</p>
+	</button>
+</div>
 
 <style lang="scss">
 	.lesson {
-		--border-radius: 0.5rem;
 		--duration: calc(var(--end) - var(--start));
-		--accent: hsl(var(--hue), 100%, 50%);
+
+		position: absolute;
+		height: calc(var(--duration) * var(--second-height));
+		top: calc(var(--start) * var(--second-height));
+		left: 0;
+		right: 0;
+		display: flex;
+		flex-direction: column;
+	}
+
+	button {
+		--border-radius: 0.5rem;
+		--accent: hsl(var(--hue), 75%, 50%);
 
 		@media (prefers-color-scheme: dark) {
 			--accent: hsl(var(--hue), 40%, 50%);
 		}
 
 		all: unset;
-		position: absolute;
-		height: calc(var(--duration) * var(--second-height));
+		flex: 1;
 		background-color: var(--surface0);
-		border-radius: 0.5rem;
-		top: calc(var(--start) * var(--second-height));
-		left: 0;
-		right: 0;
+		border-radius: var(--border-radius);
 		padding: 0.5rem;
-		padding-block-start: 0.75rem;
+		padding-top: 0.75rem;
 		box-sizing: border-box;
 		overflow: hidden;
-		font: 400 0.875rem/1.1 var(--font-sans);
-		letter-spacing: -0.006em;
 		color: var(--text0-muted);
 		width: 100%;
 		cursor: pointer;
@@ -64,36 +60,62 @@
 		display: flex;
 		flex-direction: column;
 		box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+		position: relative;
 
 		&::before {
 			content: "";
 			position: absolute;
-			inset-inline: 0;
-			inset-block-start: 0;
-			block-size: 0.25rem;
+			top: 0;
+			left: 0;
+			right: 0;
+			height: 0.25rem;
 			background-color: var(--accent);
 			border-radius: var(--border-radius);
 		}
 
 		&:hover,
 		&:focus {
-			box-shadow: 0 2px 10px 2px rgba(0, 0, 0, 0.2);
+			box-shadow: 0 2px 10px 2px rgba(0, 0, 0, 0.1);
 			z-index: 1;
 		}
 
 		&:focus-visible {
 			outline: 2px solid var(--theme-hover);
 		}
+
+		&.compact {
+			padding: 0;
+			padding-left: 0.75rem;
+			flex-direction: row;
+			align-items: center;
+
+			&::before {
+				bottom: 0;
+				height: 100%;
+				width: 0.25rem;
+			}
+
+			h3 {
+				margin-block: 0;
+				margin-inline-end: 0.5rem;
+			}
+		}
 	}
 
 	h3 {
-		margin-block: 0 0.5rem;
-		font: inherit;
+		margin: 0;
 		font-weight: 600;
 		color: var(--text0);
+		line-height: 1.1;
+		font-size: clamp(0.75rem, 1rem * var(--duration) / 3600, 0.875rem);
+		letter-spacing: -0.006em;
+		margin-block-end: clamp(0.25rem, 0.5rem * (var(--duration) / 3600 - 1), 0.5rem);
 	}
 
 	p {
 		margin: 0;
+		flex: 1;
+		font-size: 0.75rem;
+		font-weight: 500;
 	}
 </style>

@@ -2,10 +2,10 @@
 	import Lesson from "./Lesson.svelte";
 	import { getScheduleContext } from "./schedule";
 	import type { Lesson as LessonType } from "../client";
-	import { DateTime } from "luxon";
-	import TableDialog from "./TableDialog.svelte";
 
-	const { schedule, scope, startOfScope, endOfScope, tableDialog } = getScheduleContext();
+	let windowWidth: number;
+
+	const { cursor, schedule, scope, startOfScope, endOfScope } = getScheduleContext();
 
 	$: numDays = $scope == "week" ? 5 : 1;
 
@@ -19,20 +19,53 @@
 
 		return cols;
 	}, Array.from({ length: numDays }).map(() => []) as LessonType[][]);
+
+	$: if (windowWidth < 768) {
+		$scope = "day";
+	}
 </script>
 
-<div class={`root ${$scope}`}>
-	{#if $tableDialog}
-		<TableDialog dialog={$tableDialog} />
+<div class={`root ${$scope}`} style:--days={numDays}>
+	<div class="scale">
+		{#each Array.from({ length: 96 }).map((_, i) => i * 15) as mins}
+			{@const hour = ~~(mins / 60)}
+			{@const min = mins % 60}
+			<div class="line" class:whole={min == 0} class:half={min % 30 == 0} style:--mins={mins}>
+				{#if min == 0}
+					<span>
+						{hour.toString().padStart(2, "0")}:{min.toString().padStart(2, "0")}
+					</span>
+				{/if}
+			</div>
+		{/each}
+	</div>
+
+	{#if $scope == "day"}
+		<div class="date">
+			<span class="weekday">{$cursor.setLocale("sv").toLocaleString({ weekday: "short" })}</span>
+			<span class="day">{$cursor.day}</span>
+		</div>
 	{/if}
-	<!-- {#each Array.from({ length: 48 }).map((_, i) => i * 30) as mins}
-		<p>{mins}</p>
-	{/each} -->
+
+	<header>
+		<h1>
+			{$cursor.setLocale("sv").toLocaleString({ month: "long", year: "numeric" })}
+			<span class="week">Vecka {$cursor.weekNumber}</span>
+		</h1>
+	</header>
 
 	{#each cols as lessons, i}
-		<div class="col" style:grid-column={i + 1}>
-			{$startOfScope.plus({ days: i }).setLocale("sv").toLocaleString(DateTime.DATE_FULL)}
-			<div class="inner">
+		{@const col = i + 2}
+		<div class="cell col-header" style:grid-column={col}>
+			<h2>
+				{$startOfScope
+					.plus({ days: i })
+					.setLocale("sv")
+					.toLocaleString({ day: "numeric", weekday: "short", month: "numeric" })}
+			</h2>
+		</div>
+		<div class="cell" style:grid-column={col}>
+			<div class="track">
 				{#each lessons as lesson (lesson.id)}
 					<Lesson {lesson} />
 				{/each}
@@ -41,27 +74,172 @@
 	{/each}
 </div>
 
+<svelte:window bind:innerWidth={windowWidth} />
+
 <style lang="scss">
 	.root {
 		--second-height: calc(4rem / 3600);
+		--scale-size: 3rem;
+		--scale-font-size: 0.625rem;
+		--scale-letter-spacing: 0.01em;
+		--header-height: 6rem;
+		--border: 1px solid var(--outline);
 
-		display: grid;
-		column-gap: 0.25rem;
-		background-color: var(--surface1);
-
-		&.day {
-			grid-template-columns: 1fr;
+		@media (min-width: 1024px) {
+			--scale-size: 4rem;
+			--scale-font-size: 0.75rem;
+			--scale-letter-spacing: 0;
 		}
 
-		&.week {
-			grid-template-columns: repeat(5, 1fr);
+		display: grid;
+		background-color: var(--surface1);
+		grid-template-columns: var(--scale-size);
+		grid-auto-columns: 1fr;
+		position: relative;
+
+		&::after {
+			content: "";
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			height: calc(8 * 3600 * var(--second-height));
+			background: linear-gradient(180deg, var(--surface1-transparent) 0%, var(--surface1) 100%);
+			pointer-events: none;
 		}
 	}
 
-	.col {
-		.inner {
-			position: relative;
-			height: calc(86400 * var(--second-height));
+	.cell {
+		padding: 0 0.25rem;
+		border-left: var(--border);
+	}
+
+	.track {
+		position: relative;
+		height: calc(86400 * var(--second-height));
+	}
+
+	h2 {
+		font: 600 1rem/1 var(--font-sans);
+		margin-block: 0.5rem;
+		letter-spacing: -0.011em;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+
+		@media (min-width: 480px) {
+			font-size: 1.25rem;
+			letter-spacing: -0.006em;
+		}
+	}
+
+	.scale {
+		grid-column: 1;
+		grid-row: 3;
+		position: relative;
+
+		div {
+			position: absolute;
+			top: calc(var(--mins) * 60 * var(--second-height));
+
+			&::before {
+				content: "";
+				position: absolute;
+				top: 0;
+				left: 0.5rem;
+				width: calc(var(--scale-size) * 0.25);
+				height: 1px;
+				background-color: var(--outline);
+			}
+
+			&.half::before {
+				width: calc(var(--scale-size) * 0.5);
+			}
+
+			&.whole::before {
+				left: calc(var(--scale-size));
+				width: calc(100vw - var(--scale-size));
+			}
+
+			span {
+				position: absolute;
+				left: 0.5rem;
+				top: 50%;
+				transform: translateY(-50%);
+				font: 500 var(--scale-font-size) / 1 var(--font-sans);
+				letter-spacing: var(--scale-letter-spacing);
+				color: var(--text0-muted);
+				font-feature-settings: "tnum";
+			}
+		}
+	}
+
+	header,
+	.col-header {
+		background-color: var(--surface0);
+		position: sticky;
+		grid-column: 2;
+		z-index: 2;
+	}
+
+	.col-header {
+		grid-row: 2;
+		border-bottom: var(--border);
+		border-top: var(--border);
+		top: var(--header-height);
+		margin-bottom: -1px;
+	}
+
+	header {
+		grid-column: 2 / calc(2 + var(--days));
+		grid-row: 1;
+		top: 0;
+		height: var(--header-height);
+		border-left: var(--border);
+		padding: 0.5rem 0.25rem;
+		box-sizing: border-box;
+		display: flex;
+		align-items: center;
+
+		h1 {
+			margin: 0;
+			display: inline-flex;
+			align-items: center;
+			font: 700 1.5rem/1 var(--font-sans);
+
+			.week {
+				font: 500 0.75rem/1 var(--font-sans);
+				letter-spacing: 0.01em;
+				color: var(--text0-muted);
+				background-color: var(--surface1);
+				padding-block: 0.1em;
+				padding-inline: 0.5em;
+				border-radius: 999px;
+				border: 1px solid var(--outline);
+				margin-inline-start: 0.5rem;
+			}
+		}
+	}
+
+	.date {
+		grid-column: 1;
+		grid-row: 1 / 3;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-direction: column;
+		gap: 0.125rem;
+		text-align: center;
+
+		.day {
+			font: 600 1.5rem/1 var(--font-sans);
+			letter-spacing: -0.01em;
+		}
+
+		.weekday {
+			font: 600 0.625rem/1 var(--font-sans);
+			letter-spacing: 0.01em;
+			color: var(--text0-muted);
 		}
 	}
 </style>

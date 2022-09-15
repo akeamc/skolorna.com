@@ -3,13 +3,13 @@
 	import { DateTime } from "luxon";
 	import { derived, get, writable } from "svelte/store";
 	import { getSchedule, type Schedule } from "../client";
-	import { setScheduleContext, type Scope, type TableDialog } from "./schedule";
+	import { setScheduleContext, type Scope } from "./schedule";
 	import Table from "./Table.svelte";
 
 	const cursor = writable(DateTime.now());
 	const scope = writable<Scope>("week");
 	const schedule = writable<Schedule | null>(null);
-	const tableDialog = writable<TableDialog | null>(null);
+	const lessonDialog = writable<string | null>(null);
 
 	$: browser &&
 		getSchedule($cursor.year, $cursor.weekNumber).then((res) => {
@@ -24,7 +24,7 @@
 		scope,
 		startOfScope: derived([cursor, scope], ([$cursor, $scope]) => $cursor.startOf($scope)),
 		endOfScope: derived([cursor, scope], ([$cursor, $scope]) => $cursor.endOf($scope)),
-		tableDialog
+		lessonDialog
 	});
 </script>
 
