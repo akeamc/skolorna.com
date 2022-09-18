@@ -10,6 +10,7 @@
 	const scope = writable<Scope>("week");
 	const schedule = writable<Schedule | null>(null);
 	const lessonDialog = writable<string | null>(null);
+	const offset = writable(7 * 3600);
 
 	$: browser &&
 		getSchedule($cursor.year, $cursor.weekNumber).then((res) => {
@@ -24,8 +25,11 @@
 		scope,
 		startOfScope: derived([cursor, scope], ([$cursor, $scope]) => $cursor.startOf($scope)),
 		endOfScope: derived([cursor, scope], ([$cursor, $scope]) => $cursor.endOf($scope)),
-		lessonDialog
+		lessonDialog,
+		offset
 	});
 </script>
 
-<Table />
+<div style:--offset={$offset}>
+	<Table />
+</div>

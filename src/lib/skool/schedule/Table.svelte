@@ -2,12 +2,16 @@
 	import Lesson from "./Lesson.svelte";
 	import { getScheduleContext } from "./schedule";
 	import type { Lesson as LessonType } from "../client";
+	import TableCorner from "./TableCorner.svelte";
+	import { DateTime } from "luxon";
+	import { monthSpanFmt } from "$lib/date";
 
 	let windowWidth: number;
 
-	const { cursor, schedule, scope, startOfScope, endOfScope } = getScheduleContext();
+	const { cursor, schedule, scope, startOfScope, endOfScope, offset } = getScheduleContext();
+	const now = DateTime.now();
 
-	$: numDays = $scope == "week" ? 5 : 1;
+	$: numDays = $scope == "week" ? 7 : 1;
 
 	$: cols = ($schedule?.lessons ?? []).reduce((cols, lesson) => {
 		const { start, end } = lesson;
@@ -23,11 +27,15 @@
 	$: if (windowWidth < 768) {
 		$scope = "day";
 	}
+
+	$: scale = Array.from({ length: 24 * (60 / 15) })
+		.map((_, i) => i * 15)
+		.filter((i) => i > $offset / 60);
 </script>
 
 <div class={`root ${$scope}`} style:--days={numDays}>
-	<div class="scale">
-		{#each Array.from({ length: 96 }).map((_, i) => i * 15) as mins}
+	<aside class="scale">
+		{#each scale as mins}
 			{@const hour = ~~(mins / 60)}
 			{@const min = mins % 60}
 			<div class="line" class:whole={min == 0} class:half={min % 30 == 0} style:--mins={mins}>
@@ -38,30 +46,28 @@
 				{/if}
 			</div>
 		{/each}
-	</div>
+	</aside>
 
-	{#if $scope == "day"}
-		<div class="date">
-			<span class="weekday">{$cursor.setLocale("sv").toLocaleString({ weekday: "short" })}</span>
-			<span class="day">{$cursor.day}</span>
-		</div>
-	{/if}
+	<TableCorner />
 
 	<header>
 		<h1>
-			{$cursor.setLocale("sv").toLocaleString({ month: "long", year: "numeric" })}
+			{monthSpanFmt($startOfScope.toJSDate(), $endOfScope.toJSDate(), "sv")}
 			<span class="week">Vecka {$cursor.weekNumber}</span>
 		</h1>
 	</header>
 
 	{#each cols as lessons, i}
 		{@const col = i + 2}
-		<div class="cell col-header" style:grid-column={col}>
+		{@const day = $startOfScope.plus({ days: i }).setLocale("sv")}
+		<div class="cell col-header" style:grid-column={col} class:today={now.hasSame(day, "day")}>
 			<h2>
-				{$startOfScope
-					.plus({ days: i })
-					.setLocale("sv")
-					.toLocaleString({ day: "numeric", weekday: "short", month: "numeric" })}
+				<div class="weekday">
+					{day.toLocaleString({ weekday: "short" })}
+				</div>
+				<div class="day">
+					{day.toLocaleString({ day: "numeric" })}
+				</div>
 			</h2>
 		</div>
 		<div class="cell" style:grid-column={col}>
@@ -79,14 +85,14 @@
 <style lang="scss">
 	.root {
 		--second-height: calc(4rem / 3600);
-		--scale-size: 3rem;
+		--scale-size: 4rem;
 		--scale-font-size: 0.625rem;
 		--scale-letter-spacing: 0.01em;
 		--header-height: 6rem;
 		--border: 1px solid var(--outline);
 
 		@media (min-width: 1024px) {
-			--scale-size: 4rem;
+			--scale-size: 5rem;
 			--scale-font-size: 0.75rem;
 			--scale-letter-spacing: 0;
 		}
@@ -116,7 +122,7 @@
 
 	.track {
 		position: relative;
-		height: calc(86400 * var(--second-height));
+		height: calc((86400 - var(--offset)) * var(--second-height));
 	}
 
 	h2 {
@@ -140,7 +146,7 @@
 
 		div {
 			position: absolute;
-			top: calc(var(--mins) * 60 * var(--second-height));
+			top: calc((var(--mins) * 60 - var(--offset)) * var(--second-height));
 
 			&::before {
 				content: "";
@@ -185,18 +191,52 @@
 	.col-header {
 		grid-row: 2;
 		border-bottom: var(--border);
-		border-top: var(--border);
 		top: var(--header-height);
 		margin-bottom: -1px;
+		text-align: center;
+
+		h2 {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			gap: 0.25rem;
+			margin-block: 1rem;
+			height: 3.5rem;
+			width: 3.5rem;
+			margin-inline: auto;
+			border-radius: 0.5rem;
+
+			.day {
+				font: 600 1.5rem/1 var(--font-sans);
+				letter-spacing: -0.01em;
+			}
+
+			.weekday {
+				font: 600 0.75rem/1 var(--font-sans);
+				letter-spacing: 0.01em;
+				color: var(--text0-muted);
+			}
+		}
+
+		&.today h2 {
+			background-color: var(--brand);
+			color: var(--on-theme);
+			box-shadow: 0 4px 4px 0 var(--brand-transparent);
+
+			.weekday {
+				color: var(--on-theme);
+			}
+		}
 	}
 
 	header {
-		grid-column: 2 / calc(2 + var(--days));
+		grid-column: 1 / calc(2 + var(--days));
 		grid-row: 1;
 		top: 0;
 		height: var(--header-height);
-		border-left: var(--border);
-		padding: 0.5rem 0.25rem;
+		border-bottom: var(--border);
+		padding: 0.5rem var(--page-gutter);
 		box-sizing: border-box;
 		display: flex;
 		align-items: center;
@@ -218,28 +258,6 @@
 				border: 1px solid var(--outline);
 				margin-inline-start: 0.5rem;
 			}
-		}
-	}
-
-	.date {
-		grid-column: 1;
-		grid-row: 1 / 3;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		flex-direction: column;
-		gap: 0.125rem;
-		text-align: center;
-
-		.day {
-			font: 600 1.5rem/1 var(--font-sans);
-			letter-spacing: -0.01em;
-		}
-
-		.weekday {
-			font: 600 0.625rem/1 var(--font-sans);
-			letter-spacing: 0.01em;
-			color: var(--text0-muted);
 		}
 	}
 </style>

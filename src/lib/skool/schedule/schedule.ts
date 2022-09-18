@@ -14,6 +14,7 @@ export interface ScheduleContext {
 	startOfScope: Readable<DateTime>;
 	endOfScope: Readable<DateTime>;
 	lessonDialog: Writable<string | null>;
+	offset: Writable<number>;
 }
 
 export const setScheduleContext = (ctx: ScheduleContext): ScheduleContext => setContext(key, ctx);

@@ -30,7 +30,7 @@
 
 		position: absolute;
 		height: calc(var(--duration) * var(--second-height));
-		top: calc(var(--start) * var(--second-height));
+		top: calc((var(--start) - var(--offset)) * var(--second-height));
 		left: 0;
 		right: 0;
 		display: flex;
