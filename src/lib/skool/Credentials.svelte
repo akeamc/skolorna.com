@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Button from "$lib/Button.svelte";
+	import ErrorText from "$lib/ErrorText.svelte";
 	import Field from "$lib/form/Field.svelte";
 	import Skeleton from "$lib/Skeleton.svelte";
 	import { DateTime } from "luxon";
@@ -99,7 +100,7 @@
 			</Field>
 
 			{#if error}
-				<p class="error">{error}</p>
+				<ErrorText class="error">{error}</ErrorText>
 			{/if}
 
 			<Button type="submit" disabled={!interactive}>
@@ -117,7 +118,7 @@
 			>
 		</form>
 	{:catch error}
-		<p class="error">{error}</p>
+		<ErrorText class="error">{error}</ErrorText>
 	{/await}
 </div>
 
@@ -143,19 +144,15 @@
 		letter-spacing: -0.017em;
 	}
 
-	.error {
-		padding: 1rem;
-		background-color: var(--surface0-error);
-		border-radius: 0.5rem;
-		font: 500 14px var(--font-sans);
-		color: var(--text0-error);
-	}
-
 	.status {
 		margin-block: 1rem;
 		font: 500 14px var(--font-sans);
 		color: var(--text1);
 		color: var(--text0-muted);
 		font-style: italic;
+	}
+
+	.error {
+		margin: 0;
 	}
 </style>

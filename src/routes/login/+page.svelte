@@ -1,12 +1,17 @@
 <script lang="ts">
 	import { goto } from "$app/navigation";
 	import { page } from "$app/stores";
-	import { authenticate, authenticating, authenticated } from "$lib/auth";
+	import { authenticate, authenticating, authenticated, isError, type AuthError } from "$lib/auth";
 	import Button from "$lib/Button.svelte";
+	import ErrorText from "$lib/ErrorText.svelte";
 	import Field from "$lib/form/Field.svelte";
 	import FormCard from "$lib/FormCard.svelte";
 
 	let next: string;
+	let error: AuthError | null = null;
+
+	let email = "";
+	let password = "";
 
 	$: next = $page.url.searchParams.get("next") ?? "/";
 
@@ -14,23 +19,22 @@
 		goto(next);
 	}
 
-	const handleSubmit: svelte.JSX.EventHandler<SubmitEvent, HTMLFormElement> = async ({
-		target
-	}) => {
-		const data = new FormData(target as HTMLFormElement);
-
-		const email = data.get("email")?.toString();
-		const password = data.get("password")?.toString();
-
+	const handleSubmit: svelte.JSX.EventHandler<SubmitEvent, HTMLFormElement> = async () => {
 		if (!email || !password) {
 			return;
 		}
 
-		await authenticate({
+		error = null;
+
+		const res = await authenticate({
 			grant_type: "password",
 			username: email,
 			password
 		});
+
+		if (isError(res)) {
+			error = res;
+		}
 	};
 </script>
 
@@ -39,16 +43,26 @@
 
 	<form on:submit|preventDefault={handleSubmit}>
 		<Field inputId="email" label="E-postadress">
-			<input name="email" id="email" type="email" required />
+			<input name="email" id="email" type="email" required bind:value={email} />
 		</Field>
 
 		<Field inputId="password" label="Lösenord">
-			<input name="password" id="password" type="password" required />
+			<input name="password" id="password" type="password" required bind:value={password} />
 		</Field>
 
 		<Button type="submit" disabled={$authenticating}>
 			{$authenticating ? "Loggar in …" : "Logga in"}
 		</Button>
+
+		{#if error}
+			<ErrorText>
+				{#if error.status === 401}
+					Fel e-postadress eller lösenord. <a href={`/reset?email=${email}`}>Återställ lösenord</a>
+				{:else}
+					Något gick fel. Försök igen.
+				{/if}
+			</ErrorText>
+		{/if}
 
 		<p>Har du inget konto? <a href={`/register?next=${next}`}>Skapa ett</a></p>
 	</form>

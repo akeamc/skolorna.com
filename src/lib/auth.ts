@@ -4,6 +4,8 @@ import { decodeJwt } from "jose";
 import { derived, get, writable } from "svelte/store";
 import { authedFetch } from "./client";
 
+export const API_URL = "https://api2.skolorna.com/v0/auth";
+
 interface PasswordTokenRequest {
 	grant_type: "password";
 	username: string;
@@ -65,10 +67,19 @@ function ingestTokenResponse(response: TokenResponse) {
 	if (response.refresh_token) refreshToken.set(response.refresh_token);
 }
 
-export async function authenticate(req: TokenRequest): Promise<TokenResponse> {
+export interface AuthError {
+	status: number;
+	message: string;
+}
+
+export function isError<T>(obj: T | AuthError): obj is AuthError {
+	return (obj as AuthError)?.status !== undefined;
+}
+
+export async function authenticate(req: TokenRequest): Promise<TokenResponse | AuthError> {
 	authenticating.set(true);
 
-	const res = await fetch("https://api-staging.skolorna.com/v0/auth/token", {
+	const res = await fetch(`${API_URL}/token`, {
 		method: "POST",
 		headers: {
 			"content-type": "application/x-www-form-urlencoded"
@@ -77,9 +88,8 @@ export async function authenticate(req: TokenRequest): Promise<TokenResponse> {
 	});
 
 	if (!res.ok) {
-		const e = await res.text();
 		authenticating.set(false);
-		throw new Error(e);
+		return { status: res.status, message: await res.text() };
 	}
 
 	const data: TokenResponse = await res.json();
@@ -96,10 +106,10 @@ export interface RegistrationRequest {
 	full_name: string;
 }
 
-export async function register(req: RegistrationRequest) {
+export async function register(req: RegistrationRequest): Promise<void | AuthError> {
 	authenticating.set(true);
 
-	const res = await fetch("https://api-staging.skolorna.com/v0/auth/users", {
+	const res = await fetch(`${API_URL}/account`, {
 		method: "POST",
 		headers: {
 			"content-type": "application/json"
@@ -108,9 +118,9 @@ export async function register(req: RegistrationRequest) {
 	});
 
 	if (!res.ok) {
-		const e = await res.text();
+		const message = await res.text();
 		authenticating.set(false);
-		throw new Error(e);
+		return { status: res.status, message };
 	}
 
 	ingestTokenResponse(await res.json());
@@ -161,9 +171,46 @@ authenticated.subscribe(async (v) => {
 });
 
 export async function getUser(): Promise<User> {
-	const res = await authedFetch("https://api-staging.skolorna.com/v0/auth/users/@me");
+	const res = await authedFetch(`${API_URL}/account`);
 
 	if (!res.ok) throw new Error(await res.text());
 
 	return res.json();
+}
+
+export async function verifyEmail(token: string): Promise<void> {
+	const res = await fetch(`${API_URL}/verify`, {
+		method: "POST",
+		headers: {
+			"content-type": "application/json"
+		},
+		body: JSON.stringify({ token })
+	});
+
+	if (!res.ok) throw new Error(await res.text());
+}
+
+interface RequestResetLink {
+	email: string;
+}
+
+interface ResetPassword {
+	token: string;
+	password: string;
+}
+
+export async function resetPassword(
+	data: RequestResetLink | ResetPassword
+): Promise<void | AuthError> {
+	const res = await fetch(`${API_URL}/account/password`, {
+		method: "PUT",
+		headers: {
+			"content-type": "application/json"
+		},
+		body: JSON.stringify(data)
+	});
+
+	if (!res.ok) {
+		return { status: res.status, message: await res.text() };
+	}
 }

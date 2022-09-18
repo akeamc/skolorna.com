@@ -66,7 +66,7 @@
 					<li>
 						<a
 							href={`/menyer/${hit.id}`}
-							sveltekit:prefetch
+							data-sveltekit-prefetch
 							class:focus={i === focusedHit}
 							tabindex="-1"
 							on:mousemove={() => (focusedHit = i)}

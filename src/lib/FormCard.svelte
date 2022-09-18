@@ -8,7 +8,6 @@
 	.root {
 		display: flex;
 		flex-direction: column;
-		align-items: center;
 		min-height: calc(100vh - var(--header-height));
 		padding-inline: var(--page-gutter);
 	}
@@ -24,6 +23,7 @@
 		.root {
 			background-color: var(--surface1);
 			justify-content: center;
+			align-items: center;
 		}
 
 		.card {
