@@ -9,18 +9,28 @@
 	const cursor = writable(DateTime.now());
 	const scope = writable<Scope>("week");
 	const schedule = writable<Schedule | null>(null);
+	const loading = writable(false);
 	const lessonDialog = writable<string | null>(null);
 	const offset = writable(7 * 3600);
 
-	$: browser &&
-		getSchedule($cursor.year, $cursor.weekNumber).then((res) => {
-			const c = get(cursor);
+	$: {
+		if (browser) {
+			$loading = true;
 
-			if (res.week == c.weekNumber && res.year == c.year) schedule.set(res);
-		});
+			getSchedule($cursor.year, $cursor.weekNumber).then((res) => {
+				const c = get(cursor);
+
+				if (res.week == c.weekNumber && res.year == c.year) {
+					$schedule = res;
+					$loading = false;
+				}
+			});
+		}
+	}
 
 	setScheduleContext({
 		schedule,
+		loading,
 		cursor,
 		scope,
 		startOfScope: derived([cursor, scope], ([$cursor, $scope]) => $cursor.startOf($scope)),

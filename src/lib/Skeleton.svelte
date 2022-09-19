@@ -7,8 +7,7 @@
 
 <style lang="scss">
 	.skeleton {
-		animation: skeleton 1.5s ease-in-out infinite;
-		background-color: var(--surface1);
+		background-color: var(--surface2);
 		background-repeat: no-repeat;
 		background-size: 100vw 100%;
 		border-radius: 0.75rem;

@@ -1,7 +1,7 @@
 import { DateTime } from "luxon";
 import { authedFetch } from "../client";
 
-export const API_URL = "http://localhost:8000";
+export const API_URL = "https://api2.skolorna.com/v0/skool";
 
 interface SkolplattformenCredentials {
 	service: "skolplattformen";
@@ -36,9 +36,11 @@ export async function getCredentials(): Promise<CredentialsInfo | null> {
 }
 
 export async function deleteCredentials(): Promise<void> {
-	await authedFetch(`${API_URL}/credentials`, {
+	const res = await authedFetch(`${API_URL}/credentials`, {
 		method: "DELETE"
 	});
+
+	if (!res.ok) throw new Error(await res.text());
 }
 
 export class Lesson {

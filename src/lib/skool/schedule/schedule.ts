@@ -9,6 +9,7 @@ export type Scope = "day" | "week";
 
 export interface ScheduleContext {
 	schedule: Readable<Schedule | null>;
+	loading: Readable<boolean>;
 	cursor: Writable<DateTime>;
 	scope: Writable<Scope>;
 	startOfScope: Readable<DateTime>;

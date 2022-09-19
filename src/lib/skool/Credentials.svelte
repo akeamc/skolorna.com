@@ -52,6 +52,8 @@
 		try {
 			await deleteCredentials();
 			credentials = Promise.resolve(null);
+		} catch (_) {
+			error = "Något gick fel. Försök igen.";
 		} finally {
 			deleting = false;
 		}

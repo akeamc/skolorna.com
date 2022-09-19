@@ -5,10 +5,12 @@
 	import TableCorner from "./TableCorner.svelte";
 	import { DateTime } from "luxon";
 	import { monthSpanFmt } from "$lib/date";
+	import Skeleton from "$lib/Skeleton.svelte";
 
 	let windowWidth: number;
 
-	const { cursor, schedule, scope, startOfScope, endOfScope, offset } = getScheduleContext();
+	const { schedule, loading, cursor, scope, startOfScope, endOfScope, offset } =
+		getScheduleContext();
 	const now = DateTime.now();
 
 	$: numDays = $scope == "week" ? 5 : 1;
@@ -31,6 +33,10 @@
 	$: scale = Array.from({ length: 24 * (60 / 15) })
 		.map((_, i) => i * 15)
 		.filter((i) => i > $offset / 60);
+
+	$: numLessons = $schedule?.lessons?.filter(
+		({ start, end }) => +start >= +$startOfScope && +end <= +$endOfScope
+	)?.length;
 </script>
 
 <div class={`root ${$scope}`} style:--days={numDays}>
@@ -53,8 +59,15 @@
 	<header>
 		<h1>
 			{monthSpanFmt($startOfScope.toJSDate(), $endOfScope.toJSDate(), "sv")}
-			<span class="week">Vecka {$cursor.weekNumber}</span>
 		</h1>
+		<span class="week">Vecka {$cursor.weekNumber}</span>
+		<div class="count">
+			{#if $loading || typeof numLessons !== "number"}
+				<Skeleton width="8ch" />
+			{:else}
+				{numLessons} {numLessons == 1 ? "lektion" : "lektioner"}
+			{/if}
+		</div>
 	</header>
 
 	{#each cols as lessons, i}
@@ -239,26 +252,40 @@
 		border-bottom: var(--border);
 		padding: 0.5rem var(--page-gutter);
 		box-sizing: border-box;
-		display: flex;
+		display: grid;
+		gap: 0.5rem;
 		align-items: center;
 
 		h1 {
+			grid-column: 1;
+			grid-row: 1;
 			margin: 0;
-			display: inline-flex;
-			align-items: center;
 			font: 700 1.5rem/1 var(--font-sans);
+			align-self: flex-end;
+		}
 
-			.week {
-				font: 500 0.75rem/1 var(--font-sans);
-				letter-spacing: 0.01em;
-				color: var(--text0-muted);
-				background-color: var(--surface0);
-				padding-block: 0.1em;
-				padding-inline: 0.5em;
-				border-radius: 999px;
-				border: 1px solid var(--outline);
-				margin-inline-start: 0.5rem;
-			}
+		.week {
+			grid-column: 2;
+			grid-row: 1 / span 2;
+			font: 500 0.75rem/1 var(--font-sans);
+			letter-spacing: 0.01em;
+			color: var(--text0-muted);
+			background-color: var(--surface0);
+			padding-block: 0.25em;
+			padding-inline: 0.5em;
+			border-radius: 999px;
+			border: 1px solid var(--outline);
+			white-space: nowrap;
+			justify-self: flex-end;
+		}
+
+		.count {
+			font: 500 0.875rem/1 var(--font-sans);
+			color: var(--text0-muted);
+			letter-spacing: -0.006em;
+			grid-column: 1;
+			grid-row: 2;
+			align-self: flex-start;
 		}
 	}
 </style>

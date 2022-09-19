@@ -28,6 +28,7 @@
 		margin-bottom: -1px;
 		position: sticky;
 		top: var(--header-height);
+		z-index: 1;
 	}
 
 	button {
