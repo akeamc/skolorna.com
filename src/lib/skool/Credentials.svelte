@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Button from "$lib/Button.svelte";
+	import ButtonGroup from "$lib/ButtonGroup.svelte";
 	import ErrorText from "$lib/ErrorText.svelte";
 	import Field from "$lib/form/Field.svelte";
 	import Skeleton from "$lib/Skeleton.svelte";
@@ -37,7 +38,7 @@
 			} else {
 				error =
 					res.status === 400
-						? "Felaktigt användarnamn eller lösenord. Med största sannolikhet består ditt användarnamn av två bokstäver och fem siffror."
+						? "Felaktigt användarnamn eller lösenord."
 						: "Något gick fel. Försök igen.";
 			}
 		} finally {
@@ -102,38 +103,38 @@
 			</Field>
 
 			{#if error}
-				<ErrorText class="error">{error}</ErrorText>
+				<ErrorText>{error}</ErrorText>
 			{/if}
 
-			<Button type="submit" disabled={!interactive}>
-				{#if putting}
-					Sparar …
-				{:else if credentials}
-					Ändra
-				{:else}
-					Spara
-				{/if}
-			</Button>
+			<ButtonGroup>
+				<Button type="submit" disabled={!interactive}>
+					{#if putting}
+						Sparar …
+					{:else if credentials}
+						Ändra
+					{:else}
+						Spara
+					{/if}
+				</Button>
 
-			<Button type="button" on:click={handleDelete} disabled={!interactive} variant="secondary"
-				>Logga ut från Skolplattformen</Button
-			>
+				<Button
+					type="button"
+					on:click={handleDelete}
+					disabled={!credentials || !interactive}
+					variant="secondary"
+				>
+					Logga ut
+				</Button>
+			</ButtonGroup>
 		</form>
 	{:catch error}
-		<ErrorText class="error">{error}</ErrorText>
+		<ErrorText>{error}</ErrorText>
 	{/await}
 </div>
 
 <style lang="scss">
 	.root {
-		border-radius: 0.5rem;
-		border: 1px solid var(--outline);
-		padding: 1rem;
-		margin-block: 2rem;
-	}
-
-	input {
-		max-width: 20rem;
+		text-align: start;
 	}
 
 	#username {
@@ -154,7 +155,7 @@
 		font-style: italic;
 	}
 
-	.error {
-		margin: 0;
+	.root :global(p) {
+		margin-block-end: 1rem;
 	}
 </style>

@@ -1,5 +1,6 @@
 import { DateTime } from "luxon";
 import { authedFetch } from "../client";
+import { hasCredentials } from "./stores";
 
 export const API_URL = "https://api2.skolorna.com/v0/skool";
 
@@ -27,19 +28,26 @@ export function isError<T>(obj: T | SkoolError): obj is SkoolError {
 }
 
 export async function putCredentials(credentials: Credentials): Promise<Response> {
-	return authedFetch(`${API_URL}/credentials`, {
+	const res = await authedFetch(`${API_URL}/credentials`, {
 		method: "PUT",
 		headers: {
 			"content-type": "application/json"
 		},
 		body: JSON.stringify(credentials)
 	});
+
+	if (res.ok) hasCredentials.set(true);
+
+	return res;
 }
 
 export async function getCredentials(): Promise<CredentialsInfo | null> {
 	const res = await authedFetch(`${API_URL}/credentials`);
 
-	if (res.status === 404) return null;
+	if (res.status === 404) {
+		hasCredentials.set(false);
+		return null;
+	}
 
 	return res.json();
 }
@@ -50,6 +58,8 @@ export async function deleteCredentials(): Promise<void> {
 	});
 
 	if (!res.ok) throw new Error(await res.text());
+
+	hasCredentials.set(false);
 }
 
 export class Lesson {
@@ -128,13 +138,17 @@ export async function getSchedule(year: number, week: number): Promise<Schedule 
 	const res = await authedFetch(`${API_URL}/schedule?year=${year}&week=${week}`);
 
 	if (!res.ok) {
+		if (res.status === 401) hasCredentials.set(false);
+
 		return {
 			status: res.status,
 			message: await res.text()
 		};
 	}
 
-	const lessons = await res.json();
+	const schedule = Schedule.fromJSON(year, week, await res.json());
 
-	return Schedule.fromJSON(year, week, lessons);
+	hasCredentials.set(true);
+
+	return schedule;
 }

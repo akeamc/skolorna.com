@@ -68,5 +68,6 @@
 	.button.disabled {
 		opacity: 0.1;
 		cursor: default;
+		pointer-events: none;
 	}
 </style>

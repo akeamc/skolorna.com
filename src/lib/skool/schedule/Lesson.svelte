@@ -40,7 +40,7 @@
 
 		@media (prefers-color-scheme: dark) {
 			--background: hsl(var(--hue), 40%, 20%);
-			--foreground: hsl(var(--hue), 40%, 80%);
+			--foreground: var(--text0);
 		}
 
 		position: absolute;

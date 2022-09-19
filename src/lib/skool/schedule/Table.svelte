@@ -63,9 +63,9 @@
 		<span class="week">Vecka {$cursor.weekNumber}</span>
 		<div class="count">
 			{#if $loading || typeof numLessons !== "number"}
-				<Skeleton width="8ch" />
+				<Skeleton width="12ch" />
 			{:else}
-				{numLessons} {numLessons == 1 ? "lektion" : "lektioner"}
+				{numLessons} {numLessons == 1 ? "lektion" : "lektioner"} visas
 			{/if}
 		</div>
 	</header>
