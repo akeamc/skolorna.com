@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { browser } from "$app/environment";
+	import { isError } from "$lib/auth";
 	import { DateTime } from "luxon";
 	import { derived, get, writable } from "svelte/store";
 	import { getSchedule, type Schedule } from "../client";
@@ -12,6 +13,7 @@
 	const loading = writable(false);
 	const lessonDialog = writable<string | null>(null);
 	const offset = writable(7 * 3600);
+	let unauthenticated = false;
 
 	$: {
 		if (browser) {
@@ -20,9 +22,16 @@
 			getSchedule($cursor.year, $cursor.weekNumber).then((res) => {
 				const c = get(cursor);
 
+				if (isError(res)) {
+					$loading = false;
+					unauthenticated = res.status === 401;
+					return;
+				}
+
 				if (res.week == c.weekNumber && res.year == c.year) {
 					$schedule = res;
 					$loading = false;
+					unauthenticated = false;
 				}
 			});
 		}
@@ -39,6 +48,10 @@
 		offset
 	});
 </script>
+
+{#if unauthenticated}
+	UNAUTH
+{/if}
 
 <div style:--offset={$offset}>
 	<Table />

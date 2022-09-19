@@ -17,6 +17,15 @@ type CredentialsInfo = SkolplattformenCredentialsInfo & {
 	updated_at: string;
 };
 
+export interface SkoolError {
+	status: number;
+	message: string;
+}
+
+export function isError<T>(obj: T | SkoolError): obj is SkoolError {
+	return (obj as SkoolError)?.status !== undefined;
+}
+
 export async function putCredentials(credentials: Credentials): Promise<Response> {
 	return authedFetch(`${API_URL}/credentials`, {
 		method: "PUT",
@@ -115,8 +124,15 @@ export class Schedule {
 	}
 }
 
-export async function getSchedule(year: number, week: number): Promise<Schedule> {
+export async function getSchedule(year: number, week: number): Promise<Schedule | SkoolError> {
 	const res = await authedFetch(`${API_URL}/schedule?year=${year}&week=${week}`);
+
+	if (!res.ok) {
+		return {
+			status: res.status,
+			message: await res.text()
+		};
+	}
 
 	const lessons = await res.json();
 
