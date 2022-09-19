@@ -152,7 +152,7 @@
 		overflow: hidden;
 		font: 500 14px/1 var(--font-sans);
 		letter-spacing: -0.006em;
-		z-index: 1;
+		z-index: 10;
 
 		@media (min-width: 480px) {
 			--pad-block: 10px;

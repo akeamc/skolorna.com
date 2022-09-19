@@ -23,7 +23,7 @@
 		align-items: center;
 		justify-content: center;
 		text-align: center;
-		background-color: var(--surface0);
+		background-color: var(--header-background);
 		border-bottom: var(--border);
 		margin-bottom: -1px;
 		position: sticky;
@@ -43,7 +43,12 @@
 		user-select: none;
 
 		&:hover {
-			background-color: var(--surface1);
+			background-color: var(--surface2);
+		}
+
+		&:focus {
+			outline: var(--theme-hover) solid 2px;
+			outline-offset: -2px;
 		}
 
 		:global(svg) {

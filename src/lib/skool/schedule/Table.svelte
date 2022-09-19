@@ -11,7 +11,7 @@
 	const { cursor, schedule, scope, startOfScope, endOfScope, offset } = getScheduleContext();
 	const now = DateTime.now();
 
-	$: numDays = $scope == "week" ? 7 : 1;
+	$: numDays = $scope == "week" ? 5 : 1;
 
 	$: cols = ($schedule?.lessons ?? []).reduce((cols, lesson) => {
 		const { start, end } = lesson;
@@ -89,6 +89,7 @@
 		--scale-font-size: 0.625rem;
 		--scale-letter-spacing: 0.01em;
 		--header-height: 6rem;
+		--header-background: var(--surface1);
 		--border: 1px solid var(--outline);
 
 		@media (min-width: 1024px) {
@@ -98,7 +99,7 @@
 		}
 
 		display: grid;
-		background-color: var(--surface1);
+		background-color: var(--surface0);
 		grid-template-columns: var(--scale-size);
 		grid-auto-columns: 1fr;
 		position: relative;
@@ -110,7 +111,7 @@
 			left: 0;
 			right: 0;
 			height: calc(8 * 3600 * var(--second-height));
-			background: linear-gradient(180deg, var(--surface1-transparent) 0%, var(--surface1) 100%);
+			background: linear-gradient(180deg, var(--surface0-transparent) 0%, var(--surface0) 100%);
 			pointer-events: none;
 		}
 	}
@@ -182,7 +183,7 @@
 
 	header,
 	.col-header {
-		background-color: var(--surface0);
+		background-color: var(--header-background);
 		position: sticky;
 		grid-column: 2;
 		z-index: 2;
@@ -251,7 +252,7 @@
 				font: 500 0.75rem/1 var(--font-sans);
 				letter-spacing: 0.01em;
 				color: var(--text0-muted);
-				background-color: var(--surface1);
+				background-color: var(--surface0);
 				padding-block: 0.1em;
 				padding-inline: 0.5em;
 				border-radius: 999px;

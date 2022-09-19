@@ -11,9 +11,16 @@
 	const [start, end] = lesson.seconds();
 	const color = lesson.color ? chroma(lesson.color) : null;
 	const hue = color?.get("hsl.h") || 0;
+	const sat = color?.get("hsl.s");
 </script>
 
-<div class="lesson" style:--start={start} style:--end={end} style:--hue={hue}>
+<div
+	class="lesson"
+	class:gray={sat === 0}
+	style:--start={start}
+	style:--end={end}
+	style:--hue={hue}
+>
 	<button class:compact={end - start <= 2700} on:click={() => lessonDialog.set(lesson.id)}>
 		<h3>{lesson.course}</h3>
 		<p>
@@ -27,6 +34,14 @@
 <style lang="scss">
 	.lesson {
 		--duration: calc(var(--end) - var(--start));
+		--background: hsl(var(--hue), 54%, 92%);
+		--foreground: hsl(var(--hue), 51%, 45%);
+		--shadow: hsla(var(--hue), 51%, 35% / 1);
+
+		@media (prefers-color-scheme: dark) {
+			--background: hsl(var(--hue), 40%, 20%);
+			--foreground: hsl(var(--hue), 40%, 80%);
+		}
 
 		position: absolute;
 		height: calc(var(--duration) * var(--second-height));
@@ -35,25 +50,24 @@
 		right: 0;
 		display: flex;
 		flex-direction: column;
+
+		&.gray {
+			--background: var(--surface1);
+			--foreground: var(--text0);
+		}
 	}
 
 	button {
 		--border-radius: 0.5rem;
-		--accent: hsl(var(--hue), 75%, 50%);
-
-		@media (prefers-color-scheme: dark) {
-			--accent: hsl(var(--hue), 40%, 50%);
-		}
 
 		all: unset;
 		flex: 1;
-		background-color: var(--surface0);
+		background-color: var(--background);
 		border-radius: var(--border-radius);
 		padding: 0.5rem;
-		padding-top: 0.75rem;
 		box-sizing: border-box;
 		overflow: hidden;
-		color: var(--text0-muted);
+		color: var(--foreground);
 		width: 100%;
 		cursor: pointer;
 		transition: box-shadow 0.1s;
@@ -61,17 +75,6 @@
 		flex-direction: column;
 		box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
 		position: relative;
-
-		&::before {
-			content: "";
-			position: absolute;
-			top: 0;
-			left: 0;
-			right: 0;
-			height: 0.25rem;
-			background-color: var(--accent);
-			border-radius: var(--border-radius);
-		}
 
 		&:hover,
 		&:focus {
@@ -84,16 +87,9 @@
 		}
 
 		&.compact {
-			padding: 0;
-			padding-left: 0.75rem;
+			padding-block: 0;
 			flex-direction: row;
 			align-items: center;
-
-			&::before {
-				bottom: 0;
-				height: 100%;
-				width: 0.25rem;
-			}
 
 			h3 {
 				margin-block: 0;
@@ -105,7 +101,6 @@
 	h3 {
 		margin: 0;
 		font-weight: 600;
-		color: var(--text0);
 		line-height: 1.1;
 		font-size: clamp(0.75rem, 1rem * var(--duration) / 3600, 0.875rem);
 		letter-spacing: -0.006em;
