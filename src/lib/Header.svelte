@@ -2,7 +2,7 @@
 	import { browser } from "$app/environment";
 	import { page } from "$app/stores";
 	import Search from "$lib/search/Search.svelte";
-	import { authenticated, user } from "./auth";
+	import { authenticated, authenticating, user } from "./auth";
 	import Button from "./Button.svelte";
 	import Skeleton from "./Skeleton.svelte";
 
@@ -13,8 +13,11 @@
 	<div class="container">
 		<Search />
 		<ul>
+			<li>
+				<a href="/schedule">Schema</a>
+			</li>
 			<hr />
-			{#if browser}
+			{#if browser && !$authenticating}
 				{#if $authenticated}
 					<li>
 						<a href="/account">

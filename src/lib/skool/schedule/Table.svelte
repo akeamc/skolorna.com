@@ -6,6 +6,7 @@
 	import { DateTime } from "luxon";
 	import { monthSpanFmt } from "$lib/date";
 	import Skeleton from "$lib/Skeleton.svelte";
+	import Clock from "./Clock.svelte";
 
 	let windowWidth: number;
 
@@ -52,6 +53,8 @@
 				{/if}
 			</div>
 		{/each}
+		
+		<Clock />
 	</aside>
 
 	<TableCorner />

@@ -39,7 +39,7 @@
 		justify-content: center;
 		border-radius: 0.5rem;
 		transition: background-color 0.1s;
-		color: var(--text0-muted);
+		color: var(--text0);
 		padding: 0.25rem;
 		user-select: none;
 

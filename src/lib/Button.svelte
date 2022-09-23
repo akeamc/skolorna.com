@@ -35,6 +35,7 @@
 		align-items: center;
 		text-align: center;
 		text-decoration: none;
+		user-select: none;
 
 		&:focus {
 			outline: var(--theme-hover) solid 2px;

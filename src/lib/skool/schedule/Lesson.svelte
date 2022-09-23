@@ -12,6 +12,10 @@
 	const color = lesson.color ? chroma(lesson.color) : null;
 	const hue = color?.get("hsl.h") || 0;
 	const sat = color?.get("hsl.s");
+
+	function timeFmt(time: DateTime) {
+		return time.setLocale("sv").toLocaleString(DateTime.TIME_SIMPLE)
+	}
 </script>
 
 <div
@@ -24,9 +28,9 @@
 	<button class:compact={end - start <= 2700} on:click={() => lessonDialog.set(lesson.id)}>
 		<h3>{lesson.course}</h3>
 		<p>
-			{lesson.start.setLocale("sv").toLocaleString(DateTime.TIME_SIMPLE)}
-			{#if lesson.teacher}<span>{lesson.teacher}</span>{/if}
+			{timeFmt(lesson.start)}–{timeFmt(lesson.end)}
 			{#if lesson.location}<span>{lesson.location}</span>{/if}
+			{#if lesson.teacher}<span>{lesson.teacher}</span>{/if}
 		</p>
 	</button>
 </div>

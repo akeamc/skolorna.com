@@ -22,6 +22,8 @@
 			return;
 		}
 
+		error = null;
+
 		const res = await register({
 			full_name: name,
 			email,
