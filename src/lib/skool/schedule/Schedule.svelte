@@ -8,6 +8,7 @@
 	import { hasCredentials } from "../stores";
 	import { setScheduleContext, type Scope } from "./schedule";
 	import Table from "./Table.svelte";
+	import logo from "$lib/assets/sterik.svg";
 
 	const cursor = writable(DateTime.now());
 	const scope = writable<Scope>("week");
@@ -53,7 +54,12 @@
 <section style:--offset={$offset}>
 	<div class="unauthenticated" class:visible={$hasCredentials === false}>
 		<div class="modal">
-			<Credentials />
+			<header>
+				<img alt="Sant Erik med solglasögon" src={logo} />
+			</header>
+			<div class="inner">
+				<Credentials />
+			</div>
 		</div>
 	</div>
 
@@ -89,21 +95,46 @@
 		}
 
 		.modal {
+			--padding: var(--page-gutter);
+			--border-radius: 0;
+
 			background-color: var(--surface0);
-			text-align: center;
 			margin: 0;
-			box-sizing: border-box;
-			padding: var(--page-gutter);
 			flex: 1;
 			max-width: 100%;
+			border-radius: var(--border-radius);
 
 			@media (min-width: 480px) {
-				padding: 2rem;
+				--padding: 2rem;
+				--border-radius: 1rem;
+
 				box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-				border-radius: 1rem;
-				width: 40rem;
-				margin-top: 10rem;
+				width: 30rem;
+				margin-top: 4rem;
 				flex: 0;
+			}
+
+			header {
+				background-color: var(--surface1);
+				padding: var(--padding);
+				border-start-start-radius: var(--border-radius);
+				border-start-end-radius: var(--border-radius);
+				display: flex;
+				justify-content: center;
+			}
+
+			img {
+				display: block;
+				width: 100%;
+				max-width: 8rem;
+
+				@media (prefers-color-scheme: dark) {
+					filter: saturate(0.5);
+				}
+			}
+
+			.inner {
+				padding: var(--padding);
 			}
 		}
 	}

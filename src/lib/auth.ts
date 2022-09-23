@@ -1,6 +1,8 @@
 import { browser } from "$app/environment";
 import { goto } from "$app/navigation";
+import { navigating, page } from "$app/stores";
 import { decodeJwt } from "jose";
+import { onMount } from "svelte";
 import { derived, get, writable } from "svelte/store";
 import { authedFetch } from "./client";
 
@@ -213,4 +215,17 @@ export async function resetPassword(
 	if (!res.ok) {
 		return { status: res.status, message: await res.text() };
 	}
+}
+
+export function requireAuth(next?: string): void {
+	const s = derived([authenticated, authenticating, navigating], (v) => v);
+
+	onMount(() =>
+		s.subscribe(([auth, authing, nav]) => {
+			if (!auth && !authing && !nav) {
+				console.log("going");
+				goto(`/login?next=${next || get(page).url.pathname}`);
+			}
+		})
+	);
 }

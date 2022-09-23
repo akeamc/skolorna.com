@@ -14,7 +14,7 @@
 	const sat = color?.get("hsl.s");
 
 	function timeFmt(time: DateTime) {
-		return time.setLocale("sv").toLocaleString(DateTime.TIME_SIMPLE)
+		return time.setLocale("sv").toLocaleString(DateTime.TIME_SIMPLE);
 	}
 </script>
 

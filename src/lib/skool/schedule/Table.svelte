@@ -29,6 +29,8 @@
 
 	$: if (windowWidth < 768) {
 		$scope = "day";
+	} else {
+		$scope = "week";
 	}
 
 	$: scale = Array.from({ length: 24 * (60 / 15) })
@@ -53,7 +55,7 @@
 				{/if}
 			</div>
 		{/each}
-		
+
 		<Clock />
 	</aside>
 
@@ -101,7 +103,7 @@
 <style lang="scss">
 	.root {
 		--second-height: calc(4rem / 3600);
-		--scale-size: 4rem;
+		--scale-size: 3.5rem;
 		--scale-font-size: 0.625rem;
 		--scale-letter-spacing: 0.01em;
 		--header-height: 6rem;
@@ -161,6 +163,8 @@
 		grid-row: 3;
 		position: relative;
 
+		--font: 500 var(--scale-font-size) / 1 var(--font-sans);
+
 		div {
 			position: absolute;
 			top: calc((var(--mins) * 60 - var(--offset)) * var(--second-height));
@@ -189,7 +193,7 @@
 				left: 0.5rem;
 				top: 50%;
 				transform: translateY(-50%);
-				font: 500 var(--scale-font-size) / 1 var(--font-sans);
+				font: var(--font);
 				letter-spacing: var(--scale-letter-spacing);
 				color: var(--text0-muted);
 				font-feature-settings: "tnum";

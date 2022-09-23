@@ -1,15 +1,10 @@
 <script lang="ts">
-	import { browser } from "$app/environment";
-	import { navigating } from "$app/stores";
-	import { goto } from "$app/navigation";
-	import { authenticated, logout, user } from "$lib/auth";
+	import { logout, requireAuth, user } from "$lib/auth";
 	import Button from "$lib/Button.svelte";
 	import Credentials from "$lib/skool/Credentials.svelte";
 	import Skeleton from "$lib/Skeleton.svelte";
 
-	$: if (browser && !$authenticated && !$navigating) {
-		goto("/login?next=/account");
-	}
+	requireAuth();
 </script>
 
 <div class="root">
