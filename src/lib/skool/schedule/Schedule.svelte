@@ -6,7 +6,7 @@
 	import { getSchedule, type Schedule } from "../client";
 	import Credentials from "../Credentials.svelte";
 	import { hasCredentials } from "../stores";
-	import { setScheduleContext, type Scope } from "./schedule";
+	import { endOfScope, setScheduleContext, startOfScope, type Scope } from "./schedule";
 	import Table from "./Table.svelte";
 	import logo from "$lib/assets/sterik.svg";
 
@@ -44,8 +44,8 @@
 		loading,
 		cursor,
 		scope,
-		startOfScope: derived([cursor, scope], ([$cursor, $scope]) => $cursor.startOf($scope)),
-		endOfScope: derived([cursor, scope], ([$cursor, $scope]) => $cursor.endOf($scope)),
+		startOfScope: derived([cursor, scope], ([$cursor, $scope]) => startOfScope($cursor, $scope)),
+		endOfScope: derived([cursor, scope], ([$cursor, $scope]) => endOfScope($cursor, $scope)),
 		lessonDialog,
 		offset
 	});

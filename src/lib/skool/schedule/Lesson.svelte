@@ -3,6 +3,7 @@
 	import chroma from "chroma-js";
 	import { DateTime } from "luxon";
 	import { getScheduleContext } from "./schedule";
+	import { onMount } from "svelte";
 
 	export let lesson: Lesson;
 
@@ -12,14 +13,26 @@
 	const color = lesson.color ? chroma(lesson.color) : null;
 	const hue = color?.get("hsl.h") || 0;
 	const sat = color?.get("hsl.s");
+	let ended = +lesson.end <= +DateTime.now();
 
 	function timeFmt(time: DateTime) {
 		return time.setLocale("sv").toLocaleString(DateTime.TIME_SIMPLE);
 	}
+
+	onMount(() => {
+		const interval = setInterval(() => {
+			ended = +lesson.end <= +DateTime.now();
+		}, 1000);
+
+		return () => {
+			clearInterval(interval);
+		};
+	});
 </script>
 
 <div
 	class="lesson"
+	class:ended
 	class:gray={sat === 0}
 	style:--start={start}
 	style:--end={end}
@@ -57,6 +70,11 @@
 
 		&.gray {
 			--background: var(--surface1);
+			--foreground: var(--text0);
+		}
+
+		&.ended {
+			opacity: 0.5;
 			--foreground: var(--text0);
 		}
 	}

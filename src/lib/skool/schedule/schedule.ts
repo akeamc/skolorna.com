@@ -7,6 +7,15 @@ export const key = Symbol();
 
 export type Scope = "day" | "week";
 
+export function startOfScope(cursor: DateTime, scope: Scope): DateTime {
+	return cursor.startOf(scope);
+}
+
+export function endOfScope(cursor: DateTime, scope: Scope): DateTime {
+	if (scope === "week") return cursor.endOf("week").minus({ days: 2 });
+	else return cursor.startOf(scope);
+}
+
 export interface ScheduleContext {
 	schedule: Readable<Schedule | null>;
 	loading: Readable<boolean>;
