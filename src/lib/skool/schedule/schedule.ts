@@ -13,7 +13,7 @@ export function startOfScope(cursor: DateTime, scope: Scope): DateTime {
 
 export function endOfScope(cursor: DateTime, scope: Scope): DateTime {
 	if (scope === "week") return cursor.endOf("week").minus({ days: 2 });
-	else return cursor.startOf(scope);
+	else return cursor.endOf(scope);
 }
 
 export interface ScheduleContext {
