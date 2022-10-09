@@ -1,5 +1,6 @@
 <script lang="ts">
-	import type { PageData } from "./$types";
+	import Animation from "$lib/animation/Animation.svelte";
+import type { PageData } from "./$types";
 
 	export let data: PageData;
 
@@ -10,6 +11,7 @@
 <section class="hero">
 	<h1>Vi vet vad det blir till lunch på <em>{menus}</em> ställen</h1>
 	<p>Hittills har vi arkiverat {days} måltider.</p>
+	<Animation days={data?.days || 0} />
 </section>
 
 <style lang="scss">
