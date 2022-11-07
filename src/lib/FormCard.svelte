@@ -1,7 +1,15 @@
+<script lang="ts">
+	import { browser } from "$app/environment";
+
+	export let browserOnly = false;
+</script>
+
 <div class="root">
-	<div class="card">
-		<slot />
-	</div>
+	{#if !browserOnly || browser}
+		<div class="card" class:animate={browserOnly}>
+			<slot />
+		</div>
+	{/if}
 </div>
 
 <style lang="scss">
@@ -17,6 +25,19 @@
 		margin: calc(var(--header-height) + var(--page-gutter)) 0;
 		text-align: center;
 		font: 400 14px var(--font-sans);
+	}
+
+	.animate {
+		animation: enter 0.3s ease-in-out;
+	}
+
+	@keyframes enter {
+		0% {
+			opacity: 0;
+		}
+		100% {
+			opacity: 1;
+		}
 	}
 
 	@media (min-width: 480px) {
@@ -48,6 +69,7 @@
 
 	.card :global(p) {
 		margin-block: 1rem 0;
+		line-height: 1.5;
 	}
 
 	.card :global(button) {

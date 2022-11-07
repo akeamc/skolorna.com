@@ -32,7 +32,7 @@
 	@include brand-alpha("brand-transparent", 0.2, 0.1);
 	@include brand-alpha("brand-transparent-active", 0.25, 0.15);
 
-	--text0-light: hsl(var(--brand-hue) var(--brand-saturation) 10%);
+	--text0-light: hsl(var(--brand-hue) var(--brand-saturation) 5%);
 	--text0-muted-light: hsl(var(--brand-hue) 10% 50%);
 	--surface0-light: hsl(var(--brand-hue) 25% 97%);
 	--surface0-transparent-light: hsla(var(--brand-hue) 25% 97% / 0);
@@ -114,6 +114,8 @@ body {
 a {
 	color: var(--brand);
 	font-weight: 500;
+	text-decoration: underline;
+	cursor: pointer;
 
 	&:hover,
 	&:focus {

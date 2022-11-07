@@ -8,10 +8,10 @@ import { authedFetch } from "./client";
 
 export const API_URL = "https://api2.skolorna.com/v0/auth";
 
-interface PasswordTokenRequest {
-	grant_type: "password";
-	username: string;
-	password: string;
+interface OtpTokenRequest {
+	grant_type: "otp";
+	token: string;
+	otp: string;
 }
 
 interface RefreshTokenRequest {
@@ -19,7 +19,7 @@ interface RefreshTokenRequest {
 	refresh_token: string;
 }
 
-type TokenRequest = PasswordTokenRequest | RefreshTokenRequest;
+type TokenRequest = OtpTokenRequest | RefreshTokenRequest;
 
 interface TokenResponse {
 	access_token: string;
@@ -32,6 +32,9 @@ export const refreshToken = writable<string | null>(
 );
 export const accessToken = writable<string | null>(
 	browser ? localStorage.getItem("access_token") : null
+);
+export const loginToken = writable<string | null>(
+	browser ? sessionStorage.getItem("login_token") : null
 );
 
 refreshToken.subscribe((v) => {
@@ -48,6 +51,13 @@ accessToken.subscribe((v) => {
 	}
 });
 
+loginToken.subscribe((v) => {
+	if (browser) {
+		if (v) sessionStorage.setItem("login_token", v);
+		else sessionStorage.removeItem("login_token");
+	}
+});
+
 export const authenticating = writable(false);
 export const authenticated = derived([accessToken], ([token]) => !!token);
 
@@ -61,12 +71,15 @@ export function logout(next?: string): void {
 	if (next) goto(next);
 	refreshToken.set(null);
 	accessToken.set(null);
+	loginToken.set(null);
 }
 
 function ingestTokenResponse(response: TokenResponse) {
 	accessToken.set(response.access_token);
 
 	if (response.refresh_token) refreshToken.set(response.refresh_token);
+
+	loginToken.set(null);
 }
 
 export interface AuthError {
@@ -102,15 +115,35 @@ export async function authenticate(req: TokenRequest): Promise<TokenResponse | A
 	return data;
 }
 
+interface LoginResponse {
+	token: string;
+}
+
+export async function login(email: string): Promise<void | AuthError> {
+	const res = await fetch(`${API_URL}/login`, {
+		method: "POST",
+		headers: {
+			"content-type": "application/json"
+		},
+		body: JSON.stringify({ email })
+	});
+
+	if (!res.ok) {
+		authenticating.set(false);
+		return { status: res.status, message: await res.text() };
+	}
+
+	const data: LoginResponse = await res.json();
+
+	loginToken.set(data.token);
+}
+
 export interface RegistrationRequest {
 	email: string;
-	password: string;
 	full_name: string;
 }
 
 export async function register(req: RegistrationRequest): Promise<void | AuthError> {
-	authenticating.set(true);
-
 	const res = await fetch(`${API_URL}/account`, {
 		method: "POST",
 		headers: {
@@ -125,8 +158,9 @@ export async function register(req: RegistrationRequest): Promise<void | AuthErr
 		return { status: res.status, message };
 	}
 
-	ingestTokenResponse(await res.json());
-	authenticating.set(false);
+	const data: LoginResponse = await res.json();
+
+	loginToken.set(data.token);
 }
 
 export async function getAccessToken(minimumValidity = 5): Promise<string | null> {

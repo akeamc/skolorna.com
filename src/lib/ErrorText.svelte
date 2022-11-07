@@ -10,6 +10,7 @@
 		font: 500 14px var(--font-sans);
 		color: var(--text0-error);
 		margin: 0;
+		text-align: start;
 
 		:global(a) {
 			color: var(--text0-error);

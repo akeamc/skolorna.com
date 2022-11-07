@@ -1,7 +1,14 @@
 <script lang="ts">
 	import { goto } from "$app/navigation";
 	import { page } from "$app/stores";
-	import { authenticating, authenticated, register, type AuthError, isError } from "$lib/auth";
+	import {
+		authenticating,
+		authenticated,
+		register,
+		loginToken,
+		type AuthError,
+		isError
+	} from "$lib/auth";
 	import Button from "$lib/Button.svelte";
 	import ErrorText from "$lib/ErrorText.svelte";
 	import Field from "$lib/form/Field.svelte";
@@ -11,14 +18,17 @@
 		goto($page.url.searchParams.get("next") || "/");
 	}
 
+	$: if ($loginToken) {
+		goto("/login");
+	}
+
 	let email = $page.url.searchParams.get("email") ?? "";
-	let password = "";
 	let name = "";
 
 	let error: AuthError | null = null;
 
 	const handleSubmit: svelte.JSX.EventHandler<SubmitEvent, HTMLFormElement> = async () => {
-		if (!name || !email || !password) {
+		if (!name || !email) {
 			return;
 		}
 
@@ -26,8 +36,7 @@
 
 		const res = await register({
 			full_name: name,
-			email,
-			password
+			email
 		});
 
 		if (isError(res)) {
@@ -36,7 +45,7 @@
 	};
 </script>
 
-<FormCard>
+<FormCard browserOnly>
 	<h1>Skapa konto</h1>
 
 	<form on:submit|preventDefault={handleSubmit}>
@@ -46,10 +55,6 @@
 
 		<Field inputId="email" label="E-postadress">
 			<input name="email" id="email" type="email" required bind:value={email} />
-		</Field>
-
-		<Field inputId="password" label="Lösenord">
-			<input name="password" id="password" type="password" required bind:value={password} />
 		</Field>
 
 		<Button type="submit" disabled={$authenticating}>
