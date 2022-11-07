@@ -34,7 +34,7 @@ export const accessToken = writable<string | null>(
 	browser ? localStorage.getItem("access_token") : null
 );
 export const loginToken = writable<string | null>(
-	browser ? sessionStorage.getItem("login_token") : null
+	browser ? localStorage.getItem("login_token") : null
 );
 
 refreshToken.subscribe((v) => {
@@ -53,8 +53,8 @@ accessToken.subscribe((v) => {
 
 loginToken.subscribe((v) => {
 	if (browser) {
-		if (v) sessionStorage.setItem("login_token", v);
-		else sessionStorage.removeItem("login_token");
+		if (v) localStorage.setItem("login_token", v);
+		else localStorage.removeItem("login_token");
 	}
 });
 
