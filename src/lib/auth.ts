@@ -1,10 +1,10 @@
-import { browser } from "$app/environment";
 import { goto } from "$app/navigation";
 import { navigating, page } from "$app/stores";
 import { decodeJwt } from "jose";
 import { onMount } from "svelte";
 import { derived, get, writable } from "svelte/store";
 import { authedFetch } from "./client";
+import { localStorageStore } from "./util/localstorage";
 
 export const API_URL = "https://api2.skolorna.com/v0/auth";
 
@@ -27,36 +27,9 @@ interface TokenResponse {
 	refresh_token?: string;
 }
 
-export const refreshToken = writable<string | null>(
-	browser ? localStorage.getItem("refresh_token") : null
-);
-export const accessToken = writable<string | null>(
-	browser ? localStorage.getItem("access_token") : null
-);
-export const loginToken = writable<string | null>(
-	browser ? localStorage.getItem("login_token") : null
-);
-
-refreshToken.subscribe((v) => {
-	if (browser) {
-		if (v) localStorage.setItem("refresh_token", v);
-		else localStorage.removeItem("refresh_token");
-	}
-});
-
-accessToken.subscribe((v) => {
-	if (browser) {
-		if (v) localStorage.setItem("access_token", v);
-		else localStorage.removeItem("access_token");
-	}
-});
-
-loginToken.subscribe((v) => {
-	if (browser) {
-		if (v) localStorage.setItem("login_token", v);
-		else localStorage.removeItem("login_token");
-	}
-});
+export const refreshToken = localStorageStore("refresh_token");
+export const accessToken = localStorageStore("access_token");
+export const loginToken = localStorageStore("login_token");
 
 export const authenticating = writable(false);
 export const authenticated = derived([accessToken], ([token]) => !!token);

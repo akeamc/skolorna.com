@@ -1,7 +1,7 @@
 import type { DateTime } from "luxon";
 import { getContext, setContext } from "svelte";
 import type { Readable, Writable } from "svelte/store";
-import type { Schedule } from "../client";
+import type { Schedule, SkoolError } from "../client";
 
 export const key = Symbol();
 
@@ -19,6 +19,7 @@ export function endOfScope(cursor: DateTime, scope: Scope): DateTime {
 export interface ScheduleContext {
 	schedule: Readable<Schedule | null>;
 	loading: Readable<boolean>;
+	error: Writable<SkoolError | null>;
 	cursor: Writable<DateTime>;
 	scope: Writable<Scope>;
 	startOfScope: Readable<DateTime>;

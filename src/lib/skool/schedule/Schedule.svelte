@@ -3,29 +3,39 @@
 	import { isError } from "$lib/auth";
 	import { DateTime } from "luxon";
 	import { derived, get, writable } from "svelte/store";
-	import { getSchedule, type Schedule } from "../client";
+	import { getSchedule, type Schedule, type SkoolError } from "../client";
 	import Credentials from "../Credentials.svelte";
 	import { hasCredentials } from "../stores";
 	import { endOfScope, setScheduleContext, startOfScope, type Scope } from "./schedule";
 	import Table from "./Table.svelte";
 	import logo from "$lib/assets/sterik.svg";
+	import SplashScreen from "./SplashScreen.svelte";
 
 	const cursor = writable(DateTime.now());
 	const scope = writable<Scope>("week");
 	const schedule = writable<Schedule | null>(null);
-	const loading = writable(false);
+	const loading = writable(true);
+	const error = writable<SkoolError | null>(null);
 	const lessonDialog = writable<string | null>(null);
 	const offset = writable(7 * 3600);
+	const splashScreen = writable(true);
+
+	loading.subscribe((v) => {
+		if (!v) splashScreen.set(false);
+	});
+
 	$: year = $cursor.year;
 	$: week = $cursor.weekNumber;
 
 	$: {
 		if (browser && $hasCredentials !== false) {
 			$loading = true;
+			$error = null;
 
 			getSchedule(year, week).then((res) => {
 				if (isError(res)) {
 					$loading = false;
+					$error = res;
 					return;
 				}
 
@@ -42,6 +52,7 @@
 	setScheduleContext({
 		schedule,
 		loading,
+		error,
 		cursor,
 		scope,
 		startOfScope: derived([cursor, scope], ([$cursor, $scope]) => startOfScope($cursor, $scope)),
@@ -52,18 +63,24 @@
 </script>
 
 <section style:--offset={$offset}>
-	<div class="unauthenticated" class:visible={$hasCredentials === false}>
-		<div class="modal">
-			<header>
-				<img alt="Sant Erik med solglasögon" src={logo} />
-			</header>
-			<div class="inner">
-				<Credentials />
+	{#if $hasCredentials === false}
+		<div class="unauthenticated">
+			<div class="modal">
+				<header>
+					<img alt="Sankt Erik med solglasögon" src={logo} />
+				</header>
+				<div class="inner">
+					<Credentials />
+				</div>
 			</div>
 		</div>
-	</div>
+	{/if}
 
-	<Table />
+	{#if $splashScreen || $hasCredentials !== true}
+		<SplashScreen />
+	{:else}
+		<Table />
+	{/if}
 </section>
 
 <style lang="scss">
@@ -81,17 +98,19 @@
 		align-items: center;
 		flex-direction: column;
 		box-sizing: border-box;
-		opacity: 0;
-		pointer-events: none;
-		transition: opacity 0.2s ease-in-out;
+		animation: enter 0.2s ease-out;
 
 		@media (min-width: 480px) {
 			padding: 0 var(--page-gutter);
 		}
 
-		&.visible {
-			opacity: 1;
-			pointer-events: all;
+		@keyframes enter {
+			0% {
+				opacity: 0;
+			}
+			100% {
+				opacity: 1;
+			}
 		}
 
 		.modal {

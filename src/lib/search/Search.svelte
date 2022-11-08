@@ -120,7 +120,7 @@
 		letter-spacing: -0.006em;
 		block-size: var(--box-block-size);
 		padding-inline-start: 2rem;
-		padding-inline-end: 1rem;
+		padding-inline-end: 0;
 		width: 100%;
 		border: 1px solid var(--outline);
 		border-radius: var(--border-radius);

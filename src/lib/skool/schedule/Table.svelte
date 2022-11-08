@@ -10,7 +10,7 @@
 
 	let windowWidth: number;
 
-	const { schedule, loading, cursor, scope, startOfScope, endOfScope, offset } =
+	const { schedule, loading, error, cursor, scope, startOfScope, endOfScope, offset } =
 		getScheduleContext();
 	const now = DateTime.now();
 
@@ -66,8 +66,10 @@
 			{monthSpanFmt($startOfScope.toJSDate(), $endOfScope.toJSDate(), "sv")}
 		</h1>
 		<span class="week">Vecka {$cursor.weekNumber}</span>
-		<div class="count">
-			{#if $loading || typeof numLessons !== "number"}
+		<div class="count" class:error={$error}>
+			{#if $error}
+				Ett fel uppstod. Förhoppingsvis är det Skolplattformens (och inte vårt) fel.
+			{:else if $loading || typeof numLessons !== "number"}
 				<Skeleton width="15ch" />
 			{:else}
 				{numLessons} {numLessons == 1 ? "lektion" : "lektioner"} hittades
@@ -293,6 +295,10 @@
 			grid-column: 1;
 			grid-row: 2;
 			align-self: flex-start;
+
+			&.error {
+				color: var(--text0-error);
+			}
 		}
 	}
 </style>
