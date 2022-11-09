@@ -1,8 +1,10 @@
 <script lang="ts">
 	import { goto } from "$app/navigation";
 	import { getKey, search, type SearchResponse } from "./client";
-	import { SearchIcon } from "svelte-feather-icons";
+	import { ClockIcon, SearchIcon } from "svelte-feather-icons";
 	import type { Menu } from "$lib/oden";
+	import reltime from "$lib/util/reltime";
+	import { DateTime } from "luxon";
 
 	let query = "";
 	let key: string;
@@ -16,7 +18,7 @@
 	$: {
 		if (!key) break $;
 
-		search<Menu>({ q: query }, key).then((r) => {
+		search<Menu>({ q: query, attributesToHighlight: ["title"] }, key).then((r) => {
 			if (r.query == query) {
 				// prevent race condition
 				response = r;
@@ -47,6 +49,8 @@
 				break;
 		}
 	};
+
+	const rtf = new Intl.RelativeTimeFormat("sv", { numeric: "auto" });
 </script>
 
 <div class="search">
@@ -71,7 +75,13 @@
 							tabindex="-1"
 							on:mousemove={() => (focusedHit = i)}
 						>
-							{hit.title}
+							<div class="title">
+								{@html hit._formatted?.title ?? hit.title}
+							</div>
+							<div class="updated">
+								<ClockIcon />
+								Uppdaterad {reltime(+DateTime.fromISO(hit.updated_at) - +DateTime.now(), rtf)}
+							</div>
 						</a>
 					</li>
 				{/each}
@@ -83,7 +93,7 @@
 				</div>
 			{:else}
 				<div class="stats">
-					{response.nbHits} resultat ({response.processingTimeMs} ms)
+					{response.estimatedTotalHits} resultat ({response.processingTimeMs} ms)
 				</div>
 			{/if}
 		</div>
@@ -138,7 +148,7 @@
 	}
 
 	.response {
-		--pad-block: 12px;
+		--pad-block: 10px;
 		--pad-inline: 8px;
 
 		display: none;
@@ -150,16 +160,11 @@
 		box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
 		width: 100%;
 		overflow: hidden;
-		font: 500 14px/1 var(--font-sans);
-		letter-spacing: -0.006em;
+		font: 500 0.75rem/1 var(--font-sans);
+		letter-spacing: 0;
 		z-index: 10;
-
-		@media (min-width: 480px) {
-			--pad-block: 10px;
-
-			font-size: 12px;
-			letter-spacing: 0;
-		}
+		max-height: min(50vh, 26rem);
+		overflow-y: auto;
 	}
 
 	.search:focus-within .response {
@@ -174,6 +179,9 @@
 	}
 
 	li a {
+		--primary: var(--text0);
+		--secondary: var(--text0-muted);
+
 		display: block;
 		padding-block: var(--pad-block);
 		padding-inline: var(--pad-inline);
@@ -182,19 +190,47 @@
 		text-overflow: ellipsis;
 		margin: 0;
 		border-bottom: 1px solid var(--color-separator);
-		color: var(--color-on-surface);
 		text-decoration: none;
 		border-bottom: 1px solid var(--outline);
 
 		&.focus {
+			--primary: var(--on-theme);
+			--secondary: var(--on-theme);
+
 			background-color: var(--theme-hover);
-			color: var(--on-theme);
 			outline: none;
 		}
 
 		&:active {
+			--primary: var(--on-theme);
+			--secondary: var(--on-theme);
+
 			background-color: var(--theme-active);
-			color: var(--on-theme);
+		}
+
+		.title {
+			color: var(--primary);
+		}
+
+		.title :global(em) {
+			font-style: normal;
+			text-decoration: underline;
+		}
+
+		.updated {
+			margin-block-start: 0.5rem;
+			display: flex;
+			align-items: center;
+			color: var(--secondary);
+
+			:global(svg) {
+				--size: 0.75rem;
+
+				width: var(--size);
+				height: var(--size);
+				flex: 0 0 var(--size);
+				margin-inline-end: 0.25rem;
+			}
 		}
 	}
 
@@ -204,7 +240,8 @@
 		justify-content: center;
 		text-align: center;
 		flex-direction: column;
-		padding-block: 24px;
+		padding-block: 1.5rem;
+		color: var(--text0-muted);
 
 		pre {
 			font: 400 20px/1 var(--font-sans);

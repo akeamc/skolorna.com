@@ -5,13 +5,15 @@ export async function getKey(): Promise<string> {
 	return res.text();
 }
 
-export type Hit<T> = T;
+export type Hit<T> = T & {
+	_formatted?: T;
+};
 
 export interface SearchResponse<T> {
 	exhaustiveHits: boolean;
 	hits: Hit<T>[];
 	limit: number;
-	nbHits: number;
+	estimatedTotalHits: number;
 	offset: number;
 	processingTimeMs: number;
 	query: string;
@@ -23,13 +25,14 @@ type Direction = "asc" | "desc";
 
 type Sort = `${SortableAttribute}:${Direction}`;
 
-export interface SearchRequest {
+export interface SearchRequest<T> {
 	q: string;
 	sort?: Sort[];
+	attributesToHighlight?: (keyof T)[];
 }
 
-export async function search<T>(req: SearchRequest, key: string): Promise<SearchResponse<T>> {
-	const res = await fetch("https://api.skolorna.com/v0/search/indexes/menus/search", {
+export async function search<T>(req: SearchRequest<T>, key: string): Promise<SearchResponse<T>> {
+	const res = await fetch("https://api2.skolorna.com/v0/search/indexes/menus/search", {
 		method: "POST",
 		headers: {
 			authorization: `Bearer ${key}`,

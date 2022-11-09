@@ -44,7 +44,9 @@
 	{#if error}
 		<ErrorText>
 			{#if error.status === 400}
-				Inget konto med den e-postadressen hittades.
+				Inget konto med den e-postadressen hittades. Vill du <a
+					href={`/register?next=${next}&email=${email}`}>skapa ett</a
+				>?
 			{:else}
 				Något gick fel. Försök igen.
 			{/if}

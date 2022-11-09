@@ -1,7 +1,7 @@
 import { error } from "@sveltejs/kit";
 import type { DateTime } from "luxon";
 
-const API_URL = "https://api.skolorna.com/v0/oden";
+const API_URL = "https://api2.skolorna.com/v0/oden";
 
 export async function get(path: string): Promise<Response> {
 	return fetch(`${API_URL}${path}`);
