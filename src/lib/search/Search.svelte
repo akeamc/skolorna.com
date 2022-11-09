@@ -10,6 +10,7 @@
 	let key: string;
 	let response: SearchResponse<Menu>;
 	let focusedHit = 0;
+	let responseElement: HTMLElement;
 
 	getKey().then((k) => {
 		key = k;
@@ -27,6 +28,11 @@
 		});
 	}
 
+	const scrollToFocused = () => {
+		const element = document.querySelector(`[data-hit-no="${focusedHit}"]`);
+		if (element) element.scrollIntoView({ block: "center", behavior: "smooth" });
+	};
+
 	const handleKeyDown: svelte.JSX.KeyboardEventHandler<HTMLInputElement> = (e) => {
 		const hit = response?.hits[focusedHit];
 
@@ -42,10 +48,12 @@
 			case "ArrowUp":
 				e.preventDefault(); // don't move the cursor
 				focusedHit = Math.max(focusedHit - 1, 0);
+				scrollToFocused();
 				break;
 			case "ArrowDown":
 				e.preventDefault(); // don't move the cursor
 				focusedHit = Math.min((response?.hits.length || 0) - 1, focusedHit + 1);
+				scrollToFocused();
 				break;
 		}
 	};
@@ -64,7 +72,7 @@
 		/>
 	</div>
 	{#if response}
-		<div class="response">
+		<div class="response" bind:this={responseElement}>
 			<ol>
 				{#each response.hits as hit, i (hit.id)}
 					<li>
@@ -73,6 +81,7 @@
 							data-sveltekit-prefetch
 							class:focus={i === focusedHit}
 							tabindex="-1"
+							data-hit-no={i}
 							on:mousemove={() => (focusedHit = i)}
 						>
 							<div class="title">
@@ -151,7 +160,7 @@
 		--pad-block: 10px;
 		--pad-inline: 8px;
 
-		display: none;
+		opacity: 0;
 		pointer-events: none;
 		position: absolute;
 		top: calc(100% + 8px);
@@ -163,13 +172,16 @@
 		font: 500 0.75rem/1 var(--font-sans);
 		letter-spacing: 0;
 		z-index: 10;
-		max-height: min(50vh, 26rem);
+		max-height: min(80vh, 30rem);
 		overflow-y: auto;
+		transform: translateY(-8px);
+		transition: all 0.15s ease-in-out;
 	}
 
 	.search:focus-within .response {
-		display: block;
+		opacity: 1;
 		pointer-events: auto;
+		transform: translateY(0);
 	}
 
 	ol {
