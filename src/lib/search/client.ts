@@ -9,6 +9,14 @@ export type Hit<T> = T & {
 	_formatted?: T;
 };
 
+export interface IndexedMenu {
+	id: string;
+	title: string;
+	slug: string;
+	updated_at: string;
+	last_day: string;
+}
+
 export interface SearchResponse<T> {
 	exhaustiveHits: boolean;
 	hits: Hit<T>[];
@@ -19,7 +27,7 @@ export interface SearchResponse<T> {
 	query: string;
 }
 
-type SortableAttribute = "updated_at";
+type SortableAttribute = "updated_at" | "last_day";
 
 type Direction = "asc" | "desc";
 

@@ -1,14 +1,13 @@
 <script lang="ts">
 	import { goto } from "$app/navigation";
-	import { getKey, search, type SearchResponse } from "./client";
+	import { getKey, search, type IndexedMenu, type SearchResponse } from "./client";
 	import { ClockIcon, SearchIcon } from "svelte-feather-icons";
-	import type { Menu } from "$lib/oden";
 	import reltime from "$lib/util/reltime";
 	import { DateTime } from "luxon";
 
 	let query = "";
 	let key: string;
-	let response: SearchResponse<Menu>;
+	let response: SearchResponse<IndexedMenu>;
 	let focusedHit = 0;
 	let responseElement: HTMLElement;
 
@@ -19,7 +18,10 @@
 	$: {
 		if (!key) break $;
 
-		search<Menu>({ q: query, attributesToHighlight: ["title"] }, key).then((r) => {
+		search<IndexedMenu>(
+			{ q: query, attributesToHighlight: ["title"], sort: ["last_day:desc"] },
+			key
+		).then((r) => {
 			if (r.query == query) {
 				// prevent race condition
 				response = r;
