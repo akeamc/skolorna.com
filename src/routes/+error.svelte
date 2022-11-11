@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { page } from "$app/stores";
+	import Seo from "$lib/Seo.svelte";
 </script>
 
 <div class="root">
@@ -12,13 +13,15 @@
 	{:else}
 		<h1>Okänt fel</h1>
 		<p>
-			Ett okänt fel uppstod: <code>{$page.error.message}</code>
+			Ett okänt fel uppstod: <code>{$page.error?.message}</code>
 		</p>
-		{#if $page.error.stack}
-			<pre>{$page.error.stack}</pre>
+		{#if $page.error?.stack}
+			<pre>{$page.error?.stack}</pre>
 		{/if}
 	{/if}
 </div>
+
+<Seo />
 
 <style lang="scss">
 	.root {

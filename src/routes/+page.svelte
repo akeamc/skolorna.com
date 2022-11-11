@@ -1,4 +1,5 @@
 <script lang="ts">
+	import Seo from "$lib/Seo.svelte";
 	import type { PageData } from "./$types";
 
 	export let data: PageData;
@@ -6,6 +7,8 @@
 	const menus = data?.menus.toLocaleString("sv") ?? "jättemånga";
 	const days = data?.days.toLocaleString("sv") ?? "ett astronomiskt antal";
 </script>
+
+<Seo />
 
 <section class="hero">
 	<h1>Vi vet vad det blir till lunch på <em>{menus}</em> ställen</h1>

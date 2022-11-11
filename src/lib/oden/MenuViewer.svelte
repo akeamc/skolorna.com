@@ -2,9 +2,10 @@
 	import { ChevronLeftIcon, ChevronRightIcon } from "svelte-feather-icons";
 	import Skeleton from "$lib/Skeleton.svelte";
 	import { DateTime } from "luxon";
-	import { spanfmt } from "./date";
-	import { getDays, type Day } from "./oden";
+	import { spanfmt } from "../date";
+	import { getDays, type Day } from "../oden";
 	import { browser } from "$app/environment";
+	import DayComponent from "./Day.svelte";
 
 	export let menu: string;
 
@@ -19,15 +20,6 @@
 					// never resolve
 			  });
 
-	function dayfmt(date: string) {
-		return new Date(date).toLocaleString("sv", {
-			weekday: "short",
-			day: "numeric",
-			month: "short",
-			year: "numeric"
-		});
-	}
-
 	const now = DateTime.now();
 </script>
 
@@ -37,7 +29,12 @@
 			<button on:click={() => cursor && (cursor = cursor.minus({ weeks: 1 }))}>
 				<ChevronLeftIcon />
 			</button>
-			<button class="wide" on:click={() => (cursor = DateTime.now())}> Idag </button>
+			<button
+				class="wide"
+				on:click={() => {
+					cursor = DateTime.now();
+				}}>Idag</button
+			>
 			<button on:click={() => cursor && (cursor = cursor.plus({ weeks: 1 }))}>
 				<ChevronRightIcon />
 			</button>
@@ -55,16 +52,7 @@
 		{#await days then days}
 			<ol>
 				{#each days as day (day.date)}
-					<li class="day">
-						<h3 class:today={day.date == now.toISODate()}>
-							{dayfmt(day.date)}
-						</h3>
-						<ul>
-							{#each day.meals as meal}
-								<li>{meal.value}</li>
-							{/each}
-						</ul>
-					</li>
+					<DayComponent data={day} today={day.date === now.toISODate()} />
 				{/each}
 			</ol>
 			{#if days.length == 0}
@@ -164,47 +152,10 @@
 		border-top: var(--border);
 	}
 
-	ul,
 	ol {
 		list-style: none;
 		margin: 0;
 		padding: 0;
-	}
-
-	.day {
-		padding-block: 1.5rem;
-		border-bottom: var(--border);
-
-		h3 {
-			font: 500 0.875rem/1 var(--font-sans);
-			letter-spacing: -0.006em;
-			color: var(--text0-muted);
-			margin-block: 0 1rem;
-			position: relative;
-
-			&.today {
-				color: var(--brand);
-
-				&::before {
-					--size: 0.4em;
-
-					content: "";
-					position: absolute;
-					inset-inline-start: calc(-2 * var(--size));
-					inset-block: calc(50% - var(--size) / 2);
-					width: var(--size);
-					height: var(--size);
-					border-radius: 50%;
-					background: currentColor;
-				}
-			}
-		}
-
-		li {
-			font: 500 1.125rem/1.2 var(--font-sans);
-			letter-spacing: -0.014em;
-			margin-block: 1rem 0;
-		}
 	}
 
 	.void {

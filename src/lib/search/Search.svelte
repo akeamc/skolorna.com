@@ -1,8 +1,7 @@
 <script lang="ts">
 	import { goto } from "$app/navigation";
 	import { getKey, search, type IndexedMenu, type SearchResponse } from "./client";
-	import { ClockIcon, SearchIcon } from "svelte-feather-icons";
-	import reltime from "$lib/util/reltime";
+	import { ArchiveIcon, SearchIcon } from "svelte-feather-icons";
 	import { DateTime } from "luxon";
 
 	let query = "";
@@ -45,6 +44,7 @@
 			case "Enter":
 				if (hit) {
 					goto(`/menyer/${hit.id}`);
+					e.currentTarget.blur();
 				}
 				break;
 			case "ArrowUp":
@@ -60,7 +60,7 @@
 		}
 	};
 
-	const rtf = new Intl.RelativeTimeFormat("sv", { numeric: "auto" });
+	const today = DateTime.local().startOf("day");
 </script>
 
 <div class="search">
@@ -77,11 +77,14 @@
 		<div class="response" bind:this={responseElement}>
 			<ol>
 				{#each response.hits as hit, i (hit.id)}
+					{@const lastDay = hit.last_day ? DateTime.fromISO(hit.last_day).setLocale("sv") : null}
+					{@const outdated = lastDay && lastDay < today}
 					<li>
 						<a
 							href={`/menyer/${hit.id}`}
 							data-sveltekit-prefetch
 							class:focus={i === focusedHit}
+							class:outdated
 							tabindex="-1"
 							data-hit-no={i}
 							on:mousemove={() => (focusedHit = i)}
@@ -89,9 +92,15 @@
 							<div class="title">
 								{@html hit._formatted?.title ?? hit.title}
 							</div>
-							<div class="updated">
-								<ClockIcon />
-								Uppdaterad {reltime(+DateTime.fromISO(hit.updated_at) - +DateTime.now(), rtf)}
+							<div class="last">
+								{#if outdated}
+									<ArchiveIcon />
+								{/if}
+								{#if lastDay}
+									Till och med {lastDay?.toLocaleString(DateTime.DATE_FULL)}
+								{:else}
+									Ingen information
+								{/if}
 							</div>
 						</a>
 					</li>
@@ -104,7 +113,8 @@
 				</div>
 			{:else}
 				<div class="stats">
-					{response.estimatedTotalHits} resultat ({response.processingTimeMs} ms)
+					{response.hits.length} av {response.estimatedTotalHits} resultat ({response.processingTimeMs}
+					ms)
 				</div>
 			{/if}
 		</div>
@@ -150,6 +160,14 @@
 
 	input::placeholder {
 		color: var(--text0-muted);
+	}
+
+	input {
+		-webkit-appearance: textfield;
+	}
+
+	input::-webkit-search-decoration {
+		-webkit-appearance: none;
 	}
 
 	input:focus {
@@ -207,6 +225,11 @@
 		text-decoration: none;
 		border-bottom: 1px solid var(--outline);
 
+		&.outdated {
+			--primary: var(--text0-muted);
+			--secondary: var(--text0-muted);
+		}
+
 		&.focus {
 			--primary: var(--on-theme);
 			--secondary: var(--on-theme);
@@ -231,11 +254,12 @@
 			text-decoration: underline;
 		}
 
-		.updated {
+		.last {
 			margin-block-start: 0.5rem;
 			display: flex;
 			align-items: center;
 			color: var(--secondary);
+			gap: 0.25rem;
 
 			:global(svg) {
 				--size: 0.75rem;
@@ -243,7 +267,6 @@
 				width: var(--size);
 				height: var(--size);
 				flex: 0 0 var(--size);
-				margin-inline-end: 0.25rem;
 			}
 		}
 	}

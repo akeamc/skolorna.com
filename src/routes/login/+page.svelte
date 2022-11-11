@@ -5,6 +5,7 @@
 	import LoginForm from "$lib/auth/LoginForm.svelte";
 	import OtpForm from "$lib/auth/OtpForm.svelte";
 	import FormCard from "$lib/FormCard.svelte";
+	import Seo from "$lib/Seo.svelte";
 
 	let next: string;
 	let otp: string;
@@ -16,6 +17,8 @@
 		goto(next);
 	}
 </script>
+
+<Seo title="Logga in" />
 
 <FormCard browserOnly>
 	{#if $loginToken || otp}

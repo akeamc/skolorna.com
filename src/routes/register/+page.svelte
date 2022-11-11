@@ -13,6 +13,7 @@
 	import ErrorText from "$lib/ErrorText.svelte";
 	import Field from "$lib/form/Field.svelte";
 	import FormCard from "$lib/FormCard.svelte";
+	import Seo from "$lib/Seo.svelte";
 
 	$: if ($authenticated) {
 		goto($page.url.searchParams.get("next") || "/");
@@ -44,6 +45,8 @@
 		}
 	};
 </script>
+
+<Seo title="Skapa konto" />
 
 <FormCard browserOnly>
 	<h1>Skapa konto</h1>

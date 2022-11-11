@@ -1,7 +1,8 @@
 <script lang="ts">
 	import { browser } from "$app/environment";
 
-	import MenuViewer from "$lib/MenuViewer.svelte";
+	import MenuViewer from "$lib/oden/MenuViewer.svelte";
+	import Seo from "$lib/Seo.svelte";
 	import Skeleton from "$lib/Skeleton.svelte";
 	import { DateTime } from "luxon";
 	import type { PageData } from "./$types";
@@ -20,6 +21,8 @@
 		  })
 		: null;
 </script>
+
+<Seo title={data.title} />
 
 <div class="container">
 	<header>

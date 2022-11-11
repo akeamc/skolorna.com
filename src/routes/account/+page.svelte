@@ -3,9 +3,12 @@
 	import Button from "$lib/Button.svelte";
 	import Credentials from "$lib/skool/Credentials.svelte";
 	import Skeleton from "$lib/Skeleton.svelte";
+	import Seo from "$lib/Seo.svelte";
 
 	requireAuth();
 </script>
+
+<Seo title="Konto" />
 
 <div class="root">
 	<h1>
