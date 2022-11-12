@@ -8,7 +8,6 @@
 	let key: string;
 	let response: SearchResponse<IndexedMenu>;
 	let focusedHit = 0;
-	let responseElement: HTMLElement;
 
 	getKey().then((k) => {
 		key = k;
@@ -69,12 +68,13 @@
 		<input
 			type="search"
 			placeholder="Sök efter menyer …"
+			role="searchbox"
 			bind:value={query}
 			on:keydown={handleKeyDown}
 		/>
 	</div>
 	{#if response}
-		<div class="response" bind:this={responseElement}>
+		<div class="response">
 			<ol>
 				{#each response.hits as hit, i (hit.id)}
 					{@const lastDay = hit.last_day ? DateTime.fromISO(hit.last_day).setLocale("sv") : null}
