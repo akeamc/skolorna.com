@@ -1,14 +1,21 @@
 <script lang="ts">
 	import logo from "$lib/assets/sterik.svg";
+	import { getScheduleContext } from "./schedule";
+
+	const { error } = getScheduleContext();
 </script>
 
-<div class="container">
+<div class="container" class:stale={$error}>
 	<div class="logo">
 		<img src={logo} alt="Sankt Erik med solglasögon" />
 		<div class="wave" />
 	</div>
 	<h1>Skålplattformen™</h1>
-	<p>Läser in <i>The cooler Skolplattformen</i>.</p>
+	{#if $error}
+		<p class:error>Ett fel uppstod. Förhoppingsvis är det Skolplattformens (och inte vårt) fel.</p>
+	{:else}
+		<p>Läser in <i>The cooler Skolplattformen</i>.</p>
+	{/if}
 </div>
 
 <style lang="scss">
@@ -44,6 +51,11 @@
 		object-fit: contain;
 	}
 
+	.container.stale img {
+		animation: none;
+		filter: saturate(0);
+	}
+
 	.wave {
 		content: "";
 		display: block;
@@ -65,9 +77,14 @@
 	}
 
 	p {
-		font: 400 1rem/1 var(--font-sans);
+		font: 400 1rem/1.2 var(--font-sans);
 		color: var(--text0-muted);
 		margin: 0;
+
+		&.error {
+			color: var(--text0-error);
+			font-weight: 500;
+		}
 	}
 
 	@keyframes enter {
