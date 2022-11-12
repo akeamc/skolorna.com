@@ -8,8 +8,6 @@
 <style lang="scss">
 	.skeleton {
 		background-color: var(--surface2);
-		background-repeat: no-repeat;
-		background-size: 100vw 100%;
 		border-radius: 0.75rem;
 		display: inline-block;
 		line-height: 1;

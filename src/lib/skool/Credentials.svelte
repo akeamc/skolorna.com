@@ -66,6 +66,8 @@
 
 	{#await credentials}
 		<p class="status"><Skeleton width="25ch" /></p>
+		<Field skeleton />
+		<Field skeleton />
 	{:then credentials}
 		<p class="status">
 			{#if credentials}
