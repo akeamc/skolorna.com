@@ -168,7 +168,6 @@ interface User {
 	id: string;
 	email: string;
 	full_name: string;
-	verified: boolean;
 }
 
 export const user = writable<User | null>(null);
@@ -185,43 +184,6 @@ export async function getUser(): Promise<User> {
 	if (!res.ok) throw new Error(await res.text());
 
 	return res.json();
-}
-
-export async function verifyEmail(token: string): Promise<void> {
-	const res = await fetch(`${API_URL}/verify`, {
-		method: "POST",
-		headers: {
-			"content-type": "application/json"
-		},
-		body: JSON.stringify({ token })
-	});
-
-	if (!res.ok) throw new Error(await res.text());
-}
-
-interface RequestResetLink {
-	email: string;
-}
-
-interface ResetPassword {
-	token: string;
-	password: string;
-}
-
-export async function resetPassword(
-	data: RequestResetLink | ResetPassword
-): Promise<void | AuthError> {
-	const res = await fetch(`${API_URL}/account/password`, {
-		method: "PUT",
-		headers: {
-			"content-type": "application/json"
-		},
-		body: JSON.stringify(data)
-	});
-
-	if (!res.ok) {
-		return { status: res.status, message: await res.text() };
-	}
 }
 
 export function requireAuth(next?: string): void {

@@ -15,10 +15,6 @@
 		{#if $user}{$user.full_name}{:else}<Skeleton width="10ch" />{/if}
 	</h1>
 
-	{#if !$user?.verified}
-		<p>Du har inte bekräftat din e-postadress ({$user?.email}).</p>
-	{/if}
-
 	<section>
 		<Credentials />
 	</section>
