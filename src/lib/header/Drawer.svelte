@@ -2,7 +2,7 @@
 	import { browser } from "$app/environment";
 	import { onMount } from "svelte";
 	import Logo from "./Logo.svelte";
-	import { authenticated, authenticating, user } from "../auth";
+	import { authenticated, authenticating, user } from "../auth/auth";
 	import { page } from "$app/stores";
 
 	export let open = false;

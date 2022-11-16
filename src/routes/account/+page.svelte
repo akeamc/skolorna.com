@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { logout, requireAuth, user } from "$lib/auth";
+	import { logout, requireAuth, user } from "$lib/auth/auth";
 	import Button from "$lib/Button.svelte";
 	import Credentials from "$lib/skool/Credentials.svelte";
 	import Skeleton from "$lib/Skeleton.svelte";

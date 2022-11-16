@@ -1,4 +1,6 @@
 import { get as getOden } from "$lib/oden";
+import request from "$lib/request";
+import * as Sentry from "@sentry/svelte";
 
 export async function getKey(): Promise<string> {
 	const res = await getOden("/key");
@@ -40,14 +42,28 @@ export interface SearchRequest<T> {
 }
 
 export async function search<T>(req: SearchRequest<T>, key: string): Promise<SearchResponse<T>> {
-	const res = await fetch("https://api2.skolorna.com/v0/search/indexes/menus/search", {
-		method: "POST",
-		headers: {
-			authorization: `Bearer ${key}`,
-			"content-type": "application/json"
-		},
-		body: JSON.stringify(req)
+	const transaction = Sentry.startTransaction({
+		name: "search"
 	});
 
-	return res.json();
+	try {
+		const res = await request(
+			"https://api2.skolorna.com/v0/search/indexes/menus/search",
+			{
+				method: "POST",
+				headers: {
+					authorization: `Bearer ${key}`,
+					"content-type": "application/json"
+				},
+				body: JSON.stringify(req)
+			},
+			{ auth: false, span: transaction }
+		).then((res) => res.json());
+
+		transaction.setStatus("ok");
+
+		return res;
+	} finally {
+		transaction.finish();
+	}
 }

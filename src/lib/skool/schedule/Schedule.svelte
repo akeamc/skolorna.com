@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { browser } from "$app/environment";
-	import { isError } from "$lib/auth";
+	import { isError } from "$lib/auth/auth";
 	import { DateTime } from "luxon";
 	import { derived, get, writable } from "svelte/store";
 	import { getSchedule, type Schedule, type SkoolError } from "../client";

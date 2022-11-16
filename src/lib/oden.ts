@@ -1,5 +1,6 @@
 import { error } from "@sveltejs/kit";
 import type { DateTime } from "luxon";
+import * as Sentry from "@sentry/svelte";
 
 const API_URL = "https://api2.skolorna.com/v0/oden";
 
@@ -39,9 +40,23 @@ export interface Day {
 }
 
 export async function getDays(menu: string, first: DateTime, last: DateTime): Promise<Day[]> {
-	const res = await get(`/menus/${menu}/days?first=${first.toISODate()}&last=${last.toISODate()}`);
+	const transaction = Sentry.startTransaction({
+		name: "getDays"
+	});
 
-	if (res.ok) return await res.json();
+	try {
+		const res = await get(
+			`/menus/${menu}/days?first=${first.toISODate()}&last=${last.toISODate()}`
+		);
 
-	throw error(res.status, await res.text());
+		transaction.setHttpStatus(res.status);
+
+		if (res.ok) {
+			return await res.json();
+		}
+
+		throw error(res.status, await res.text());
+	} finally {
+		transaction.finish();
+	}
 }
