@@ -1,6 +1,7 @@
+import request from "$lib/request";
 import { DateTime } from "luxon";
-import { authedFetch } from "../client";
 import { hasCredentials } from "./stores";
+import * as Sentry from "@sentry/svelte";
 
 export const API_URL = "https://api2.skolorna.com/v0/skool";
 
@@ -28,7 +29,7 @@ export function isError<T>(obj: T | SkoolError): obj is SkoolError {
 }
 
 export async function putCredentials(credentials: Credentials): Promise<Response> {
-	const res = await authedFetch(`${API_URL}/credentials`, {
+	const res = await request(`${API_URL}/credentials`, {
 		method: "PUT",
 		headers: {
 			"content-type": "application/json"
@@ -42,7 +43,7 @@ export async function putCredentials(credentials: Credentials): Promise<Response
 }
 
 export async function getCredentials(): Promise<CredentialsInfo | null> {
-	const res = await authedFetch(`${API_URL}/credentials`);
+	const res = await request(`${API_URL}/credentials`);
 
 	if (res.status === 404) {
 		hasCredentials.set(false);
@@ -53,7 +54,7 @@ export async function getCredentials(): Promise<CredentialsInfo | null> {
 }
 
 export async function deleteCredentials(): Promise<void> {
-	const res = await authedFetch(`${API_URL}/credentials`, {
+	const res = await request(`${API_URL}/credentials`, {
 		method: "DELETE"
 	});
 
@@ -135,20 +136,38 @@ export class Schedule {
 }
 
 export async function getSchedule(year: number, week: number): Promise<Schedule | SkoolError> {
-	const res = await authedFetch(`${API_URL}/schedule?year=${year}&week=${week}`);
+	const transaction = Sentry.startTransaction({
+		op: "http.client",
+		name: "getSchedule"
+	});
 
-	if (!res.ok) {
-		if (res.status === 401) hasCredentials.set(false);
+	try {
+		const res = await request(`${API_URL}/schedule?year=${year}&week=${week}`, undefined, {
+			span: transaction
+		});
 
-		return {
-			status: res.status,
-			message: await res.text()
-		};
+		transaction.setHttpStatus(res.status);
+
+		if (!res.ok) {
+			if (res.status === 401) hasCredentials.set(false);
+
+			return {
+				status: res.status,
+				message: await res.text()
+			};
+		}
+
+		try {
+			const schedule = Schedule.fromJSON(year, week, await res.json());
+
+			hasCredentials.set(true);
+
+			return schedule;
+		} catch (err) {
+			transaction.setStatus("internal_error");
+			throw err;
+		}
+	} finally {
+		transaction.finish();
 	}
-
-	const schedule = Schedule.fromJSON(year, week, await res.json());
-
-	hasCredentials.set(true);
-
-	return schedule;
 }

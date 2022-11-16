@@ -8,7 +8,7 @@
 		loginToken,
 		type AuthError,
 		isError
-	} from "$lib/auth";
+	} from "$lib/auth/auth";
 	import Button from "$lib/Button.svelte";
 	import ErrorText from "$lib/ErrorText.svelte";
 	import Field from "$lib/form/Field.svelte";

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { isError, type AuthError, login } from "$lib/auth";
+	import { isError, type AuthError, login } from "$lib/auth/auth";
 	import Button from "$lib/Button.svelte";
 	import ErrorText from "$lib/ErrorText.svelte";
 	import Field from "$lib/form/Field.svelte";

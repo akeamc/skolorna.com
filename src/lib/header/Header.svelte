@@ -4,7 +4,7 @@
 	import { page } from "$app/stores";
 	import Search from "$lib/search/Search.svelte";
 	import { MenuIcon } from "svelte-feather-icons";
-	import { authenticated, authenticating, user } from "../auth";
+	import { authenticated, authenticating, user } from "../auth/auth";
 	import Button from "../Button.svelte";
 	import Drawer from "./Drawer.svelte";
 	import Skeleton from "../Skeleton.svelte";

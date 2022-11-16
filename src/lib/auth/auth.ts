@@ -1,10 +1,11 @@
 import { goto } from "$app/navigation";
 import { navigating, page } from "$app/stores";
+import request from "$lib/request";
 import { decodeJwt } from "jose";
 import { onMount } from "svelte";
 import { derived, get, writable } from "svelte/store";
-import { authedFetch } from "./client";
-import { localStorageStore } from "./util/localstorage";
+import { localStorageStore } from "../util/localstorage";
+import * as Sentry from "@sentry/svelte";
 
 export const API_URL = "https://api2.skolorna.com/v0/auth";
 
@@ -45,6 +46,8 @@ export function logout(next?: string): void {
 	refreshToken.set(null);
 	accessToken.set(null);
 	loginToken.set(null);
+
+	Sentry.setUser(null);
 }
 
 function ingestTokenResponse(response: TokenResponse) {
@@ -65,27 +68,40 @@ export function isError<T>(obj: T | AuthError): obj is AuthError {
 }
 
 export async function authenticate(req: TokenRequest): Promise<TokenResponse | AuthError> {
-	authenticating.set(true);
-
-	const res = await fetch(`${API_URL}/token`, {
-		method: "POST",
-		headers: {
-			"content-type": "application/x-www-form-urlencoded"
-		},
-		body: new URLSearchParams(req as unknown as Record<string, string>)
+	const transaction = Sentry.startTransaction({
+		name: "authenticate",
+		op: "http.client"
 	});
 
-	if (!res.ok) {
+	authenticating.set(true);
+
+	try {
+		const res = await request(
+			`${API_URL}/token`,
+			{
+				method: "POST",
+				headers: {
+					"content-type": "application/x-www-form-urlencoded"
+				},
+				body: new URLSearchParams(req as unknown as Record<string, string>)
+			},
+			{ auth: false, span: transaction }
+		);
+
+		if (!res.ok) {
+			return { status: res.status, message: await res.text() };
+		}
+
+		const data: TokenResponse = await res.json();
+		ingestTokenResponse(data);
+
+		transaction.setStatus("ok");
+
+		return data;
+	} finally {
+		transaction.finish();
 		authenticating.set(false);
-		return { status: res.status, message: await res.text() };
 	}
-
-	const data: TokenResponse = await res.json();
-
-	ingestTokenResponse(data);
-	authenticating.set(false);
-
-	return data;
 }
 
 interface LoginResponse {
@@ -93,22 +109,33 @@ interface LoginResponse {
 }
 
 export async function login(email: string): Promise<void | AuthError> {
-	const res = await fetch(`${API_URL}/login`, {
-		method: "POST",
-		headers: {
-			"content-type": "application/json"
-		},
-		body: JSON.stringify({ email })
-	});
+	const transaction = Sentry.startTransaction({ name: "login" });
 
-	if (!res.ok) {
-		authenticating.set(false);
-		return { status: res.status, message: await res.text() };
+	try {
+		const res = await request(
+			`${API_URL}/login`,
+			{
+				method: "POST",
+				headers: {
+					"content-type": "application/json"
+				},
+				body: JSON.stringify({ email })
+			},
+			{ auth: false, span: transaction }
+		);
+
+		if (!res.ok) {
+			authenticating.set(false);
+			return { status: res.status, message: await res.text() };
+		}
+
+		const data: LoginResponse = await res.json();
+
+		loginToken.set(data.token);
+		transaction.setStatus("ok");
+	} finally {
+		transaction.finish();
 	}
-
-	const data: LoginResponse = await res.json();
-
-	loginToken.set(data.token);
 }
 
 export interface RegistrationRequest {
@@ -117,13 +144,17 @@ export interface RegistrationRequest {
 }
 
 export async function register(req: RegistrationRequest): Promise<void | AuthError> {
-	const res = await fetch(`${API_URL}/account`, {
-		method: "POST",
-		headers: {
-			"content-type": "application/json"
+	const res = await request(
+		`${API_URL}/account`,
+		{
+			method: "POST",
+			headers: {
+				"content-type": "application/json"
+			},
+			body: JSON.stringify(req)
 		},
-		body: JSON.stringify(req)
-	});
+		{ auth: false }
+	);
 
 	if (!res.ok) {
 		const message = await res.text();
@@ -168,6 +199,8 @@ interface User {
 	id: string;
 	email: string;
 	full_name: string;
+	created_at: string;
+	last_login: string;
 }
 
 export const user = writable<User | null>(null);
@@ -179,11 +212,21 @@ authenticated.subscribe(async (v) => {
 });
 
 export async function getUser(): Promise<User> {
-	const res = await authedFetch(`${API_URL}/account`);
+	const transaction = Sentry.startTransaction({ name: "getUser" });
 
-	if (!res.ok) throw new Error(await res.text());
+	try {
+		const res = await request(`${API_URL}/account`, undefined, { span: transaction });
+		if (!res.ok) throw new Error(await res.text());
 
-	return res.json();
+		const user: User = await res.json();
+		transaction.setStatus("ok");
+
+		Sentry.setUser({ id: user.id, email: user.email });
+
+		return user;
+	} finally {
+		transaction.finish();
+	}
 }
 
 export function requireAuth(next?: string): void {
