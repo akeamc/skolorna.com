@@ -17,7 +17,7 @@
 	let el: HTMLLIElement;
 
 	onMount(() => {
-		if (today) el.scrollIntoView({ behavior: "smooth" });
+		if (today) el.scrollIntoView({ block: "center", behavior: "smooth" });
 	});
 </script>
 
