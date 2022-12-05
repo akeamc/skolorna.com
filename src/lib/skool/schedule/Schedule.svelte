@@ -3,7 +3,7 @@
 	import { isError } from "$lib/auth/auth";
 	import { DateTime } from "luxon";
 	import { derived, get, writable } from "svelte/store";
-	import { getSchedule, type Schedule, type SkoolError } from "../client";
+	import { createLink, getLinks, getSchedule, type Schedule, type SkoolError } from "../client";
 	import Credentials from "../Credentials.svelte";
 	import { hasCredentials } from "../stores";
 	import { endOfScope, setScheduleContext, startOfScope, type Scope } from "./schedule";
@@ -19,6 +19,8 @@
 	const lessonDialog = writable<string | null>(null);
 	const offset = writable(7 * 3600);
 	const splashScreen = writable(true);
+
+	const links = getLinks();
 
 	loading.subscribe((v) => {
 		if (!v) splashScreen.set(false);
@@ -61,6 +63,23 @@
 		offset
 	});
 </script>
+
+<h2>Dela</h2>
+
+{#await links}
+	laddar
+{:then links}
+	<ul class="links">
+		{#each links as link}
+			<li>
+				<button on:click={() => link.copyToClipboard()}>Kopiera länk</button>
+				<button on:click={() => link.delete()}>Ta bort</button>
+			</li>
+		{/each}
+	</ul>
+{/await}
+
+<button on:click={createLink}>Ny länk</button>
 
 <section style:--offset={$offset}>
 	{#if $hasCredentials === false}
