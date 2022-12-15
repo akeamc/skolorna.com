@@ -4,9 +4,10 @@ import type { PageLoad } from "./$types";
 
 export const load: PageLoad = async ({ params, setHeaders }) => {
 	const res = await getMenu(params.id);
+
 	setHeaders({
-		age: res.headers.get("age"),
-		"cache-control": res.headers.get("cache-control")
+		age: res.headers.get("age") || "0",
+		"cache-control": res.headers.get("cache-control") || "no-cache"
 	});
 
 	if (res.ok) return (await res.json()) as Menu;

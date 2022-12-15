@@ -108,8 +108,18 @@
 				<ErrorText>{error}</ErrorText>
 			{/if}
 
-			<ButtonGroup>
-				<Button type="submit" disabled={!interactive}>
+			<ButtonGroup justify="space-between">
+				<Button
+					type="button"
+					on:click={handleDelete}
+					disabled={!credentials || !interactive}
+					variant="secondary"
+					size="medium"
+				>
+					Logga ut
+				</Button>
+
+				<Button type="submit" size="medium" disabled={!interactive}>
 					{#if putting}
 						Sparar …
 					{:else if credentials}
@@ -117,15 +127,6 @@
 					{:else}
 						Spara
 					{/if}
-				</Button>
-
-				<Button
-					type="button"
-					on:click={handleDelete}
-					disabled={!credentials || !interactive}
-					variant="secondary"
-				>
-					Logga ut
 				</Button>
 			</ButtonGroup>
 		</form>

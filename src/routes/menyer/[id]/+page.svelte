@@ -11,7 +11,7 @@
 
 	const now = DateTime.now();
 	const updatedAt = DateTime.fromISO(data.updated_at);
-	const updatedAtText = browser
+	$: updatedAtText = browser
 		? updatedAt.setLocale("sv").toLocaleString({
 				year: updatedAt.year != now.year ? "numeric" : undefined,
 				month: "long",

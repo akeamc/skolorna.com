@@ -3,14 +3,17 @@
 	export let type: "button" | "submit" | "reset" = "button";
 	export let href: string | undefined = undefined;
 	export let variant: "primary" | "secondary" = "primary";
+	export let size: "small" | "medium" | "large";
+
+	const className = `button ${variant} ${size}`;
 </script>
 
 {#if href}
-	<a {href} class="button" class:disabled on:click>
+	<a {href} class={className} class:disabled on:click>
 		<slot />
 	</a>
 {:else}
-	<button {type} class={`button ${variant}`} {disabled} on:click>
+	<button {type} class={className} {disabled} on:click>
 		<slot />
 	</button>
 {/if}
@@ -22,14 +25,11 @@
 		color: var(--on-theme);
 		border: 0;
 		font-family: var(--font-sans);
-		border-radius: 8px;
-		height: 3rem;
-		font-size: 14px;
+		border-radius: 0.5rem;
 		font-weight: 500;
 		line-height: 1.1;
 		cursor: pointer;
 		transition: background-color 0.1s;
-		padding-inline: 1.5rem;
 		display: inline-flex;
 		justify-content: center;
 		align-items: center;
@@ -70,5 +70,23 @@
 		opacity: 0.1;
 		cursor: default;
 		pointer-events: none;
+	}
+
+	.small {
+		height: 2rem;
+		font-size: 0.75rem;
+		padding-inline: 1rem;
+	}
+
+	.medium {
+		height: 2.5rem;
+		font-size: 0.875rem;
+		padding-inline: 1.25rem;
+	}
+
+	.large {
+		height: 3rem;
+		font-size: 0.875rem;
+		padding-inline: 1.5rem;
 	}
 </style>

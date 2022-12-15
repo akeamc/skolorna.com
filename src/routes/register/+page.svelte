@@ -60,7 +60,7 @@
 			<input name="email" id="email" type="email" required bind:value={email} />
 		</Field>
 
-		<Button type="submit" disabled={$authenticating}>
+		<Button type="submit" disabled={$authenticating} size="large">
 			{$authenticating ? "Skapar konto …" : "Fortsätt"}
 		</Button>
 

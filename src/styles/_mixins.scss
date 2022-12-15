@@ -1,0 +1,6 @@
+@mixin dotted-background {
+	background-color: var(--surface1);
+	background-image: radial-gradient(var(--outline) 1px, transparent 1px);
+	background-position: center;
+	background-size: 16px 16px;
+}

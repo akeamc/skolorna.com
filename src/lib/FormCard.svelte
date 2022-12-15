@@ -13,6 +13,8 @@
 </div>
 
 <style lang="scss">
+	@use "../styles/mixins";
+
 	.root {
 		display: flex;
 		flex-direction: column;
@@ -42,7 +44,7 @@
 
 	@media (min-width: 480px) {
 		.root {
-			background-color: var(--surface1);
+			@include mixins.dotted-background;
 			justify-content: center;
 			align-items: center;
 		}

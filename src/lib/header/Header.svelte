@@ -44,7 +44,9 @@
 							</a>
 						</li>
 					{:else}
-						<li><Button href={`/login?next=${$page.url.pathname}`}>Logga in</Button></li>
+						<li>
+							<Button href={`/login?next=${$page.url.pathname}`} size="medium">Logga in</Button>
+						</li>
 					{/if}
 				{:else}
 					<Skeleton width="12rem" height="3rem" />

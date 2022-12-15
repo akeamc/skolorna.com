@@ -19,7 +19,7 @@
 		<Credentials />
 	</section>
 
-	<Button on:click={() => logout("/")}>Logga ut</Button>
+	<Button on:click={() => logout("/")} size="large">Logga ut</Button>
 </div>
 
 <style lang="scss">

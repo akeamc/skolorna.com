@@ -10,6 +10,7 @@
 	import Table from "./Table.svelte";
 	import logo from "$lib/assets/sterik.svg";
 	import SplashScreen from "./SplashScreen.svelte";
+	import Modal from "$lib/Modal.svelte";
 
 	const cursor = writable(DateTime.now());
 	const scope = writable<Scope>("week");
@@ -62,6 +63,13 @@
 		lessonDialog,
 		offset
 	});
+
+	let modalOpen = true;
+
+	const onClose = () => {
+		modalOpen = false;
+		setTimeout(() => (modalOpen = true), 1000);
+	};
 </script>
 
 <h2>Dela</h2>
@@ -83,16 +91,29 @@
 
 <section style:--offset={$offset}>
 	{#if $hasCredentials === false}
-		<div class="unauthenticated">
+		<!-- <div class="unauthenticated">
 			<div class="modal">
 				<header>
-					<img alt="Sankt Erik med solglasögon" src={logo} />
+					<div class="logo">
+						<img alt="Sankt Erik med solglasögon" src={logo} />
+					</div>
 				</header>
 				<div class="inner">
 					<Credentials />
 				</div>
 			</div>
-		</div>
+		</div> -->
+
+		<Modal open={modalOpen} {onClose}>
+			<div class="header" slot="header">
+				<div class="logo">
+					<img alt="Sankt Erik med solglasögon" src={logo} />
+				</div>
+			</div>
+			<div slot="main">
+				<Credentials />
+			</div>
+		</Modal>
 	{/if}
 
 	{#if $splashScreen || $hasCredentials !== true}
@@ -103,77 +124,40 @@
 </section>
 
 <style lang="scss">
+	@use "../../../styles/mixins";
+
 	section {
 		position: relative;
 	}
 
-	.unauthenticated {
-		position: absolute;
-		inset: 0;
-		z-index: 3;
-		backdrop-filter: blur(8px);
-		background-color: rgba(0, 0, 0, 0.2);
+	.header {
+		@include mixins.dotted-background;
+
+		padding: var(--padding);
+		border-start-start-radius: var(--border-radius);
+		border-start-end-radius: var(--border-radius);
 		display: flex;
-		align-items: center;
-		flex-direction: column;
+		justify-content: center;
+	}
+
+	.logo {
+		max-width: 8rem;
+		display: flex;
+		aspect-ratio: 1;
+		background-color: var(--surface0);
+		border-radius: 50%;
+		box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.1);
 		box-sizing: border-box;
-		animation: enter 0.2s ease-out;
+	}
 
-		@media (min-width: 480px) {
-			padding: 0 var(--page-gutter);
-		}
+	img {
+		display: block;
+		width: 100%;
+		object-fit: contain;
+		margin: 20%;
 
-		@keyframes enter {
-			0% {
-				opacity: 0;
-			}
-			100% {
-				opacity: 1;
-			}
-		}
-
-		.modal {
-			--padding: var(--page-gutter);
-			--border-radius: 0;
-
-			background-color: var(--surface0);
-			margin: 0;
-			flex: 1;
-			max-width: 100%;
-			border-radius: var(--border-radius);
-
-			@media (min-width: 480px) {
-				--padding: 2rem;
-				--border-radius: 1rem;
-
-				box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-				width: 30rem;
-				margin-top: 4rem;
-				flex: 0;
-			}
-
-			header {
-				background-color: var(--surface1);
-				padding: var(--padding);
-				border-start-start-radius: var(--border-radius);
-				border-start-end-radius: var(--border-radius);
-				display: flex;
-				justify-content: center;
-			}
-
-			img {
-				display: block;
-				width: 100%;
-				max-width: 8rem;
-
-				@media (prefers-color-scheme: dark) {
-					filter: saturate(0.5);
-				}
-			}
-
-			.inner {
-				padding: var(--padding);
-			}
+		@media (prefers-color-scheme: dark) {
+			filter: saturate(0.5);
 		}
 	}
 </style>

@@ -59,7 +59,7 @@
 {#if $loginToken || $authenticating}
 	{#if otp}
 		<p style:margin-block-end={"1rem"}>Tryck på knappen för att logga in.</p>
-		<Button on:click={() => login(otp)} disabled={loading}>
+		<Button on:click={() => login(otp)} disabled={loading} size="large">
 			{loading ? "Loggar in …" : "Logga in"}
 		</Button>
 	{:else if collapsed}
@@ -77,7 +77,7 @@
 				<input name="otp" id="otp" type="text" required bind:value={otpInput} />
 			</Field>
 
-			<Button type="submit" disabled={loading}>
+			<Button type="submit" disabled={loading} size="large">
 				{loading ? "Loggar in …" : "Logga in"}
 			</Button>
 		</form>

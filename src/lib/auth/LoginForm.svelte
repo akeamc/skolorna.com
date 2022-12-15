@@ -37,7 +37,7 @@
 		<input name="email" id="email" type="email" required bind:value={email} />
 	</Field>
 
-	<Button type="submit" disabled={loading}>
+	<Button type="submit" disabled={loading} size="large">
 		{loading ? "Loggar in …" : "Logga in"}
 	</Button>
 
