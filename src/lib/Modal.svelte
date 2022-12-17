@@ -1,19 +1,33 @@
 <script lang="ts">
 	export let open: boolean;
-
 	export let overlay = true;
+	export let lockScroll = true;
+
 	/**
 	 * Modal close handler. If no function is provided, the modal won't be closable (no close button will be shown).
 	 */
 	export let onClose: (() => void) | undefined = undefined;
 
 	import { XIcon } from "svelte-feather-icons";
+	import { onMount } from "svelte";
+	import { browser } from "$app/environment";
+
+	onMount(() => {
+		if (open && lockScroll) {
+			document.body.style.overflow = "hidden";
+		}
+
+		return () => (document.body.style.overflow = "auto");
+	});
+
+	$: if (browser) {
+		if (open && lockScroll) document.body.style.overflow = "hidden";
+		else document.body.style.overflow = "auto";
+	}
 </script>
 
-<div class="container" class:open>
-	<div class="overlay" on:click={onClose} />
-
-	<div class="modal">
+<div class="container" class:open class:overlay on:click={onClose}>
+	<div class="modal" on:click|stopPropagation>
 		{#if onClose}
 			<button on:click={onClose} class="close-button">
 				<XIcon />
@@ -43,27 +57,25 @@
 		position: fixed;
 		inset: 0;
 		display: flex;
-		justify-content: center;
+		justify-content: flex-start;
 		align-items: center;
 		flex-direction: column;
-		z-index: 1;
 		pointer-events: none;
+		transition: background-color 0.5s;
+		overflow-block: auto;
+		z-index: 100000000000000;
 
 		&.open {
 			pointer-events: auto;
 		}
-	}
 
-	.overlay {
-		background-color: rgba(0, 0, 0, 0.5);
-		position: absolute;
-		inset: 0;
-		opacity: 0;
-		transition: opacity 0.5s;
-	}
+		&.overlay.open {
+			background-color: rgba(0, 0, 0, 0.5);
+		}
 
-	.container.open .overlay {
-		opacity: 1;
+		@media (min-width: 480px) {
+			padding: var(--page-gutter);
+		}
 	}
 
 	.modal {
@@ -71,23 +83,24 @@
 		--border-radius: 0;
 
 		background-color: var(--surface0);
-		margin: 0;
 		flex: 1;
-		max-width: 100%;
+		width: 100%;
 		border-radius: var(--border-radius);
 		position: relative;
 		z-index: 1;
 		scale: 0.8;
 		opacity: 0;
-		transition: all 0.3s ease-in-out;
+		transition: opacity 0.2s ease, scale 0.2s ease-in-out;
 
 		@media (min-width: 480px) {
 			--padding: 2rem;
 			--border-radius: 1rem;
 
+			margin-block: auto;
 			box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 			width: 40rem;
-			flex: 0;
+			max-width: 100%;
+			flex-grow: 0;
 		}
 	}
 
@@ -113,6 +126,7 @@
 	.container.open .modal {
 		opacity: 1;
 		scale: 1;
+		transition-duration: 0.3s;
 	}
 
 	main {

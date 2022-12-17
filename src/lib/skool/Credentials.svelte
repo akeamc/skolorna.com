@@ -62,7 +62,7 @@
 </script>
 
 <div class="root">
-	<h2>Inloggningsuppgifter till Skolplattformen</h2>
+	<h2>Logga in på Skolplattformen</h2>
 
 	{#await credentials}
 		<p class="status"><Skeleton width="25ch" /></p>

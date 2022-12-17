@@ -7,10 +7,11 @@
 	import { monthSpanFmt } from "$lib/date";
 	import Skeleton from "$lib/Skeleton.svelte";
 	import Clock from "./Clock.svelte";
+	import ShareButton from "./ShareButton.svelte";
 
 	let windowWidth: number;
 
-	const { schedule, loading, error, cursor, scope, startOfScope, endOfScope, offset } =
+	const { schedule, loading, error, scope, startOfScope, endOfScope, offset } =
 		getScheduleContext();
 	const now = DateTime.now();
 
@@ -65,15 +66,17 @@
 		<h1>
 			{monthSpanFmt($startOfScope.toJSDate(), $endOfScope.toJSDate(), "sv")}
 		</h1>
-		<span class="week">Vecka {$cursor.weekNumber}</span>
 		<div class="count" class:error={$error}>
 			{#if $error}
 				Ett fel uppstod. Förhoppingsvis är det Skolplattformens (och inte vårt) fel.
 			{:else if $loading || typeof numLessons !== "number"}
 				<Skeleton width="15ch" />
 			{:else}
-				{numLessons} {numLessons == 1 ? "lektion" : "lektioner"} hittades
+				{numLessons} {numLessons == 1 ? "lektion" : "lektioner"}
 			{/if}
+		</div>
+		<div class="share">
+			<ShareButton />
 		</div>
 	</header>
 
@@ -273,18 +276,9 @@
 			align-self: flex-end;
 		}
 
-		.week {
+		.share {
 			grid-column: 2;
 			grid-row: 1 / span 2;
-			font: 500 0.75rem/1 var(--font-sans);
-			letter-spacing: 0.01em;
-			color: var(--text0-muted);
-			background-color: var(--surface0);
-			padding-block: 0.25em;
-			padding-inline: 0.5em;
-			border-radius: 999px;
-			border: 1px solid var(--outline);
-			white-space: nowrap;
 			justify-self: flex-end;
 		}
 

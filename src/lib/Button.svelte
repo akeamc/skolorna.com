@@ -36,6 +36,7 @@
 		text-align: center;
 		text-decoration: none;
 		user-select: none;
+		gap: 0.25rem;
 
 		&:focus {
 			outline: var(--theme-hover) solid 2px;
@@ -62,6 +63,11 @@
 			&:active {
 				background-color: var(--brand-transparent-active);
 			}
+		}
+
+		:global(svg) {
+			height: 1rem;
+			width: 1rem;
 		}
 	}
 
