@@ -7,9 +7,12 @@
 	import { monthSpanFmt } from "$lib/date";
 	import Skeleton from "$lib/Skeleton.svelte";
 	import Clock from "./Clock.svelte";
-	import ShareButton from "./ShareButton.svelte";
+	import ShareModal from "./ShareModal.svelte";
+	import Button from "$lib/Button.svelte";
+	import { ShareIcon } from "svelte-feather-icons";
 
 	let windowWidth: number;
+	let shareModalOpen = false;
 
 	const { schedule, loading, error, scope, startOfScope, endOfScope, offset } =
 		getScheduleContext();
@@ -42,6 +45,8 @@
 		({ start, end }) => +start >= +$startOfScope && +end <= +$endOfScope
 	)?.length;
 </script>
+
+<ShareModal open={shareModalOpen} onClose={() => (shareModalOpen = false)} />
 
 <div class={`root ${$scope}`} style:--days={numDays}>
 	<aside class="scale">
@@ -76,7 +81,9 @@
 			{/if}
 		</div>
 		<div class="share">
-			<ShareButton />
+			<Button size="medium" variant="secondary" on:click={() => (shareModalOpen = true)}
+				><ShareIcon />Dela</Button
+			>
 		</div>
 	</header>
 

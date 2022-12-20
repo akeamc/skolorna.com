@@ -2,6 +2,8 @@
 	export let open: boolean;
 	export let overlay = true;
 	export let lockScroll = true;
+	export let closeButton = true;
+	export let width: "narrow" | "medium" | "wide" = "medium";
 
 	/**
 	 * Modal close handler. If no function is provided, the modal won't be closable (no close button will be shown).
@@ -20,15 +22,23 @@
 		return () => (document.body.style.overflow = "auto");
 	});
 
+	function onKeydown(event: KeyboardEvent) {
+		if (open && event.key === "Escape") onClose?.();
+	}
+
 	$: if (browser) {
 		if (open && lockScroll) document.body.style.overflow = "hidden";
 		else document.body.style.overflow = "auto";
 	}
 </script>
 
-<div class="container" class:open class:overlay on:click={onClose}>
-	<div class="modal" on:click|stopPropagation>
-		{#if onClose}
+<svelte:window on:keydown={onKeydown} />
+
+<!-- svelte-ignore a11y-click-events-have-key-events -->
+<div class="container" class:open class:overlay on:click={onClose} role="dialog">
+	<!-- svelte-ignore a11y-click-events-have-key-events -->
+	<div class={`modal ${width}`} on:click|stopPropagation>
+		{#if onClose && closeButton}
 			<button on:click={onClose} class="close-button">
 				<XIcon />
 			</button>
@@ -93,15 +103,32 @@
 		transition: opacity 0.2s ease, scale 0.2s ease-in-out;
 
 		@media (min-width: 480px) {
-			--padding: 2rem;
+			--padding: 1.5rem;
 			--border-radius: 1rem;
 
 			margin-block: auto;
-			box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-			width: 40rem;
+			box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 			max-width: 100%;
 			flex-grow: 0;
+
+			&.narrow {
+				--padding: 1rem;
+
+				width: 30rem;
+			}
+
+			&.medium {
+				width: 40rem;
+			}
+
+			&.wide {
+				width: 60rem;
+			}
 		}
+	}
+
+	footer {
+		padding: var(--padding);
 	}
 
 	.close-button {

@@ -2,18 +2,23 @@
 	export let disabled = false;
 	export let type: "button" | "submit" | "reset" = "button";
 	export let href: string | undefined = undefined;
-	export let variant: "primary" | "secondary" = "primary";
+	export let variant: "primary" | "secondary" | "tetriary" = "primary";
+	export let color: "normal" | "danger" = "normal";
 	export let size: "small" | "medium" | "large";
 
-	const className = `button ${variant} ${size}`;
+	let element: HTMLElement;
+
+	$: className = `button ${variant} ${size} ${color} ${
+		element?.innerText === "" ? "icon-only" : ""
+	}`;
 </script>
 
 {#if href}
-	<a {href} class={className} class:disabled on:click>
+	<a {href} class={className} class:disabled on:click bind:this={element}>
 		<slot />
 	</a>
 {:else}
-	<button {type} class={className} {disabled} on:click>
+	<button {type} class={className} {disabled} on:click bind:this={element}>
 		<slot />
 	</button>
 {/if}
@@ -21,8 +26,8 @@
 <style lang="scss">
 	button,
 	.button {
-		background-color: var(--brand);
-		color: var(--on-theme);
+		background-color: var(--bg);
+		color: var(--fg);
 		border: 0;
 		font-family: var(--font-sans);
 		border-radius: 0.5rem;
@@ -36,33 +41,37 @@
 		text-align: center;
 		text-decoration: none;
 		user-select: none;
-		gap: 0.25rem;
+		gap: 0.5rem;
 
 		&:focus {
-			outline: var(--theme-hover) solid 2px;
+			outline: var(--outline) solid 2px;
 			outline-offset: 2px;
 		}
 
 		&:hover {
-			background-color: var(--theme-hover);
+			background-color: var(--bg-hover);
 		}
 
 		&:active {
-			background-color: var(--theme-active);
+			background-color: var(--bg-active);
 		}
 
-		&.secondary {
+		&.secondary,
+		&.tetriary {
 			background-color: transparent;
-			color: var(--brand);
-			border: 1px solid var(--brand);
+			color: var(--bg);
 
 			&:hover {
-				background-color: var(--brand-transparent);
+				background-color: var(--bg-transparent);
 			}
 
 			&:active {
-				background-color: var(--brand-transparent-active);
+				background-color: var(--bg-transparent-active);
 			}
+		}
+
+		&.secondary {
+			border: 1px solid var(--bg);
 		}
 
 		:global(svg) {
@@ -94,5 +103,24 @@
 		height: 3rem;
 		font-size: 0.875rem;
 		padding-inline: 1.5rem;
+	}
+
+	.icon-only {
+		padding-inline: 0.5rem;
+	}
+
+	.normal {
+		--bg: var(--brand);
+		--fg: var(--on-theme);
+		--outline: var(--theme-hover);
+		--bg-hover: var(--theme-hover);
+		--bg-active: var(--theme-active);
+		--bg-transparent: var(--brand-transparent);
+		--bg-transparent-active: var(--brand-transparent-active);
+	}
+
+	.danger {
+		--bg: red;
+		--bg-transparent: rgba(255, 0, 0, 0.178);
 	}
 </style>

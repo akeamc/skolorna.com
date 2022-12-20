@@ -6,7 +6,7 @@
 	import Credentials from "./Credentials.svelte";
 </script>
 
-<Modal open={$hasCredentials === false} onClose={() => goto("/")}>
+<Modal open={$hasCredentials === false} onClose={() => goto("/")} width="narrow">
 	<div class="header" slot="header">
 		<div class="logo">
 			<img alt="Sankt Erik med solglasögon" src={logo} />

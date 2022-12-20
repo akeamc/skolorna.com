@@ -194,6 +194,7 @@ class Link {
 	}
 
 	async delete(): Promise<void> {
+		console.log(this, this.id);
 		return deleteLink(this.id);
 	}
 }
