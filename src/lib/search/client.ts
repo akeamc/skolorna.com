@@ -48,7 +48,7 @@ export async function search<T>(req: SearchRequest<T>, key: string): Promise<Sea
 
 	try {
 		const res = await request(
-			"https://api2.skolorna.com/v0/search/indexes/menus/search",
+			"https://api.skolorna.com/v03/search/indexes/menus/search",
 			{
 				method: "POST",
 				headers: {

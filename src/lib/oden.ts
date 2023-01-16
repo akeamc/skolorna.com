@@ -2,7 +2,7 @@ import { error } from "@sveltejs/kit";
 import type { DateTime } from "luxon";
 import * as Sentry from "@sentry/svelte";
 
-const API_URL = "https://api2.skolorna.com/v0/oden";
+const API_URL = "https://api.skolorna.com/v03/oden";
 
 export async function get(path: string): Promise<Response> {
 	return fetch(`${API_URL}${path}`);
@@ -20,7 +20,7 @@ export function getStats(): Promise<Response> {
 export interface Menu {
 	title: string;
 	id: string;
-	updated_at: string;
+	checked_at: string;
 }
 
 export function getMenu(id: string): Promise<Response> {

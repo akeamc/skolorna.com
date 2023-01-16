@@ -7,7 +7,7 @@ import { derived, get, writable } from "svelte/store";
 import { localStorageStore } from "../util/localstorage";
 import * as Sentry from "@sentry/svelte";
 
-export const API_URL = "https://api2.skolorna.com/v0/auth";
+export const API_URL = "https://api.skolorna.com/v0/auth";
 
 interface OtpTokenRequest {
 	grant_type: "otp";

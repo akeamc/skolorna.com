@@ -3,7 +3,7 @@ import { DateTime } from "luxon";
 import { hasCredentials } from "./stores";
 import * as Sentry from "@sentry/svelte";
 
-export const API_URL = "https://api2.skolorna.com/v0/skool";
+export const API_URL = "https://api.skolorna.com/v0/skool";
 
 interface SkolplattformenCredentials {
 	service: "skolplattformen";
