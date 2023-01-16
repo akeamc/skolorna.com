@@ -235,7 +235,6 @@ export function requireAuth(next?: string): void {
 	onMount(() =>
 		s.subscribe(([auth, authing, nav]) => {
 			if (!auth && !authing && !nav) {
-				console.log("going");
 				goto(`/login?next=${next || get(page).url.pathname}`);
 			}
 		})

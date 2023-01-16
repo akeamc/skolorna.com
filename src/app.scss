@@ -1,3 +1,5 @@
+@use "./styles/mixins";
+
 @mixin brand-alpha($name, $light, $dark) {
 	--#{$name}-light: hsla(
 		var(--brand-hue) var(--brand-saturation) var(--brand-lightness) / #{$light}
@@ -79,6 +81,8 @@
 	--theme-hover: var(--theme-hover-light);
 	--theme-active: var(--theme-active-light);
 	--on-theme: var(--on-theme-light);
+	
+	@include mixins.def-color("text0", #000, #fff);
 
 	@media (prefers-color-scheme: dark) {
 		--text0: var(--text0-dark);

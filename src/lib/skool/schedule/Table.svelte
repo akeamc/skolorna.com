@@ -7,7 +7,7 @@
 	import { monthSpanFmt } from "$lib/date";
 	import Skeleton from "$lib/Skeleton.svelte";
 	import Clock from "./Clock.svelte";
-	import ShareModal from "./ShareModal.svelte";
+	import ShareModal from "./share/ShareModal.svelte";
 	import Button from "$lib/Button.svelte";
 	import { ShareIcon } from "svelte-feather-icons";
 

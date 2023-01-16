@@ -172,7 +172,7 @@ export async function getSchedule(year: number, week: number): Promise<Schedule 
 	}
 }
 
-class Link {
+export class Link {
 	constructor(public id: string) {}
 
 	static fromJSON(json: unknown): Link {
@@ -193,8 +193,7 @@ class Link {
 		return navigator.clipboard.writeText(this.url);
 	}
 
-	async delete(): Promise<void> {
-		console.log(this, this.id);
+	async del(): Promise<void> {
 		return deleteLink(this.id);
 	}
 }
