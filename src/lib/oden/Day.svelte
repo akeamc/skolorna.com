@@ -27,7 +27,7 @@
 	</h3>
 	<ul>
 		{#each data.meals as meal}
-			<li>{meal.value}</li>
+			<li>{meal}</li>
 		{/each}
 	</ul>
 </li>

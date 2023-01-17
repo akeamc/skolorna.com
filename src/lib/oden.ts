@@ -21,15 +21,14 @@ export interface Menu {
 	title: string;
 	id: string;
 	checked_at: string;
+	osm_id: string | null;
 }
 
 export function getMenu(id: string): Promise<Response> {
 	return get(`/menus/${id}`);
 }
 
-export interface Meal {
-	value: string;
-}
+export type Meal = string;
 
 export interface Day {
 	/**

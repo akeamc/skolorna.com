@@ -15,7 +15,7 @@ export interface IndexedMenu {
 	id: string;
 	title: string;
 	slug: string;
-	updated_at: string;
+	checked_at: string;
 	last_day: string;
 }
 

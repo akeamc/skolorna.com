@@ -81,7 +81,7 @@
 	--theme-hover: var(--theme-hover-light);
 	--theme-active: var(--theme-active-light);
 	--on-theme: var(--on-theme-light);
-	
+
 	@include mixins.def-color("text0", #000, #fff);
 
 	@media (prefers-color-scheme: dark) {
