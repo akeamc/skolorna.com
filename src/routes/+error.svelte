@@ -1,6 +1,31 @@
 <script lang="ts">
 	import { page } from "$app/stores";
 	import Seo from "$lib/Seo.svelte";
+	import { DateTime } from "luxon";
+
+	const menus = [
+		{
+			date: "2023-02-01",
+			meals: [
+				"Ugnsgratinerad nötfalukorv med tomat och ost serveras med hemlagat potatismos",
+				"Gratinerad vegetarisk korv med tomat och ost serveras med hemlagat potatismos"
+			]
+		},
+		{
+			date: "2023-02-02",
+			meals: [
+				"Bolognese serveras med ECO spaghetti",
+				"Vegetarisk Bolognese serveras med ECO spaghetti"
+			]
+		},
+		{
+			date: "2023-02-03",
+			meals: [
+				"Hamburgare serveras med bröd, dressing och klyftpotatis",
+				"Vegoburgare serveras med bröd, dressing och klyftpotatis"
+			]
+		}
+	];
 </script>
 
 <div class="root">
@@ -13,6 +38,13 @@
 	{:else}
 		<h1>Okänt fel</h1>
 		<p>Det verkar som att hemsidan faktiskt inte fungerar. Pinsamt.</p>
+		<p>Nödsammansatt matsedel för Södra Latin:</p>
+		{#each menus as menu}
+			<p>
+				<b>{DateTime.fromISO(menu.date).toLocaleString(DateTime.DATE_MED_WITH_WEEKDAY)}:</b>
+				{menu.meals.join(" · ")}
+			</p>
+		{/each}
 	{/if}
 </div>
 
