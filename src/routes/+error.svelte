@@ -12,12 +12,7 @@
 		</div>
 	{:else}
 		<h1>Okänt fel</h1>
-		<p>
-			Ett okänt fel uppstod: <code>{$page.error?.message}</code>
-		</p>
-		{#if $page.error?.stack}
-			<pre>{$page.error?.stack}</pre>
-		{/if}
+		<p>Det verkar som att hemsidan faktiskt inte fungerar. Pinsamt.</p>
 	{/if}
 </div>
 
@@ -52,22 +47,5 @@
 		margin-block: 1rem;
 		line-height: 1.5;
 		color: var(--text0-muted);
-	}
-
-	code {
-		background-color: var(--surface1);
-		border-radius: 6px;
-		display: inline-block;
-		padding-inline: 0.4em;
-		padding-block: 0.2em;
-	}
-
-	pre {
-		padding: 0.5rem;
-		background-color: var(--surface1);
-		border-radius: 6px;
-		text-align: start;
-		box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
-		margin-block: 1rem;
 	}
 </style>
