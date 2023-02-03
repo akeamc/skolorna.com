@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { ChevronLeftIcon, ChevronRightIcon } from "svelte-feather-icons";
+	import { createQuery } from "@tanstack/svelte-query";
 	import Skeleton from "$lib/Skeleton.svelte";
 	import { DateTime } from "luxon";
 	import { spanfmt } from "../date";
@@ -13,12 +14,11 @@
 
 	$: first = cursor?.startOf("week");
 	$: last = cursor?.endOf("week");
-	$: days =
-		first && last
-			? getDays(menu, first, last)
-			: new Promise<Day[]>(() => {
-					// never resolve
-			  });
+	$: days = createQuery({
+		queryKey: ["days", menu, first?.toISODate(), last?.toISODate()],
+		queryFn: () => getDays(menu, first!, last!),
+		enabled: !!first && !!last
+	});
 
 	const now = DateTime.now();
 </script>
@@ -49,20 +49,22 @@
 	</div>
 
 	<div class="result">
-		{#await days then days}
+		{#if $days.isLoading}
+			Laddar ...
+		{:else if $days.isError}
+			Ett fel uppstod.
+		{:else if $days.isSuccess}
 			<ol>
-				{#each days as day (day.date)}
+				{#each $days.data as day (day.date)}
 					<DayComponent data={day} today={day.date === now.toISODate()} />
 				{/each}
 			</ol>
-			{#if days.length == 0}
+			{#if $days.data.length == 0}
 				<div class="void">
 					Vi vet inte vad det {+(last || 0) > +now ? "blir" : "blev"} till lunch.
 				</div>
 			{/if}
-		{:catch error}
-			<code>{error.message}</code>
-		{/await}
+		{/if}
 	</div>
 </section>
 
