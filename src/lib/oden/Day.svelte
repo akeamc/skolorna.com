@@ -1,9 +1,10 @@
 <script lang="ts">
 	import type { Day } from "$lib/oden";
+	import Skeleton from "$lib/Skeleton.svelte";
 	import { onMount } from "svelte";
 
-	export let today: boolean;
-	export let data: Day;
+	export let today: boolean = false;
+	export let data: Day | undefined = undefined;
 
 	function datefmt(date: string) {
 		return new Date(date).toLocaleString("sv", {
@@ -23,12 +24,21 @@
 
 <li class="root" bind:this={el}>
 	<h3 class:today>
-		{datefmt(data.date)}
+		{#if data?.date}
+			{datefmt(data.date)}
+		{:else}
+			<Skeleton width="15ch" />
+		{/if}
 	</h3>
 	<ul>
-		{#each data.meals as meal}
-			<li>{meal}</li>
-		{/each}
+		{#if !data?.meals}
+			<li><Skeleton width="50ch" /></li>
+			<li><Skeleton width="50ch" /></li>
+		{:else}
+			{#each data.meals as meal}
+				<li>{meal}</li>
+			{/each}
+		{/if}
 	</ul>
 </li>
 

@@ -49,17 +49,20 @@
 	</div>
 
 	<div class="result">
-		{#if $days.isLoading}
-			Laddar ...
-		{:else if $days.isError}
-			Ett fel uppstod.
-		{:else if $days.isSuccess}
+		{#if $days.isSuccess && $days.data?.length > 0}
 			<ol>
 				{#each $days.data as day (day.date)}
 					<DayComponent data={day} today={day.date === now.toISODate()} />
 				{/each}
 			</ol>
-			{#if $days.data.length == 0}
+		{:else}
+			{@const empty = $days.data?.length === 0}
+			<ol class:blur={empty}>
+				{#each [1, 2, 3, 4, 5] as _}
+					<DayComponent />
+				{/each}
+			</ol>
+			{#if empty}
 				<div class="void">
 					Vi vet inte vad det {+(last || 0) > +now ? "blir" : "blev"} till lunch.
 				</div>
@@ -152,15 +155,27 @@
 		--border: 1px solid var(--outline);
 
 		border-top: var(--border);
+		position: relative;
 	}
 
 	ol {
 		list-style: none;
 		margin: 0;
 		padding: 0;
+		transition: opacity 0.2s;
+
+		&.blur {
+			opacity: 0.3;
+		}
 	}
 
 	.void {
+		--inset: 0;
+
+		@media (min-width: 480px) {
+			--inset: 1rem;
+		}
+
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -172,14 +187,19 @@
 		border-radius: 1rem;
 		min-height: 10rem;
 		color: var(--text0-muted);
-		animation: fadeIn 0.5s ease-in-out forwards;
+		animation: enter 0.5s ease-in-out forwards;
 		font: 500 0.875rem/1.2 var(--font-sans);
 		letter-spacing: -0.006em;
+		position: absolute;
+		top: var(--inset);
+		left: var(--inset);
+		right: var(--inset);
 	}
 
-	@keyframes fadeIn {
+	@keyframes enter {
 		from {
 			opacity: 0;
+			transform: translateY(1rem);
 		}
 		to {
 			opacity: 1;
