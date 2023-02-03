@@ -4,8 +4,8 @@
 
 	export let data: PageData;
 
-	const menus = data?.menus.toLocaleString("sv") ?? "jättemånga";
-	const days = data?.days.toLocaleString("sv") ?? "ett astronomiskt antal";
+	const menus = data?.menus?.toLocaleString("sv") ?? "jättemånga";
+	const days = data?.days?.toLocaleString("sv") ?? "ofattbart många";
 </script>
 
 <Seo />

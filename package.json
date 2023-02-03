@@ -28,7 +28,7 @@
 		"prettier": "^2.6.2",
 		"prettier-plugin-svelte": "^2.7.0",
 		"sass": "^1.54.5",
-		"svelte": "^3.55.0",
+		"svelte": "^3.55.1",
 		"svelte-check": "^2.7.1",
 		"svelte-preprocess": "^5.0.0",
 		"tslib": "^2.3.1",
@@ -39,6 +39,7 @@
 	"dependencies": {
 		"@sentry/svelte": "^7.19.0",
 		"@sentry/tracing": "^7.19.0",
+		"@tanstack/svelte-query": "^4.24.4",
 		"chroma-js": "^2.4.2",
 		"jose": "^4.9.2",
 		"luxon": "^3.0.3",
