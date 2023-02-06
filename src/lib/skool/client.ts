@@ -1,7 +1,6 @@
 import request from "$lib/request";
 import { DateTime } from "luxon";
 import { hasCredentials } from "./stores";
-import * as Sentry from "@sentry/svelte";
 
 export const API_URL = "https://api.skolorna.com/v0/skool";
 
@@ -136,40 +135,23 @@ export class Schedule {
 }
 
 export async function getSchedule(year: number, week: number): Promise<Schedule | SkoolError> {
-	const transaction = Sentry.startTransaction({
-		op: "http.client",
-		name: "getSchedule"
-	});
+	const res = await request(`${API_URL}/schedule?year=${year}&week=${week}`);
 
-	try {
-		const res = await request(`${API_URL}/schedule?year=${year}&week=${week}`, undefined, {
-			span: transaction
-		});
+	if (!res.ok) {
+		if (res.status === 401) hasCredentials.set(false);
+		const message = await res.text();
 
-		transaction.setHttpStatus(res.status);
-
-		if (!res.ok) {
-			if (res.status === 401) hasCredentials.set(false);
-
-			return {
-				status: res.status,
-				message: await res.text()
-			};
-		}
-
-		try {
-			const schedule = Schedule.fromJSON(year, week, await res.json());
-
-			hasCredentials.set(true);
-
-			return schedule;
-		} catch (err) {
-			transaction.setStatus("internal_error");
-			throw err;
-		}
-	} finally {
-		transaction.finish();
+		return {
+			status: res.status,
+			message
+		};
 	}
+
+	const schedule = Schedule.fromJSON(year, week, await res.json());
+
+	hasCredentials.set(true);
+
+	return schedule;
 }
 
 export class Link {
