@@ -1,8 +1,8 @@
-import { get as getOden } from "$lib/oden";
+import { ODEN_URL } from "$lib/oden";
 import request from "$lib/request";
 
 export async function getKey(): Promise<string> {
-	const res = await getOden("/key");
+	const res = await request(`${ODEN_URL}/key`, undefined, { auth: false });
 	return res.text();
 }
 

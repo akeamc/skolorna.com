@@ -2,11 +2,7 @@ import { error } from "@sveltejs/kit";
 import type { DateTime } from "luxon";
 import request from "./request";
 
-const API_URL = "https://api.skolorna.com/v03/oden";
-
-export async function get(path: string): Promise<Response> {
-	return request(`${API_URL}${path}`);
-}
+export const ODEN_URL = "https://api.skolorna.com/v03/oden";
 
 export interface Stats {
 	menus: number;
@@ -14,7 +10,7 @@ export interface Stats {
 }
 
 export function getStats(): Promise<Response> {
-	return get("/stats");
+	return request(`${ODEN_URL}/stats`, undefined, { auth: false });
 }
 
 export interface Menu {
@@ -25,10 +21,14 @@ export interface Menu {
 }
 
 export function getMenu(id: string): Promise<Response> {
-	return get(`/menus/${id}`);
+	return request(`${ODEN_URL}/menus/${id}`, undefined, { auth: false });
 }
 
-export type Meal = string;
+export interface Meal {
+	value: string;
+	rating: number | null;
+	reviews: number;
+}
 
 export interface Day {
 	/**
@@ -39,11 +39,67 @@ export interface Day {
 }
 
 export async function getDays(menu: string, first: DateTime, last: DateTime): Promise<Day[]> {
-	const res = await get(`/menus/${menu}/days?first=${first.toISODate()}&last=${last.toISODate()}`);
+	const res = await request(
+		`${ODEN_URL}/menus/${menu}/days?first=${first.toISODate()}&last=${last.toISODate()}`,
+		undefined,
+		{ auth: false }
+	);
 
 	if (res.ok) {
 		return await res.json();
 	}
 
 	throw error(res.status, await res.text());
+}
+
+interface GetReviews {
+	menu?: string;
+	date?: string;
+	meal?: string;
+}
+
+export interface Review {
+	id: string;
+	author: string;
+	menu_id: string;
+	date: string;
+	meal: string;
+	rating: number;
+	comment: string | null;
+	created_at: string;
+	edited_at: string | null;
+}
+
+export async function getReviews(query: GetReviews): Promise<Review[]> {
+	const res = await request(
+		`${ODEN_URL}/reviews?${new URLSearchParams(query as Record<string, string>)}`,
+		undefined,
+		{ auth: false }
+	);
+
+	return res.json();
+}
+
+interface CreateReview {
+	menu_id: string;
+	date: string;
+	meal: string;
+	rating: number;
+	comment?: string;
+}
+
+export async function createReview(data: CreateReview) {
+	return request(`${ODEN_URL}/reviews`, {
+		method: "POST",
+		headers: {
+			"content-type": "application/json"
+		},
+		body: JSON.stringify(data)
+	});
+}
+
+export async function deleteReview(id: string) {
+	return request(`${ODEN_URL}/reviews/${id}`, {
+		method: "DELETE"
+	});
 }

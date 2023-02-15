@@ -2,8 +2,10 @@
 	import type { Day } from "$lib/oden";
 	import Skeleton from "$lib/Skeleton.svelte";
 	import { onMount } from "svelte";
+	import Meal from "./Meal.svelte";
 
-	export let today: boolean = false;
+	export let today = false;
+	export let menu: string;
 	export let data: Day | undefined = undefined;
 
 	function datefmt(date: string) {
@@ -36,7 +38,7 @@
 			<li><Skeleton width="50ch" /></li>
 		{:else}
 			{#each data.meals as meal}
-				<li>{meal}</li>
+				<li><Meal {menu} date={data.date} {meal} /></li>
 			{/each}
 		{/if}
 	</ul>
@@ -77,11 +79,5 @@
 		list-style: none;
 		padding: 0;
 		margin: 0;
-
-		li {
-			font: 500 1.125rem/1.2 var(--font-sans);
-			letter-spacing: -0.014em;
-			margin-block: 1rem 0;
-		}
 	}
 </style>

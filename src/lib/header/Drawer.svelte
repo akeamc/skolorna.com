@@ -125,6 +125,16 @@
 		padding: 0.5rem;
 	}
 
+	.drawer li {
+		transition: opacity 0.1s;
+		opacity: 0;
+	}
+
+	.drawer.open li {
+		opacity: 1;
+		transition-delay: 0.15s;
+	}
+
 	ul {
 		list-style: none;
 		padding: 0;

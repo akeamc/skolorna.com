@@ -4,7 +4,7 @@
 	import Skeleton from "$lib/Skeleton.svelte";
 	import { DateTime } from "luxon";
 	import { spanfmt } from "../date";
-	import { getDays, type Day } from "../oden";
+	import { getDays } from "../oden";
 	import { browser } from "$app/environment";
 	import DayComponent from "./Day.svelte";
 
@@ -52,14 +52,14 @@
 		{#if $days.isSuccess && $days.data?.length > 0}
 			<ol>
 				{#each $days.data as day (day.date)}
-					<DayComponent data={day} today={day.date === now.toISODate()} />
+					<DayComponent {menu} data={day} today={day.date === now.toISODate()} />
 				{/each}
 			</ol>
 		{:else}
 			{@const empty = $days.data?.length === 0}
 			<ol class:blur={empty}>
 				{#each [1, 2, 3, 4, 5] as _}
-					<DayComponent />
+					<DayComponent {menu} />
 				{/each}
 			</ol>
 			{#if empty}

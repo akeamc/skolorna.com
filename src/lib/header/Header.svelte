@@ -56,7 +56,9 @@
 	</div>
 </header>
 
-<Drawer open={drawerOpen} onClose={() => (drawerOpen = false)} />
+<div class="drawer">
+	<Drawer open={drawerOpen} onClose={() => (drawerOpen = false)} />
+</div>
 
 <style lang="scss">
 	header {
@@ -119,7 +121,8 @@
 	}
 
 	@media (min-width: 768px) {
-		.toggle {
+		.toggle,
+		.drawer {
 			display: none;
 		}
 

@@ -106,6 +106,9 @@
 		--page-gutter: 1.5rem;
 	}
 
+	--star-filled: var(--text0);
+	--star-unfilled: var(--outline);
+
 	font-family: var(--font-sans);
 	background-color: var(--surface0);
 	color: var(--text0);

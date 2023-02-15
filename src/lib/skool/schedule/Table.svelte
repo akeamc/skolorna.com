@@ -8,8 +8,8 @@
 	import Skeleton from "$lib/Skeleton.svelte";
 	import Clock from "./Clock.svelte";
 	import ShareModal from "./share/ShareModal.svelte";
-	import Button from "$lib/Button.svelte";
-	import { ShareIcon } from "svelte-feather-icons";
+	// import Button from "$lib/Button.svelte";
+	// import { ShareIcon } from "svelte-feather-icons";
 
 	let windowWidth: number;
 	let shareModalOpen = false;
@@ -80,11 +80,11 @@
 				{numLessons} {numLessons == 1 ? "lektion" : "lektioner"}
 			{/if}
 		</div>
-		<div class="share">
+		<!-- <div class="share">
 			<Button size="medium" variant="secondary" on:click={() => (shareModalOpen = true)}
 				><ShareIcon />Dela</Button
 			>
-		</div>
+		</div> -->
 	</header>
 
 	{#each cols as lessons, i}
@@ -283,11 +283,11 @@
 			align-self: flex-end;
 		}
 
-		.share {
-			grid-column: 2;
-			grid-row: 1 / span 2;
-			justify-self: flex-end;
-		}
+		// .share {
+		// 	grid-column: 2;
+		// 	grid-row: 1 / span 2;
+		// 	justify-self: flex-end;
+		// }
 
 		.count {
 			font: 500 0.875rem/1 var(--font-sans);

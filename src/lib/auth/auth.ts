@@ -98,29 +98,26 @@ interface LoginResponse {
 }
 
 export async function login(email: string): Promise<void | AuthError> {
-	try {
-		const res = await request(
-			`${API_URL}/login`,
-			{
-				method: "POST",
-				headers: {
-					"content-type": "application/json"
-				},
-				body: JSON.stringify({ email })
+	const res = await request(
+		`${API_URL}/login`,
+		{
+			method: "POST",
+			headers: {
+				"content-type": "application/json"
 			},
-			{ auth: false }
-		);
+			body: JSON.stringify({ email })
+		},
+		{ auth: false }
+	);
 
-		if (!res.ok) {
-			authenticating.set(false);
-			return { status: res.status, message: await res.text() };
-		}
-
-		const data: LoginResponse = await res.json();
-
-		loginToken.set(data.token);
-	} finally {
+	if (!res.ok) {
+		authenticating.set(false);
+		return { status: res.status, message: await res.text() };
 	}
+
+	const data: LoginResponse = await res.json();
+
+	loginToken.set(data.token);
 }
 
 export interface RegistrationRequest {
@@ -197,15 +194,12 @@ authenticated.subscribe(async (v) => {
 });
 
 export async function getUser(): Promise<User> {
-	try {
-		const res = await request(`${API_URL}/account`, undefined);
-		if (!res.ok) throw new Error(await res.text());
+	const res = await request(`${API_URL}/account`, undefined);
+	if (!res.ok) throw new Error(await res.text());
 
-		const user: User = await res.json();
+	const user: User = await res.json();
 
-		return user;
-	} finally {
-	}
+	return user;
 }
 
 export function requireAuth(next?: string): void {
@@ -218,4 +212,16 @@ export function requireAuth(next?: string): void {
 			}
 		})
 	);
+}
+
+export interface Profile {
+	id: string;
+	full_name: string;
+	created_at: string;
+}
+
+export async function getProfile(user: string): Promise<Profile> {
+	const res = await request(`${API_URL}/users/${user}/profile`, undefined, { auth: false });
+	if (!res.ok) throw new Error(await res.text());
+	return res.json();
 }

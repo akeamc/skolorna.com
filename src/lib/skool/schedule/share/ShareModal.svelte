@@ -2,7 +2,7 @@
 	import Button from "$lib/Button.svelte";
 	import ButtonGroup from "$lib/ButtonGroup.svelte";
 	import Modal from "$lib/Modal.svelte";
-	import { CopyIcon, Link2Icon, Trash2Icon } from "svelte-feather-icons";
+	import { Link2Icon } from "svelte-feather-icons";
 	import { createLink, getLinks, type Link as LinkClass } from "../../client";
 	import Link from "./Link.svelte";
 
