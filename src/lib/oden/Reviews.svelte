@@ -7,12 +7,15 @@
 	export let menu: string;
 	export let date: string;
 	export let meal: string;
+	export let enabled = true;
+	export let count = 3;
 
 	const client = useQueryClient();
 
 	$: reviews = createQuery({
 		queryKey: ["reviews", menu, meal],
-		queryFn: () => getReviews({ menu, meal })
+		queryFn: () => getReviews({ menu, meal }),
+		enabled
 	});
 
 	function onMutation() {
@@ -55,7 +58,7 @@
 			<Review {...review} on:delete={onMutation} />
 		{/each}
 	{:else}
-		{#each new Array(3) as _}
+		{#each new Array(count) as _}
 			<Review loading />
 		{/each}
 	{/if}

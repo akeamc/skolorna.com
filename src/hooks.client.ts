@@ -1,4 +1,8 @@
-import { BatchSpanProcessor, WebTracerProvider } from "@opentelemetry/sdk-trace-web";
+import {
+	BatchSpanProcessor,
+	TraceIdRatioBasedSampler,
+	WebTracerProvider
+} from "@opentelemetry/sdk-trace-web";
 import { ZoneContextManager } from "@opentelemetry/context-zone";
 import { registerInstrumentations } from "@opentelemetry/instrumentation";
 import { DocumentLoadInstrumentation } from "@opentelemetry/instrumentation-document-load";
@@ -12,7 +16,8 @@ const provider = new WebTracerProvider({
 		new Resource({
 			[SemanticResourceAttributes.SERVICE_NAME]: "skolorna.com"
 		})
-	)
+	),
+	sampler: new TraceIdRatioBasedSampler(0.1)
 });
 provider.addSpanProcessor(
 	new BatchSpanProcessor(

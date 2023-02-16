@@ -26,7 +26,7 @@
 		</button>
 
 		{#if expanded}
-			<Reviews {menu} {date} meal={meal.value} />
+			<Reviews {menu} {date} meal={meal.value} count={meal.reviews} />
 		{/if}
 	</div>
 </div>
