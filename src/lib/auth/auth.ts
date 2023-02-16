@@ -225,3 +225,36 @@ export async function getProfile(user: string): Promise<Profile> {
 	if (!res.ok) throw new Error(await res.text());
 	return res.json();
 }
+
+export interface ProfileUpdate {
+	full_name?: string;
+}
+
+export async function updateProfile(update: ProfileUpdate): Promise<Profile> {
+	await getAccessToken();
+	const userId = get(user)?.id;
+	if (!userId) throw new Error("not logged in");
+
+	const res = await request(`${API_URL}/users/${userId}/profile`, {
+		method: "PATCH",
+		headers: {
+			"content-type": "application/json"
+		},
+		body: JSON.stringify(update)
+	});
+
+	if (!res.ok) throw new Error(await res.text());
+
+	const profile: Profile = await res.json();
+
+	// todo: tidy this up
+	user.update((u) => {
+		if (u) {
+			return { ...u, full_name: profile.full_name };
+		}
+
+		return u;
+	});
+
+	return profile;
+}

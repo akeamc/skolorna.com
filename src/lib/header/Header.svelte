@@ -36,7 +36,7 @@
 					{#if $authenticated}
 						<li>
 							<a href="/account">
-								{#if $user?.full_name}
+								{#if typeof $user?.full_name === "string"}
 									{$user?.full_name}
 								{:else}
 									Konto
