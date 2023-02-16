@@ -9,15 +9,14 @@
 	import { DateTime } from "luxon";
 	import { createEventDispatcher } from "svelte";
 
-	export let author: string | undefined = undefined;
-	export let rating: number | undefined = undefined;
-	export let created_at: string | undefined = undefined;
-	export let comment: string | null | undefined = undefined;
-	export let id: string | undefined = undefined;
+	export let author: string | undefined = undefined,
+		rating: number | undefined = undefined,
+		created_at: string | undefined = undefined,
+		comment: string | null | undefined = undefined,
+		id: string | undefined = undefined;
 
-	export let loading = false;
-
-	export let interactive = false;
+	export let loading = false,
+		interactive = false;
 
 	const dispatch = createEventDispatcher();
 
@@ -128,7 +127,11 @@
 		border-radius: 0.25rem;
 		width: 100%;
 		box-sizing: border-box;
-		background-color: var(--surface1);
+		background-color: var(--surface2);
+
+		&:focus {
+			outline: 1px solid var(--theme-hover);
+		}
 
 		&::placeholder {
 			color: var(--text0-muted);

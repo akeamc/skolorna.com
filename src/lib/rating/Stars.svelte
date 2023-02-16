@@ -17,6 +17,7 @@
 		<Star
 			{interactive}
 			percentage={Math.min(Math.max(rating - i, 0), 1)}
+			title={`${i + 1} av ${total} stjärnor`}
 			on:click={() => onStarClick(i)}
 		/>
 	{/each}

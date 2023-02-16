@@ -25,9 +25,9 @@
 			</div>
 		</button>
 
-		{#if expanded}
-			<Reviews {menu} {date} meal={meal.value} count={meal.reviews} />
-		{/if}
+		<div class="collapsible">
+			<Reviews {menu} {date} meal={meal.value} count={meal.reviews} enabled={expanded} />
+		</div>
 	</div>
 </div>
 
@@ -51,7 +51,7 @@
 		margin-block: 0.5rem;
 		gap: 0.25rem;
 
-		&:focus {
+		&:focus-visible {
 			outline: 2px solid var(--theme-hover);
 		}
 
@@ -63,7 +63,17 @@
 		}
 	}
 
-	.reviews.expanded .chevron :global(svg) {
-		transform: rotate(180deg);
+	.collapsible {
+		visibility: collapse;
+	}
+
+	.reviews.expanded {
+		.collapsible {
+			visibility: visible;
+		}
+
+		.chevron :global(svg) {
+			transform: rotate(180deg);
+		}
 	}
 </style>
