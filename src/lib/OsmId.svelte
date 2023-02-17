@@ -1,15 +1,18 @@
 <script lang="ts">
+	import { createQuery } from "@tanstack/svelte-query";
 	import { MapPinIcon } from "svelte-feather-icons";
 	import Skeleton from "./Skeleton.svelte";
-	import { getElement, osmUrl, type OsmElement } from "./util/osm";
+	import { getElement, osmUrl } from "./util/osm";
 
 	export let id: string;
 
-	let element: OsmElement;
+	$: elementQuery = createQuery({
+		queryKey: ["osm", id],
+		queryFn: () => getElement(id),
+		enabled: !!id
+	});
 
-	$: getElement(id).then((el) => (element = el));
-
-	$: name = element?.tags?.name;
+	$: name = $elementQuery?.data?.tags?.name;
 </script>
 
 <a href={osmUrl(id)}>

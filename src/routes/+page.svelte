@@ -5,14 +5,14 @@
 	export let data: PageData;
 
 	const menus = data?.menus?.toLocaleString("sv") ?? "jättemånga";
-	const days = data?.days?.toLocaleString("sv") ?? "ofattbart många";
+	const meals = data?.meals?.toLocaleString("sv") ?? "ofattbart många";
 </script>
 
 <Seo />
 
 <section class="hero">
 	<h1>Vi vet vad det blir till lunch på <em>{menus}</em> ställen</h1>
-	<p>Hittills har vi arkiverat {days} måltider.</p>
+	<p>Hittills har vi arkiverat {meals} rätter.</p>
 </section>
 
 <style lang="scss">

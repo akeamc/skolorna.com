@@ -6,7 +6,7 @@ export const ODEN_URL = "https://api.skolorna.com/v03/oden";
 
 export interface Stats {
 	menus: number;
-	days: number;
+	meals: number;
 }
 
 export function getStats(): Promise<Response> {
