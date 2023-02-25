@@ -95,13 +95,13 @@
 	}
 
 	.medium {
-		height: 2.5rem;
+		height: 2.25rem;
 		font-size: 0.875rem;
 		padding-inline: 1.25rem;
 	}
 
 	.large {
-		height: 3rem;
+		height: 2.5rem;
 		font-size: 0.875rem;
 		padding-inline: 1.5rem;
 	}

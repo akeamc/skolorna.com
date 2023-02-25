@@ -1,17 +1,20 @@
 <script lang="ts">
 	import Button from "$lib/Button.svelte";
+	import { createMutation } from "@tanstack/svelte-query";
+	import { createEventDispatcher } from "svelte";
 	import { CopyIcon, Trash2Icon } from "svelte-feather-icons";
 	import type { Link as LinkClass } from "../../client";
 
 	export let link: LinkClass;
-	export let links: LinkClass[];
-	export let setLinks: (links: LinkClass[]) => void;
 
-	async function del() {
-		await link.del();
+	const dispatch = createEventDispatcher();
 
-		setLinks(links.filter((l) => l.id !== link.id));
-	}
+	$: deleteMutation = createMutation({
+		mutationFn: () => link.del(),
+		onSuccess: () => {
+			dispatch("delete");
+		}
+	});
 
 	async function copy() {
 		await link.copyToClipboard();
@@ -24,7 +27,13 @@
 	<Button type="button" on:click={copy} size="small" variant="tetriary">
 		<CopyIcon />
 	</Button>
-	<Button type="button" color="danger" on:click={del} size="small" variant="tetriary">
+	<Button
+		type="button"
+		color="danger"
+		on:click={() => $deleteMutation.mutate()}
+		size="small"
+		variant="tetriary"
+	>
 		<Trash2Icon />
 	</Button>
 </li>
