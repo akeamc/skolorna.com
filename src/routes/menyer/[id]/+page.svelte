@@ -1,6 +1,6 @@
 <script lang="ts">
 	import MenuViewer from "$lib/oden/MenuViewer.svelte";
-	import OsmId from "$lib/OsmId.svelte";
+	// import OsmId from "$lib/OsmId.svelte";
 	import Seo from "$lib/Seo.svelte";
 	import type { PageData } from "./$types";
 
@@ -12,11 +12,11 @@
 <div class="container">
 	<header>
 		<h1>{data.title}</h1>
-		{#if data.osm_id}
+		<!-- {#if data.osm_id}
 			<div class="osm">
 				<OsmId id={data.osm_id} />
 			</div>
-		{/if}
+		{/if} -->
 	</header>
 
 	<MenuViewer menu={data.id} />
@@ -45,7 +45,7 @@
 		}
 	}
 
-	.osm {
-		margin-block: 1rem;
-	}
+	// .osm {
+	// 	margin-block: 1rem;
+	// }
 </style>

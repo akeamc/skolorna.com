@@ -11,19 +11,21 @@
 	const gradientId = "gradient-" + Math.random().toString(36).substring(2, 9);
 </script>
 
-<button
+<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
+<div
 	class="button"
+	class:interactive
 	on:click={() => dispatch("click")}
 	role={interactive ? "radio" : undefined}
-	disabled={!interactive}
 	title={interactive ? title : undefined}
+	tabindex={interactive ? 0 : undefined}
 >
 	<svg {width} height={width} viewBox="0 0 22 22">
 		<defs>
 			<linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="0%">
 				<stop class="filled" offset="0%" />
-				<stop class="filled" offset="{percentage * 100}%" />
-				<stop class="unfilled" offset="{percentage * 100}%" />
+				<stop class="filled" offset="{(percentage || 0) * 100}%" />
+				<stop class="unfilled" offset="{(percentage || 0) * 100}%" />
 			</linearGradient>
 		</defs>
 		<path
@@ -32,13 +34,16 @@
 			fill="url(#{gradientId})"
 		/>
 	</svg>
-</button>
+</div>
 
 <style lang="scss">
 	.button {
 		all: unset;
 		display: flex;
-		cursor: pointer;
+
+		&.interactive {
+			cursor: pointer;
+		}
 
 		&:disabled {
 			pointer-events: none;

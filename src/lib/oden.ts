@@ -88,14 +88,16 @@ interface CreateReview {
 	comment?: string;
 }
 
-export async function createReview(data: CreateReview) {
-	return request(`${ODEN_URL}/reviews`, {
+export async function createReview(data: CreateReview): Promise<Review> {
+	const res = await request(`${ODEN_URL}/reviews`, {
 		method: "POST",
 		headers: {
 			"content-type": "application/json"
 		},
 		body: JSON.stringify(data)
 	});
+
+	return res.json();
 }
 
 export async function deleteReview(id: string) {

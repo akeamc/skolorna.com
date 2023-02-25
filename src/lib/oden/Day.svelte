@@ -33,12 +33,13 @@
 		{/if}
 	</h3>
 	<ul>
-		{#if !data?.meals}
-			<li><Skeleton width="50ch" /></li>
-			<li><Skeleton width="50ch" /></li>
-		{:else}
+		{#if data}
 			{#each data.meals as meal}
 				<li><Meal {menu} date={data.date} {meal} /></li>
+			{/each}
+		{:else}
+			{#each [1, 2] as _}
+				<li><Meal {menu} /></li>
 			{/each}
 		{/if}
 	</ul>

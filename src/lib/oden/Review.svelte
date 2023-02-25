@@ -9,14 +9,13 @@
 	import { DateTime } from "luxon";
 	import { createEventDispatcher } from "svelte";
 
-	export let author: string | undefined = undefined,
-		rating: number | undefined = undefined,
-		created_at: string | undefined = undefined,
-		comment: string | null | undefined = undefined,
-		id: string | undefined = undefined;
-
-	export let loading = false,
-		interactive = false;
+	export let author: string | undefined = undefined;
+	export let rating: number | undefined = undefined;
+	export let created_at: string | undefined = undefined;
+	export let comment: string | null | undefined = undefined;
+	export let id: string | undefined = undefined;
+	export let loading = false;
+	export let interactive = false;
 
 	const dispatch = createEventDispatcher();
 
@@ -82,7 +81,8 @@
 	<div class="actions">
 		{#if interactive}
 			{#if $user}
-				<Button size="small" on:click={() => dispatch("submit")} disabled={!valid}>Spara</Button>
+				<Button size="small" on:click={() => dispatch("submit")} disabled={!valid}>Publicera</Button
+				>
 			{:else}
 				<a href={`/login?next=${$page.url.pathname}`}>Logga in</a> för att recensera
 			{/if}
@@ -127,10 +127,11 @@
 		border-radius: 0.25rem;
 		width: 100%;
 		box-sizing: border-box;
-		background-color: var(--surface2);
+		background-color: var(--surface1);
+		border: 1px solid var(--outline);
 
 		&:focus {
-			outline: 1px solid var(--theme-hover);
+			border-color: var(--theme-hover);
 		}
 
 		&::placeholder {

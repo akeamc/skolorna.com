@@ -1,33 +1,36 @@
 <script lang="ts">
 	import type { Meal } from "$lib/oden";
 	import Stars from "$lib/rating/Stars.svelte";
+	import Skeleton from "$lib/Skeleton.svelte";
 	import { ChevronsDownIcon } from "svelte-feather-icons";
 	import Reviews from "./Reviews.svelte";
 
 	export let menu: string;
-	export let date: string;
-	export let meal: Meal;
+	export let date: string | undefined = undefined;
+	export let meal: Meal | undefined = undefined;
 
 	let expanded = false;
 </script>
 
 <div class="meal">
-	<h4>{meal.value}</h4>
+	<h4>
+		{#if meal}{meal.value}{:else}<Skeleton width="50ch" />{/if}
+	</h4>
 
 	<div class="reviews" class:expanded>
-		<button class="rating" on:click={() => (expanded = !expanded)}>
-			<div class="stars">
-				<Stars rating={meal.rating ?? undefined} />
-			</div>
+		<button class="rating" on:click={() => (expanded = !expanded)} disabled={!meal}>
+			<Stars rating={meal?.rating ?? undefined} />
 
 			<div class="chevron">
 				<ChevronsDownIcon />
 			</div>
 		</button>
 
-		<div class="collapsible">
-			<Reviews {menu} {date} meal={meal.value} count={meal.reviews} enabled={expanded} />
-		</div>
+		{#if date && meal}
+			<div class="collapsible">
+				<Reviews {menu} {date} meal={meal.value} count={meal.reviews} enabled={expanded} />
+			</div>
+		{/if}
 	</div>
 </div>
 
@@ -46,10 +49,13 @@
 		all: unset;
 		display: flex;
 		align-items: center;
-		cursor: pointer;
 		font: 400 0.875rem/1 var(--font-sans);
 		margin-block: 0.5rem;
 		gap: 0.25rem;
+
+		&:not(:disabled) {
+			cursor: pointer;
+		}
 
 		&:focus-visible {
 			outline: 2px solid var(--theme-hover);

@@ -34,7 +34,7 @@
 		font-weight: 500;
 		line-height: 1.1;
 		cursor: pointer;
-		transition: background-color 0.1s;
+		transition: background-color 0.1s, outline-offset 0.1s;
 		display: inline-flex;
 		justify-content: center;
 		align-items: center;
@@ -43,7 +43,7 @@
 		user-select: none;
 		gap: 0.5rem;
 
-		&:focus {
+		&:focus-visible {
 			outline: var(--outline) solid 2px;
 			outline-offset: 2px;
 		}
@@ -54,6 +54,7 @@
 
 		&:active {
 			background-color: var(--bg-active);
+			outline-offset: 0;
 		}
 
 		&.secondary,

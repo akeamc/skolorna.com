@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { user } from "$lib/auth/auth";
-	import { createReview, getReviews } from "$lib/oden";
+	import { createReview, getReviews, type Review as ReviewType } from "$lib/oden";
 	import { createMutation, createQuery, useQueryClient } from "@tanstack/svelte-query";
 	import Review from "./Review.svelte";
 
@@ -20,12 +20,21 @@
 
 	function onMutation() {
 		client.invalidateQueries({ queryKey: ["days"] });
-		client.invalidateQueries({ queryKey: ["reviews", menu, meal] });
+	}
+
+	function onDelete(id: string) {
+		client.setQueryData<ReviewType[]>(["reviews", menu, meal], (reviews) => {
+			if (reviews) return reviews.filter((review) => review.id !== id);
+		});
+		onMutation();
 	}
 
 	$: createReviewMutation = createMutation({
 		mutationFn: () => createReview({ menu_id: menu, meal, date, rating, comment }),
-		onSuccess: () => {
+		onSuccess: (review) => {
+			client.setQueryData<ReviewType[]>(["reviews", menu, meal], (reviews) => {
+				if (reviews) return [review, ...reviews];
+			});
 			onMutation();
 			comment = "";
 			rating = 0;
@@ -55,7 +64,7 @@
 
 	{#if $reviews.isSuccess}
 		{#each $reviews.data as review}
-			<Review {...review} on:delete={onMutation} />
+			<Review {...review} on:delete={() => onDelete(review.id)} />
 		{/each}
 	{:else}
 		{#each new Array(count) as _}

@@ -13,7 +13,7 @@
 </script>
 
 <div class="stars">
-	{#each new Array(total) as _, i}
+	{#each Array.from({ length: total }) as _, i}
 		<Star
 			{interactive}
 			percentage={Math.min(Math.max(rating - i, 0), 1)}
@@ -23,7 +23,7 @@
 	{/each}
 </div>
 
-<style lang="scss">
+<style>
 	.stars {
 		display: flex;
 	}
