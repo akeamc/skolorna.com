@@ -15,8 +15,8 @@
 
 <section class="hero">
 	{#if !$authenticated}
-		<Announcement
-			>Nu går det att använda Google för att <a href="/login">logga in<ArrowRightIcon /></a>
+		<Announcement>
+			Nu går det att använda Google för att <a href="/login">logga in<ArrowRightIcon /></a>
 		</Announcement>
 	{/if}
 	<h1>Vi vet vad det blir till lunch på <em>{menus}</em> ställen</h1>
