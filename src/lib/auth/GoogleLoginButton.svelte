@@ -1,0 +1,22 @@
+<script lang="ts">
+	import { onMount } from "svelte";
+
+	let container: HTMLDivElement;
+
+	onMount(() => {
+		google.accounts.id.renderButton(container, {
+			type: "standard",
+			size: "large",
+			text: "continue_with",
+			width: "400px"
+		});
+	});
+</script>
+
+<div bind:this={container} />
+
+<style>
+	div {
+		margin-block: 1rem;
+	}
+</style>

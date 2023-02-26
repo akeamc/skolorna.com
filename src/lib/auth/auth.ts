@@ -19,7 +19,16 @@ interface RefreshTokenRequest {
 	refresh_token: string;
 }
 
-type TokenRequest = OtpTokenRequest | RefreshTokenRequest;
+type OpenIdProvider = "google";
+
+interface IdTokenRequest {
+	grant_type: "id_token";
+	provider: OpenIdProvider;
+	id_token: string;
+	nonce: string;
+}
+
+type TokenRequest = OtpTokenRequest | RefreshTokenRequest | IdTokenRequest;
 
 interface TokenResponse {
 	access_token: string;
