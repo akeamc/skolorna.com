@@ -1,6 +1,5 @@
 <script lang="ts">
 	import Announcement from "$lib/Announcement.svelte";
-	import { authenticated } from "$lib/auth/auth";
 	import Seo from "$lib/Seo.svelte";
 	import { ArrowRightIcon } from "svelte-feather-icons";
 	import type { PageData } from "./$types";
@@ -14,11 +13,10 @@
 <Seo />
 
 <section class="hero">
-	{#if !$authenticated}
-		<Announcement>
-			Nu går det att använda Google för att <a href="/login">logga in<ArrowRightIcon /></a>
-		</Announcement>
-	{/if}
+	<Announcement>
+		<strong>Nyhet: </strong> Nu går det att använda Google för att
+		<a href="/login?next=/account">logga in<ArrowRightIcon /></a>
+	</Announcement>
 	<h1>Vi vet vad det blir till lunch på <em>{menus}</em> ställen</h1>
 	<p>Hittills har vi arkiverat {meals} rätter.</p>
 </section>

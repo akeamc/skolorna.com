@@ -18,7 +18,7 @@
 
 		& :global(a) {
 			color: inherit;
-			font-weight: 600;
+			font-weight: bold;
 
 			& :global(svg) {
 				height: 1em;
