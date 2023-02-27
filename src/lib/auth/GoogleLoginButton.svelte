@@ -7,8 +7,7 @@
 		google.accounts.id.renderButton(container, {
 			type: "standard",
 			size: "large",
-			text: "continue_with",
-			width: "400px"
+			text: "continue_with"
 		});
 	});
 </script>
