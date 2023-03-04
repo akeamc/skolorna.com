@@ -40,8 +40,14 @@
 
 <div class="review">
 	<div class="author">
-		{#if $authorQuery.isSuccess}
-			{$authorQuery.data.full_name}
+		{#if interactive}
+			Lämna ett omdöme
+		{:else if $authorQuery.isSuccess}
+			{#if $authorQuery.data.id === $user?.id}
+				Ditt omdöme
+			{:else}
+				{$authorQuery.data.full_name}
+			{/if}
 		{:else}
 			<Skeleton width="12ch" />
 		{/if}
@@ -64,18 +70,18 @@
 		<textarea
 			class="comment"
 			bind:value={comment}
-			placeholder="Eventuell kommentar"
+			placeholder="Eventuell kommentar (visas ej i nuvarande version)"
 			rows="4"
 			{disabled}
 		/>
-	{:else if comment}
+		<!-- {:else if comment}
 		<p class="comment">
 			{comment}
 		</p>
 	{:else if loading}
 		<p class="comment">
 			<Skeleton width="20ch" />
-		</p>
+		</p> -->
 	{/if}
 
 	<div class="actions">
@@ -99,7 +105,6 @@
 		border: 1px solid var(--outline);
 		border-radius: 0.5rem;
 		padding: 0.5rem;
-		max-width: 30rem;
 		font: 500 0.875rem/1 var(--font-sans);
 		letter-spacing: -0.006em;
 		color: var(--text0-muted);

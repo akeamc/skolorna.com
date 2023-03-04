@@ -2,8 +2,10 @@
 	import { user } from "$lib/auth/auth";
 	import { createReview, getReviews, type Review as ReviewType } from "$lib/oden";
 	import { createMutation, createQuery, useQueryClient } from "@tanstack/svelte-query";
+	import RatingHistogram from "./RatingHistogram.svelte";
 	import Review from "./Review.svelte";
 
+	export let average: number | null | undefined = undefined;
 	export let menu: string;
 	export let date: string;
 	export let meal: string;
@@ -52,6 +54,8 @@
 </script>
 
 <div class="reviews">
+	<RatingHistogram reviews={$reviews.data} {average} />
+
 	{#if reviewable}
 		<Review
 			author={$user?.id}
@@ -64,7 +68,9 @@
 
 	{#if $reviews.isSuccess}
 		{#each $reviews.data as review}
-			<Review {...review} on:delete={() => onDelete(review.id)} />
+			{#if review.author === $user?.id}
+				<Review {...review} on:delete={() => onDelete(review.id)} />
+			{/if}
 		{/each}
 	{:else}
 		{#each new Array(count) as _}
@@ -78,5 +84,6 @@
 		display: flex;
 		flex-direction: column;
 		gap: 1rem;
+		max-width: 30rem;
 	}
 </style>

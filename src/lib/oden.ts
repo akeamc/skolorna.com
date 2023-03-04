@@ -80,6 +80,18 @@ export async function getReviews(query: GetReviews): Promise<Review[]> {
 	return res.json();
 }
 
+type RatingHistogram = Record<number, number>;
+
+export function ratingHistogram(reviews: Review[]): RatingHistogram {
+	const histogram: RatingHistogram = {};
+
+	for (const review of reviews) {
+		histogram[review.rating] = (histogram[review.rating] || 0) + 1;
+	}
+
+	return histogram;
+}
+
 interface CreateReview {
 	menu_id: string;
 	date: string;

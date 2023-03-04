@@ -28,7 +28,14 @@
 
 		{#if date && meal}
 			<div class="collapsible">
-				<Reviews {menu} {date} meal={meal.value} count={meal.reviews} enabled={expanded} />
+				<Reviews
+					{menu}
+					{date}
+					meal={meal.value}
+					count={meal.reviews}
+					enabled={expanded}
+					average={meal?.rating}
+				/>
 			</div>
 		{/if}
 	</div>
