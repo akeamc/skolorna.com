@@ -24,10 +24,14 @@
 				<Skeleton width="2.5ch" />
 			{/if}
 		</div>
-		<div class="count">
-			{reviews?.length}
-			{reviews?.length === 1 ? "recension" : "recensioner"}
-		</div>
+		{#if typeof reviews === "undefined"}
+			<Skeleton width="10ch" />
+		{:else}
+			<div class="count">
+				{reviews?.length}
+				{reviews?.length === 1 ? "recension" : "recensioner"}
+			</div>
+		{/if}
 	</div>
 	<table>
 		<tbody>

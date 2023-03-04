@@ -9,7 +9,7 @@
 	.skeleton {
 		background-color: var(--surface2);
 		border-radius: 0.75rem;
-		display: inline-block;
+		display: inline-flex;
 		line-height: 1;
 		max-width: 100%;
 	}
