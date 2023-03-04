@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from "svelte";
-	import { authenticate, authenticated } from "./auth";
+	import { authenticate, authenticated, authenticating } from "./auth";
 
 	export let clientId: string;
 
@@ -30,7 +30,7 @@
 		initialized = true;
 	});
 
-	$: if (initialized && !$authenticated) {
+	$: if (initialized && !$authenticated && !$authenticating) {
 		google.accounts.id.prompt();
 	}
 </script>
