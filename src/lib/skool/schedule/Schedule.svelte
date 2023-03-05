@@ -4,12 +4,11 @@
 	import { DateTime } from "luxon";
 	import { derived, get, writable } from "svelte/store";
 	import { getSchedule, type Schedule, type SkoolError } from "../client";
-	import Credentials from "../Credentials.svelte";
 	import { hasCredentials } from "../stores";
 	import { endOfScope, setScheduleContext, startOfScope, type Scope } from "./schedule";
 	import Table from "./Table.svelte";
-	import logo from "$lib/assets/sterik.svg";
 	import SplashScreen from "./SplashScreen.svelte";
+	import CredentialsModal from "../CredentialsModal.svelte";
 
 	const cursor = writable(DateTime.now());
 	const scope = writable<Scope>("week");
@@ -63,18 +62,7 @@
 </script>
 
 <section style:--offset={$offset}>
-	{#if $hasCredentials === false}
-		<div class="unauthenticated">
-			<div class="modal">
-				<header>
-					<img alt="Sankt Erik med solglasögon" src={logo} />
-				</header>
-				<div class="inner">
-					<Credentials />
-				</div>
-			</div>
-		</div>
-	{/if}
+	<CredentialsModal />
 
 	{#if $splashScreen || $hasCredentials !== true}
 		<SplashScreen />
@@ -86,75 +74,5 @@
 <style lang="scss">
 	section {
 		position: relative;
-	}
-
-	.unauthenticated {
-		position: absolute;
-		inset: 0;
-		z-index: 3;
-		backdrop-filter: blur(8px);
-		background-color: rgba(0, 0, 0, 0.2);
-		display: flex;
-		align-items: center;
-		flex-direction: column;
-		box-sizing: border-box;
-		animation: enter 0.2s ease-out;
-
-		@media (min-width: 480px) {
-			padding: 0 var(--page-gutter);
-		}
-
-		@keyframes enter {
-			0% {
-				opacity: 0;
-			}
-			100% {
-				opacity: 1;
-			}
-		}
-
-		.modal {
-			--padding: var(--page-gutter);
-			--border-radius: 0;
-
-			background-color: var(--surface0);
-			margin: 0;
-			flex: 1;
-			max-width: 100%;
-			border-radius: var(--border-radius);
-
-			@media (min-width: 480px) {
-				--padding: 2rem;
-				--border-radius: 1rem;
-
-				box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-				width: 30rem;
-				margin-top: 4rem;
-				flex: 0;
-			}
-
-			header {
-				background-color: var(--surface1);
-				padding: var(--padding);
-				border-start-start-radius: var(--border-radius);
-				border-start-end-radius: var(--border-radius);
-				display: flex;
-				justify-content: center;
-			}
-
-			img {
-				display: block;
-				width: 100%;
-				max-width: 8rem;
-
-				@media (prefers-color-scheme: dark) {
-					filter: saturate(0.5);
-				}
-			}
-
-			.inner {
-				padding: var(--padding);
-			}
-		}
 	}
 </style>

@@ -1,9 +1,8 @@
 import request from "$lib/request";
 import { DateTime } from "luxon";
 import { hasCredentials } from "./stores";
-import * as Sentry from "@sentry/svelte";
 
-export const API_URL = "https://api2.skolorna.com/v0/skool";
+export const API_URL = "https://api.skolorna.com/v0/skool";
 
 interface SkolplattformenCredentials {
 	service: "skolplattformen";
@@ -136,38 +135,79 @@ export class Schedule {
 }
 
 export async function getSchedule(year: number, week: number): Promise<Schedule | SkoolError> {
-	const transaction = Sentry.startTransaction({
-		op: "http.client",
-		name: "getSchedule"
+	const res = await request(`${API_URL}/schedule?year=${year}&week=${week}`);
+
+	if (!res.ok) {
+		if (res.status === 401) hasCredentials.set(false);
+		const message = await res.text();
+
+		return {
+			status: res.status,
+			message
+		};
+	}
+
+	const schedule = Schedule.fromJSON(year, week, await res.json());
+
+	hasCredentials.set(true);
+
+	return schedule;
+}
+
+export class Link {
+	constructor(public id: string) {}
+
+	static fromJSON(json: unknown): Link {
+		if (typeof json !== "object" || json === null) throw new Error("invalid json");
+
+		const { id } = json as Record<string, unknown>;
+
+		if (typeof id !== "string" || !id) throw new Error("invalid id");
+
+		return new Link(id);
+	}
+
+	get url(): string {
+		return `https://skolorna.com/schedule?share=${this.id}`;
+	}
+
+	copyToClipboard(): Promise<void> {
+		return navigator.clipboard.writeText(this.url);
+	}
+
+	async del(): Promise<void> {
+		return deleteLink(this.id);
+	}
+}
+
+export async function getLinks(): Promise<Link[]> {
+	const res = await request(`${API_URL}/schedule/links`);
+
+	const links = await res.json();
+
+	if (!Array.isArray(links)) throw new Error("invalid links");
+
+	return links.map(Link.fromJSON);
+}
+
+export async function createLink(): Promise<Link> {
+	const res = await request(`${API_URL}/schedule/links`, {
+		method: "POST",
+		headers: {
+			"content-type": "application/json"
+		},
+		body: JSON.stringify({})
 	});
 
-	try {
-		const res = await request(`${API_URL}/schedule?year=${year}&week=${week}`, undefined, {
-			span: transaction
-		});
+	const json = await res.json();
 
-		transaction.setHttpStatus(res.status);
+	return Link.fromJSON(json);
+}
 
-		if (!res.ok) {
-			if (res.status === 401) hasCredentials.set(false);
+export async function deleteLink(id: string): Promise<void> {
+	const res = await request(`${API_URL}/schedule/links/${id}`, {
+		method: "DELETE"
+	});
 
-			return {
-				status: res.status,
-				message: await res.text()
-			};
-		}
-
-		try {
-			const schedule = Schedule.fromJSON(year, week, await res.json());
-
-			hasCredentials.set(true);
-
-			return schedule;
-		} catch (err) {
-			transaction.setStatus("internal_error");
-			throw err;
-		}
-	} finally {
-		transaction.finish();
-	}
+	if (!res.ok) throw new Error(await res.text());
 }

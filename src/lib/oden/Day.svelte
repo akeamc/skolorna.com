@@ -1,9 +1,12 @@
 <script lang="ts">
 	import type { Day } from "$lib/oden";
+	import Skeleton from "$lib/Skeleton.svelte";
 	import { onMount } from "svelte";
+	import Meal from "./Meal.svelte";
 
-	export let today: boolean;
-	export let data: Day;
+	export let today = false;
+	export let menu: string;
+	export let data: Day | undefined = undefined;
 
 	function datefmt(date: string) {
 		return new Date(date).toLocaleString("sv", {
@@ -17,18 +20,28 @@
 	let el: HTMLLIElement;
 
 	onMount(() => {
-		if (today) el.scrollIntoView({ behavior: "smooth" });
+		if (today) el.scrollIntoView({ block: "center", behavior: "smooth" });
 	});
 </script>
 
 <li class="root" bind:this={el}>
 	<h3 class:today>
-		{datefmt(data.date)}
+		{#if data?.date}
+			{datefmt(data.date)}
+		{:else}
+			<Skeleton width="15ch" />
+		{/if}
 	</h3>
 	<ul>
-		{#each data.meals as meal}
-			<li>{meal.value}</li>
-		{/each}
+		{#if data}
+			{#each data.meals as meal}
+				<li><Meal {menu} date={data.date} {meal} /></li>
+			{/each}
+		{:else}
+			{#each [1, 2] as _}
+				<li><Meal {menu} /></li>
+			{/each}
+		{/if}
 	</ul>
 </li>
 
@@ -67,11 +80,5 @@
 		list-style: none;
 		padding: 0;
 		margin: 0;
-
-		li {
-			font: 500 1.125rem/1.2 var(--font-sans);
-			letter-spacing: -0.014em;
-			margin-block: 1rem 0;
-		}
 	}
 </style>

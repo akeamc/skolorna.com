@@ -27,9 +27,16 @@
 			mql.removeEventListener("change", mediaQueryChanged);
 		};
 	});
+
+	function handleKeydown(event: KeyboardEvent) {
+		if (event.key === "Escape") onClose();
+	}
 </script>
 
+<svelte:window on:keydown={handleKeydown} />
+
 <div class="root">
+	<!-- svelte-ignore a11y-click-events-have-key-events -->
 	<div class="overlay" class:visible={open} on:click={onClose} />
 
 	<div class="drawer" class:open>
@@ -99,6 +106,11 @@
 			transform: translateX(0);
 			box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1);
 		}
+
+		&:not(.open) {
+			user-select: none;
+			visibility: hidden;
+		}
 	}
 
 	header {
@@ -123,6 +135,16 @@
 
 	nav {
 		padding: 0.5rem;
+	}
+
+	.drawer li {
+		transition: opacity 0.1s;
+		opacity: 0;
+	}
+
+	.drawer.open li {
+		opacity: 1;
+		transition-delay: 0.15s;
 	}
 
 	ul {

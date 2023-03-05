@@ -1,3 +1,5 @@
+@use "./styles/mixins";
+
 @mixin brand-alpha($name, $light, $dark) {
 	--#{$name}-light: hsla(
 		var(--brand-hue) var(--brand-saturation) var(--brand-lightness) / #{$light}
@@ -80,6 +82,8 @@
 	--theme-active: var(--theme-active-light);
 	--on-theme: var(--on-theme-light);
 
+	@include mixins.def-color("text0", #000, #fff);
+
 	@media (prefers-color-scheme: dark) {
 		--text0: var(--text0-dark);
 		--text0-muted: var(--text0-muted-dark);
@@ -101,6 +105,9 @@
 	@media (min-width: 480px) {
 		--page-gutter: 1.5rem;
 	}
+
+	--star-filled: var(--text0);
+	--star-unfilled: var(--outline);
 
 	font-family: var(--font-sans);
 	background-color: var(--surface0);
@@ -126,7 +133,7 @@ a {
 		color: var(--theme-active);
 	}
 
-	&:focus {
+	&:focus-visible {
 		outline: var(--theme-hover) solid 2px;
 	}
 }

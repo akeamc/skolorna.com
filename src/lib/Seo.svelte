@@ -1,11 +1,9 @@
 <script lang="ts">
 	export let title: string | undefined = undefined;
+
+	$: t = title ? `${title} · Skolorna` : "Skolorna";
 </script>
 
 <svelte:head>
-	{#if title}
-		<title>{title} · Skolorna</title>
-	{:else}
-		<title>Skolorna</title>
-	{/if}
+	<title>{t}</title>
 </svelte:head>

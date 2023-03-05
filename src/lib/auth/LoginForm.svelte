@@ -3,6 +3,7 @@
 	import Button from "$lib/Button.svelte";
 	import ErrorText from "$lib/ErrorText.svelte";
 	import Field from "$lib/form/Field.svelte";
+	import GoogleLoginButton from "./GoogleLoginButton.svelte";
 
 	let next: string;
 	let error: AuthError | null = null;
@@ -37,7 +38,7 @@
 		<input name="email" id="email" type="email" required bind:value={email} />
 	</Field>
 
-	<Button type="submit" disabled={loading}>
+	<Button type="submit" disabled={loading} size="large">
 		{loading ? "Loggar in …" : "Logga in"}
 	</Button>
 
@@ -52,6 +53,8 @@
 			{/if}
 		</ErrorText>
 	{/if}
+
+	<GoogleLoginButton />
 
 	<p>Har du inget konto? <a href={`/register?next=${next}`}>Skapa ett</a></p>
 </form>

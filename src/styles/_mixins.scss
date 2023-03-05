@@ -1,0 +1,23 @@
+@use "sass:color";
+
+@mixin dotted-background {
+	background-color: var(--surface1);
+	background-image: radial-gradient(var(--outline) 1px, transparent 1px);
+	background-position: center;
+	background-size: 16px 16px;
+}
+
+@mixin def-color($name, $light, $dark: $light) {
+	--#{$name}-light: #{$light};
+	--#{$name}-light-rgb: #{color.red($light)}, #{color.green($light)}, #{color.blue($light)};
+	--#{$name}-dark: #{$dark};
+	--#{$name}-dark-rgb: #{color.red($dark)}, #{color.green($dark)}, #{color.blue($dark)};
+
+	--#{$name}: var(--#{$name}-light);
+	--#{$name}-rgb: var(--#{$name}-light-rgb);
+
+	@media (prefers-color-scheme: dark) {
+		--#{$name}: var(--#{$name}-dark);
+		--#{$name}-rgb: var(--#{$name}-dark-rgb);
+	}
+}

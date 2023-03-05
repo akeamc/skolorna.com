@@ -1,30 +1,36 @@
 <script lang="ts">
+	import Announcement from "$lib/Announcement.svelte";
 	import Seo from "$lib/Seo.svelte";
+	import { ArrowRightIcon } from "svelte-feather-icons";
 	import type { PageData } from "./$types";
 
 	export let data: PageData;
 
-	const menus = data?.menus.toLocaleString("sv") ?? "jättemånga";
-	const days = data?.days.toLocaleString("sv") ?? "ett astronomiskt antal";
+	const menus = data?.menus?.toLocaleString("sv") ?? "jättemånga";
+	const meals = data?.meals?.toLocaleString("sv") ?? "ofattbart många";
 </script>
 
 <Seo />
 
 <section class="hero">
+	<Announcement>
+		<strong>Nyhet: </strong> Nu går det att använda Google för att
+		<a href="/login?next=/account">logga in<ArrowRightIcon /></a>
+	</Announcement>
 	<h1>Vi vet vad det blir till lunch på <em>{menus}</em> ställen</h1>
-	<p>Hittills har vi arkiverat {days} måltider.</p>
+	<p>Hittills har vi arkiverat {meals} rätter.</p>
 </section>
 
 <style lang="scss">
 	.hero {
-		margin-block: 4rem;
+		margin-block: 2rem;
 		text-align: center;
 		max-width: var(--content-width);
 		padding: 0 var(--page-gutter);
 		margin-inline: auto;
 
 		@media (min-width: 768px) {
-			margin-block: 8rem;
+			margin-block: 6rem;
 		}
 	}
 

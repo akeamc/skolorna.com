@@ -1,9 +1,10 @@
 <script lang="ts">
 	import { ChevronLeftIcon, ChevronRightIcon } from "svelte-feather-icons";
+	import { createQuery } from "@tanstack/svelte-query";
 	import Skeleton from "$lib/Skeleton.svelte";
 	import { DateTime } from "luxon";
 	import { spanfmt } from "../date";
-	import { getDays, type Day } from "../oden";
+	import { getDays } from "../oden";
 	import { browser } from "$app/environment";
 	import DayComponent from "./Day.svelte";
 
@@ -13,12 +14,11 @@
 
 	$: first = cursor?.startOf("week");
 	$: last = cursor?.endOf("week");
-	$: days =
-		first && last
-			? getDays(menu, first, last)
-			: new Promise<Day[]>(() => {
-					// never resolve
-			  });
+	$: days = createQuery({
+		queryKey: ["days", menu, first?.toISODate(), last?.toISODate()],
+		queryFn: () => getDays(menu, first!, last!),
+		enabled: !!first && !!last
+	});
 
 	const now = DateTime.now();
 </script>
@@ -49,20 +49,25 @@
 	</div>
 
 	<div class="result">
-		{#await days then days}
+		{#if $days.isSuccess && $days.data?.length > 0}
 			<ol>
-				{#each days as day (day.date)}
-					<DayComponent data={day} today={day.date === now.toISODate()} />
+				{#each $days.data as day (day.date)}
+					<DayComponent {menu} data={day} today={day.date === now.toISODate()} />
 				{/each}
 			</ol>
-			{#if days.length == 0}
+		{:else}
+			{@const empty = $days.data?.length === 0}
+			<ol class:blur={empty}>
+				{#each [1, 2, 3, 4, 5] as _}
+					<DayComponent {menu} />
+				{/each}
+			</ol>
+			{#if empty}
 				<div class="void">
 					Vi vet inte vad det {+(last || 0) > +now ? "blir" : "blev"} till lunch.
 				</div>
 			{/if}
-		{:catch error}
-			<code>{error.message}</code>
-		{/await}
+		{/if}
 	</div>
 </section>
 
@@ -150,15 +155,27 @@
 		--border: 1px solid var(--outline);
 
 		border-top: var(--border);
+		position: relative;
 	}
 
 	ol {
 		list-style: none;
 		margin: 0;
 		padding: 0;
+		transition: opacity 0.2s;
+
+		&.blur {
+			opacity: 0.3;
+		}
 	}
 
 	.void {
+		--inset: 0;
+
+		@media (min-width: 480px) {
+			--inset: 1rem;
+		}
+
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -170,14 +187,19 @@
 		border-radius: 1rem;
 		min-height: 10rem;
 		color: var(--text0-muted);
-		animation: fadeIn 0.5s ease-in-out forwards;
+		animation: enter 0.5s ease-in-out forwards;
 		font: 500 0.875rem/1.2 var(--font-sans);
 		letter-spacing: -0.006em;
+		position: absolute;
+		top: var(--inset);
+		left: var(--inset);
+		right: var(--inset);
 	}
 
-	@keyframes fadeIn {
+	@keyframes enter {
 		from {
 			opacity: 0;
+			transform: translateY(1rem);
 		}
 		to {
 			opacity: 1;

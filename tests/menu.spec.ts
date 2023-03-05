@@ -8,7 +8,7 @@ test("menu search works", async ({ page }) => {
 	await search.type("södra latin");
 
 	await (await page.locator("text=Södra Latin").first()).click();
-	await page.waitForNavigation();
+	await page.waitForURL(/\/menyer\//);
 
 	expect(await page.textContent("h1")).toBe("Södra Latins gymnasium, Fraiche Catering");
 });

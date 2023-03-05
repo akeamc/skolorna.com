@@ -3,22 +3,23 @@
 	import { getKey, search, type IndexedMenu, type SearchResponse } from "./client";
 	import { ArchiveIcon, SearchIcon } from "svelte-feather-icons";
 	import { DateTime } from "luxon";
+	import { createQuery } from "@tanstack/svelte-query";
 
 	let query = "";
-	let key: string;
 	let response: SearchResponse<IndexedMenu>;
 	let focusedHit = 0;
 
-	getKey().then((k) => {
-		key = k;
+	$: key = createQuery({
+		queryKey: ["search", "apiKey"],
+		queryFn: getKey
 	});
 
 	$: {
-		if (!key) break $;
+		if (!$key.data) break $;
 
 		search<IndexedMenu>(
 			{ q: query, attributesToHighlight: ["title"], sort: ["last_day:desc"] },
-			key
+			$key.data
 		).then((r) => {
 			if (r.query == query) {
 				// prevent race condition

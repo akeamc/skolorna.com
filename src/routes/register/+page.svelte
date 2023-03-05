@@ -9,6 +9,7 @@
 		type AuthError,
 		isError
 	} from "$lib/auth/auth";
+	import GoogleLoginButton from "$lib/auth/GoogleLoginButton.svelte";
 	import Button from "$lib/Button.svelte";
 	import ErrorText from "$lib/ErrorText.svelte";
 	import Field from "$lib/form/Field.svelte";
@@ -60,7 +61,7 @@
 			<input name="email" id="email" type="email" required bind:value={email} />
 		</Field>
 
-		<Button type="submit" disabled={$authenticating}>
+		<Button type="submit" disabled={$authenticating} size="large">
 			{$authenticating ? "Skapar konto …" : "Fortsätt"}
 		</Button>
 
@@ -69,6 +70,8 @@
 				{error.message}
 			</ErrorText>
 		{/if}
+
+		<GoogleLoginButton />
 
 		<p>Har du redan ett konto? <a href="/login">Logga in</a></p>
 	</form>

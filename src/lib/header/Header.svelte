@@ -36,7 +36,7 @@
 					{#if $authenticated}
 						<li>
 							<a href="/account">
-								{#if $user?.full_name}
+								{#if typeof $user?.full_name === "string"}
 									{$user?.full_name}
 								{:else}
 									Konto
@@ -44,7 +44,9 @@
 							</a>
 						</li>
 					{:else}
-						<li><Button href={`/login?next=${$page.url.pathname}`}>Logga in</Button></li>
+						<li>
+							<Button href={`/login?next=${$page.url.pathname}`} size="medium">Logga in</Button>
+						</li>
 					{/if}
 				{:else}
 					<Skeleton width="12rem" height="3rem" />
@@ -54,7 +56,9 @@
 	</div>
 </header>
 
-<Drawer open={drawerOpen} onClose={() => (drawerOpen = false)} />
+<div class="drawer">
+	<Drawer open={drawerOpen} onClose={() => (drawerOpen = false)} />
+</div>
 
 <style lang="scss">
 	header {
@@ -117,7 +121,8 @@
 	}
 
 	@media (min-width: 768px) {
-		.toggle {
+		.toggle,
+		.drawer {
 			display: none;
 		}
 

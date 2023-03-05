@@ -7,10 +7,14 @@
 	import { monthSpanFmt } from "$lib/date";
 	import Skeleton from "$lib/Skeleton.svelte";
 	import Clock from "./Clock.svelte";
+	import ShareModal from "./share/ShareModal.svelte";
+	// import Button from "$lib/Button.svelte";
+	// import { ShareIcon } from "svelte-feather-icons";
 
 	let windowWidth: number;
+	let shareModalOpen = false;
 
-	const { schedule, loading, error, cursor, scope, startOfScope, endOfScope, offset } =
+	const { schedule, loading, error, scope, startOfScope, endOfScope, offset } =
 		getScheduleContext();
 	const now = DateTime.now();
 
@@ -42,6 +46,8 @@
 	)?.length;
 </script>
 
+<ShareModal open={shareModalOpen} onClose={() => (shareModalOpen = false)} />
+
 <div class={`root ${$scope}`} style:--days={numDays}>
 	<aside class="scale">
 		{#each scale as mins}
@@ -65,16 +71,20 @@
 		<h1>
 			{monthSpanFmt($startOfScope.toJSDate(), $endOfScope.toJSDate(), "sv")}
 		</h1>
-		<span class="week">Vecka {$cursor.weekNumber}</span>
 		<div class="count" class:error={$error}>
 			{#if $error}
 				Ett fel uppstod. Förhoppingsvis är det Skolplattformens (och inte vårt) fel.
 			{:else if $loading || typeof numLessons !== "number"}
 				<Skeleton width="15ch" />
 			{:else}
-				{numLessons} {numLessons == 1 ? "lektion" : "lektioner"} hittades
+				{numLessons} {numLessons == 1 ? "lektion" : "lektioner"}
 			{/if}
 		</div>
+		<!-- <div class="share">
+			<Button size="medium" variant="secondary" on:click={() => (shareModalOpen = true)}>
+				<ShareIcon />Dela
+			</Button>
+		</div> -->
 	</header>
 
 	{#each cols as lessons, i}
@@ -273,20 +283,11 @@
 			align-self: flex-end;
 		}
 
-		.week {
-			grid-column: 2;
-			grid-row: 1 / span 2;
-			font: 500 0.75rem/1 var(--font-sans);
-			letter-spacing: 0.01em;
-			color: var(--text0-muted);
-			background-color: var(--surface0);
-			padding-block: 0.25em;
-			padding-inline: 0.5em;
-			border-radius: 999px;
-			border: 1px solid var(--outline);
-			white-space: nowrap;
-			justify-self: flex-end;
-		}
+		// .share {
+		// 	grid-column: 2;
+		// 	grid-row: 1 / span 2;
+		// 	justify-self: flex-end;
+		// }
 
 		.count {
 			font: 500 0.875rem/1 var(--font-sans);
