@@ -77,12 +77,12 @@
 	}
 
 	.collapsible {
-		visibility: collapse;
+		display: none;
 	}
 
 	.reviews.expanded {
 		.collapsible {
-			visibility: visible;
+			display: block;
 		}
 
 		.chevron :global(svg) {
