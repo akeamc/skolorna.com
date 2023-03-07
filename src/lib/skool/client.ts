@@ -1,8 +1,11 @@
 import request from "$lib/request";
 import { DateTime } from "luxon";
 import { hasCredentials } from "./stores";
+import * as api from "@opentelemetry/api";
 
 export const API_URL = "https://api.skolorna.com/v0/skool";
+
+const tracer = api.trace.getTracer("skool-client");
 
 interface SkolplattformenCredentials {
 	service: "skolplattformen";
@@ -134,24 +137,35 @@ export class Schedule {
 	}
 }
 
-export async function getSchedule(year: number, week: number): Promise<Schedule | SkoolError> {
-	const res = await request(`${API_URL}/schedule?year=${year}&week=${week}`);
+export function getSchedule(year: number, week: number): Promise<Schedule | SkoolError> {
+	return tracer.startActiveSpan("getSchedule", async (span) => {
+		try {
+			const res = await request(`${API_URL}/schedule?year=${year}&week=${week}`);
 
-	if (!res.ok) {
-		if (res.status === 401) hasCredentials.set(false);
-		const message = await res.text();
+			if (!res.ok) {
+				if (res.status === 401) hasCredentials.set(false);
+				const message = await res.text();
 
-		return {
-			status: res.status,
-			message
-		};
-	}
+				return {
+					status: res.status,
+					message
+				};
+			}
 
-	const schedule = Schedule.fromJSON(year, week, await res.json());
+			const schedule = Schedule.fromJSON(year, week, await res.json());
 
-	hasCredentials.set(true);
+			hasCredentials.set(true);
 
-	return schedule;
+			span.setStatus({ code: api.SpanStatusCode.OK });
+
+			return schedule;
+		} catch (err) {
+			span.setStatus({ code: api.SpanStatusCode.ERROR });
+			throw err;
+		} finally {
+			span.end();
+		}
+	});
 }
 
 export class Link {

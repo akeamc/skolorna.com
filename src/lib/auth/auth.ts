@@ -5,8 +5,11 @@ import { decodeJwt } from "jose";
 import { onMount } from "svelte";
 import { derived, get, writable } from "svelte/store";
 import { localStorageStore } from "../util/localstorage";
+import * as api from "@opentelemetry/api";
 
 export const API_URL = "https://api.skolorna.com/v0/auth";
+
+const tracer = api.trace.getTracer("auth-client");
 
 interface OtpTokenRequest {
 	grant_type: "otp";
@@ -73,33 +76,43 @@ export function isError<T>(obj: T | AuthError): obj is AuthError {
 	return (obj as AuthError)?.status !== undefined;
 }
 
-export async function authenticate(req: TokenRequest): Promise<TokenResponse | AuthError> {
-	authenticating.set(true);
+export function authenticate(req: TokenRequest): Promise<TokenResponse | AuthError> {
+	return tracer.startActiveSpan("authenticate", async (span) => {
+		authenticating.set(true);
 
-	try {
-		const res = await request(
-			`${API_URL}/token`,
-			{
-				method: "POST",
-				headers: {
-					"content-type": "application/x-www-form-urlencoded"
+		try {
+			const res = await request(
+				`${API_URL}/token`,
+				{
+					method: "POST",
+					headers: {
+						"content-type": "application/x-www-form-urlencoded"
+					},
+					body: new URLSearchParams(req as unknown as Record<string, string>)
 				},
-				body: new URLSearchParams(req as unknown as Record<string, string>)
-			},
-			{ auth: false }
-		);
+				{ auth: false }
+			);
 
-		if (!res.ok) {
-			return { status: res.status, message: await res.text() };
+			if (!res.ok) {
+				span.setStatus({
+					code: api.SpanStatusCode.ERROR
+				});
+				return { status: res.status, message: await res.text() };
+			}
+
+			const data: TokenResponse = await res.json();
+			ingestTokenResponse(data);
+
+			span.setStatus({
+				code: api.SpanStatusCode.OK
+			});
+
+			return data;
+		} finally {
+			authenticating.set(false);
+			span.end();
 		}
-
-		const data: TokenResponse = await res.json();
-		ingestTokenResponse(data);
-
-		return data;
-	} finally {
-		authenticating.set(false);
-	}
+	});
 }
 
 interface LoginResponse {
@@ -158,32 +171,42 @@ export async function register(req: RegistrationRequest): Promise<void | AuthErr
 	loginToken.set(data.token);
 }
 
-export async function getAccessToken(minimumValidity = 5): Promise<string | null> {
-	const token = get(accessToken);
+export function getAccessToken(minimumValidity = 5): Promise<string | null> {
+	return tracer.startActiveSpan(
+		"getAccessToken",
+		{ attributes: { minimumValidity, cached: false } },
+		async (span) => {
+			const token = get(accessToken);
 
-	if (token) {
-		const { exp = 0 } = decodeJwt(token);
-		const now = Math.floor(Date.now() / 1000);
+			if (token) {
+				const { exp = 0 } = decodeJwt(token);
+				const now = Math.floor(Date.now() / 1000);
 
-		if (exp > now + minimumValidity) {
-			return token;
-		}
-	}
-
-	accessToken.set(null); // trigger refresh
-
-	if (get(authenticating)) {
-		return new Promise<string>((resolve) => {
-			const unsubscribe = accessToken.subscribe((v) => {
-				if (v) {
-					unsubscribe();
-					resolve(v);
+				if (exp > now + minimumValidity) {
+					span.setAttribute("cached", true);
+					span.end();
+					return token;
 				}
-			});
-		});
-	}
+			}
 
-	return null;
+			accessToken.set(null); // trigger refresh
+
+			if (get(authenticating)) {
+				return new Promise<string>((resolve) => {
+					const unsubscribe = accessToken.subscribe((v) => {
+						if (v) {
+							unsubscribe();
+							resolve(v);
+						}
+					});
+				});
+			}
+
+			span.end();
+
+			return null;
+		}
+	);
 }
 
 interface User {
@@ -202,13 +225,28 @@ authenticated.subscribe(async (v) => {
 	user.set(await getUser());
 });
 
-export async function getUser(): Promise<User> {
-	const res = await request(`${API_URL}/account`, undefined);
-	if (!res.ok) throw new Error(await res.text());
+export function getUser(): Promise<User> {
+	return tracer.startActiveSpan("getUser", async (span) => {
+		try {
+			const res = await request(`${API_URL}/account`, undefined);
+			if (!res.ok) throw new Error(await res.text());
 
-	const user: User = await res.json();
+			const user: User = await res.json();
 
-	return user;
+			span.setStatus({
+				code: api.SpanStatusCode.OK
+			});
+
+			return user;
+		} catch (err) {
+			span.setStatus({
+				code: api.SpanStatusCode.ERROR
+			});
+			throw err;
+		} finally {
+			span.end();
+		}
+	});
 }
 
 export function requireAuth(next?: string): void {
@@ -229,41 +267,71 @@ export interface Profile {
 	created_at: string;
 }
 
-export async function getProfile(user: string): Promise<Profile> {
-	const res = await request(`${API_URL}/users/${user}/profile`, undefined, { auth: false });
-	if (!res.ok) throw new Error(await res.text());
-	return res.json();
+export function getProfile(user: string): Promise<Profile> {
+	return tracer.startActiveSpan("getProfile", { attributes: { user } }, async (span) => {
+		try {
+			const res = await request(`${API_URL}/users/${user}/profile`, undefined, { auth: false });
+			if (!res.ok) throw new Error(await res.text());
+			const data = await res.json();
+			span.setStatus({
+				code: api.SpanStatusCode.OK
+			});
+			return data;
+		} catch (err) {
+			span.setStatus({
+				code: api.SpanStatusCode.ERROR
+			});
+			throw err;
+		} finally {
+			span.end();
+		}
+	});
 }
 
 export interface ProfileUpdate {
 	full_name?: string;
 }
 
-export async function updateProfile(update: ProfileUpdate): Promise<Profile> {
-	await getAccessToken();
-	const userId = get(user)?.id;
-	if (!userId) throw new Error("not logged in");
+export function updateProfile(update: ProfileUpdate): Promise<Profile> {
+	return tracer.startActiveSpan("updateProfile", async (span) => {
+		try {
+			await getAccessToken();
+			const userId = get(user)?.id;
+			if (!userId) throw new Error("not logged in");
 
-	const res = await request(`${API_URL}/users/${userId}/profile`, {
-		method: "PATCH",
-		headers: {
-			"content-type": "application/json"
-		},
-		body: JSON.stringify(update)
-	});
+			const res = await request(`${API_URL}/users/${userId}/profile`, {
+				method: "PATCH",
+				headers: {
+					"content-type": "application/json"
+				},
+				body: JSON.stringify(update)
+			});
 
-	if (!res.ok) throw new Error(await res.text());
+			if (!res.ok) throw new Error(await res.text());
 
-	const profile: Profile = await res.json();
+			const profile: Profile = await res.json();
 
-	// todo: tidy this up
-	user.update((u) => {
-		if (u) {
-			return { ...u, full_name: profile.full_name };
+			// todo: tidy this up
+			user.update((u) => {
+				if (u) {
+					return { ...u, full_name: profile.full_name };
+				}
+
+				return u;
+			});
+
+			span.setStatus({
+				code: api.SpanStatusCode.OK
+			});
+
+			return profile;
+		} catch (err) {
+			span.setStatus({
+				code: api.SpanStatusCode.ERROR
+			});
+			throw err;
+		} finally {
+			span.end();
 		}
-
-		return u;
 	});
-
-	return profile;
 }

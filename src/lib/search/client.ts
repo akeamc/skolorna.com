@@ -2,12 +2,31 @@ import { ODEN_URL } from "$lib/oden";
 import request from "$lib/request";
 import * as api from "@opentelemetry/api";
 import { SpanStatusCode } from "@opentelemetry/api";
+import { error } from "@sveltejs/kit";
 
 const tracer = api.trace.getTracer("search-client");
 
-export async function getKey(): Promise<string> {
-	const res = await request(`${ODEN_URL}/key`, undefined, { auth: false });
-	return res.text();
+export function getKey(): Promise<string> {
+	return tracer.startActiveSpan("getKey", async (span) => {
+		try {
+			const res = await request(`${ODEN_URL}/key`, undefined, { auth: false });
+			if (!res.ok) {
+				throw error(res.status, "failed to get key");
+			}
+			const text = await res.text();
+			span.setStatus({
+				code: SpanStatusCode.OK
+			});
+			return text;
+		} catch (err) {
+			span.setStatus({
+				code: SpanStatusCode.ERROR
+			});
+			throw err;
+		} finally {
+			span.end();
+		}
+	});
 }
 
 export type Hit<T> = T & {
