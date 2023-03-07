@@ -1,5 +1,9 @@
 import { ODEN_URL } from "$lib/oden";
 import request from "$lib/request";
+import * as api from "@opentelemetry/api";
+import { SpanStatusCode } from "@opentelemetry/api";
+
+const tracer = api.trace.getTracer("search-client");
 
 export async function getKey(): Promise<string> {
 	const res = await request(`${ODEN_URL}/key`, undefined, { auth: false });
@@ -41,18 +45,37 @@ export interface SearchRequest<T> {
 }
 
 export async function search<T>(req: SearchRequest<T>, key: string): Promise<SearchResponse<T>> {
-	const res = await request(
-		"https://api.skolorna.com/v03/search/indexes/menus/search",
+	return tracer.startActiveSpan(
+		"search",
 		{
-			method: "POST",
-			headers: {
-				authorization: `Bearer ${key}`,
-				"content-type": "application/json"
-			},
-			body: JSON.stringify(req)
+			attributes: {
+				q: req.q
+			}
 		},
-		{ auth: false }
-	);
+		async (span) => {
+			try {
+				const res = await request(
+					"https://api.skolorna.com/v03/search/indexes/menus/search",
+					{
+						method: "POST",
+						headers: {
+							authorization: `Bearer ${key}`,
+							"content-type": "application/json"
+						},
+						body: JSON.stringify(req)
+					},
+					{ auth: false }
+				);
 
-	return res.json();
+				const data = await res.json();
+				span.setStatus({ code: SpanStatusCode.OK });
+				return data;
+			} catch (err) {
+				span.setStatus({ code: SpanStatusCode.ERROR });
+				throw err;
+			} finally {
+				span.end();
+			}
+		}
+	);
 }

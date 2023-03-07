@@ -1,8 +1,11 @@
 import { error } from "@sveltejs/kit";
 import type { DateTime } from "luxon";
 import request from "./request";
+import * as api from "@opentelemetry/api";
 
 export const ODEN_URL = "https://api.skolorna.com/v03/oden";
+
+const tracer = api.trace.getTracer("oden-client");
 
 export interface Stats {
 	menus: number;
@@ -10,7 +13,25 @@ export interface Stats {
 }
 
 export function getStats(): Promise<Response> {
-	return request(`${ODEN_URL}/stats`, undefined, { auth: false });
+	return tracer.startActiveSpan("getStats", async (span) => {
+		try {
+			const res = await request(`${ODEN_URL}/stats`, undefined, { auth: false });
+			if (!res.ok) {
+				throw error(res.status, "failed to get stats");
+			}
+			span.setStatus({
+				code: api.SpanStatusCode.OK
+			});
+			return res;
+		} catch (err) {
+			span.setStatus({
+				code: api.SpanStatusCode.ERROR
+			});
+			throw err;
+		} finally {
+			span.end();
+		}
+	});
 }
 
 export interface Menu {
@@ -21,7 +42,23 @@ export interface Menu {
 }
 
 export function getMenu(id: string): Promise<Response> {
-	return request(`${ODEN_URL}/menus/${id}`, undefined, { auth: false });
+	return tracer.startActiveSpan("getMenu", async (span) => {
+		try {
+			const res = await request(`${ODEN_URL}/menus/${id}`, undefined, { auth: false });
+			if (!res.ok) {
+				throw error(res.status, "failed to get menu");
+			}
+			span.setStatus({
+				code: api.SpanStatusCode.OK
+			});
+			return res;
+		} catch (err) {
+			span.setStatus({
+				code: api.SpanStatusCode.ERROR
+			});
+			throw err;
+		}
+	});
 }
 
 export interface Meal {
@@ -39,17 +76,29 @@ export interface Day {
 }
 
 export async function getDays(menu: string, first: DateTime, last: DateTime): Promise<Day[]> {
-	const res = await request(
-		`${ODEN_URL}/menus/${menu}/days?first=${first.toISODate()}&last=${last.toISODate()}`,
-		undefined,
-		{ auth: false }
-	);
+	return tracer.startActiveSpan("getDays", async (span) => {
+		try {
+			const res = await request(
+				`${ODEN_URL}/menus/${menu}/days?first=${first.toISODate()}&last=${last.toISODate()}`,
+				undefined,
+				{ auth: false }
+			);
 
-	if (res.ok) {
-		return await res.json();
-	}
+			if (res.ok) {
+				const data = await res.json();
+				return data;
+			}
 
-	throw error(res.status, await res.text());
+			throw error(res.status, await res.text());
+		} catch (err) {
+			span.setStatus({
+				code: api.SpanStatusCode.ERROR
+			});
+			throw err;
+		} finally {
+			span.end();
+		}
+	});
 }
 
 interface GetReviews {
@@ -70,14 +119,42 @@ export interface Review {
 	edited_at: string | null;
 }
 
-export async function getReviews(query: GetReviews): Promise<Review[]> {
-	const res = await request(
-		`${ODEN_URL}/reviews?${new URLSearchParams(query as Record<string, string>)}`,
-		undefined,
-		{ auth: false }
-	);
+export function getReviews(query: GetReviews): Promise<Review[]> {
+	return tracer.startActiveSpan(
+		"getReviews",
+		{
+			attributes: {
+				menu: query.menu,
+				date: query.date,
+				meal: query.meal
+			}
+		},
+		async (span) => {
+			try {
+				const res = await request(
+					`${ODEN_URL}/reviews?${new URLSearchParams(query as Record<string, string>)}`,
+					undefined,
+					{ auth: false }
+				);
 
-	return res.json();
+				const data = await res.json();
+
+				if (!res.ok) throw error(res.status, data);
+
+				span.setStatus({
+					code: api.SpanStatusCode.OK
+				});
+				return data;
+			} catch (err) {
+				span.setStatus({
+					code: api.SpanStatusCode.ERROR
+				});
+				throw err;
+			} finally {
+				span.end();
+			}
+		}
+	);
 }
 
 type RatingHistogram = Record<number, number>;
@@ -100,20 +177,62 @@ interface CreateReview {
 	comment?: string;
 }
 
-export async function createReview(data: CreateReview): Promise<Review> {
-	const res = await request(`${ODEN_URL}/reviews`, {
-		method: "POST",
-		headers: {
-			"content-type": "application/json"
+export function createReview(data: CreateReview): Promise<Review> {
+	return tracer.startActiveSpan(
+		"createReview",
+		{
+			attributes: {
+				menu_id: data.menu_id
+			}
 		},
-		body: JSON.stringify(data)
-	});
+		async (span) => {
+			try {
+				const res = await request(`${ODEN_URL}/reviews`, {
+					method: "POST",
+					headers: {
+						"content-type": "application/json"
+					},
+					body: JSON.stringify(data)
+				});
 
-	return res.json();
+				const created = await res.json();
+				span.setStatus({ code: api.SpanStatusCode.OK });
+				return created;
+			} catch (err) {
+				span.setStatus({ code: api.SpanStatusCode.ERROR });
+				throw err;
+			} finally {
+				span.end();
+			}
+		}
+	);
 }
 
-export async function deleteReview(id: string) {
-	return request(`${ODEN_URL}/reviews/${id}`, {
-		method: "DELETE"
-	});
+export function deleteReview(id: string) {
+	tracer.startActiveSpan(
+		"deleteReview",
+		{
+			attributes: {
+				id
+			}
+		},
+		async (span) => {
+			try {
+				const res = await request(`${ODEN_URL}/reviews/${id}`, {
+					method: "DELETE"
+				});
+
+				if (!res.ok) {
+					throw error(res.status, await res.text());
+				}
+
+				span.setStatus({ code: api.SpanStatusCode.OK });
+			} catch (err) {
+				span.setStatus({ code: api.SpanStatusCode.ERROR });
+				throw err;
+			} finally {
+				span.end();
+			}
+		}
+	);
 }

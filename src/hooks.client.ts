@@ -17,7 +17,7 @@ const provider = new WebTracerProvider({
 			[SemanticResourceAttributes.SERVICE_NAME]: "skolorna.com"
 		})
 	),
-	sampler: new TraceIdRatioBasedSampler(0.1)
+	sampler: new TraceIdRatioBasedSampler(0.2)
 });
 provider.addSpanProcessor(
 	new BatchSpanProcessor(
