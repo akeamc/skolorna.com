@@ -10,14 +10,16 @@ import { OTLPTraceExporter } from "@opentelemetry/exporter-trace-otlp-http";
 import { Resource } from "@opentelemetry/resources";
 import { SemanticResourceAttributes } from "@opentelemetry/semantic-conventions";
 import { FetchInstrumentation } from "@opentelemetry/instrumentation-fetch";
+import { PUBLIC_DEPLOYMENT_ENVIRONMENT, PUBLIC_TRACE_SAMPLE_RATIO } from "$env/static/public";
 
 const provider = new WebTracerProvider({
 	resource: Resource.default().merge(
 		new Resource({
-			[SemanticResourceAttributes.SERVICE_NAME]: "skolorna.com"
+			[SemanticResourceAttributes.SERVICE_NAME]: "skolorna.com",
+			[SemanticResourceAttributes.DEPLOYMENT_ENVIRONMENT]: PUBLIC_DEPLOYMENT_ENVIRONMENT
 		})
 	),
-	sampler: new TraceIdRatioBasedSampler(0.2)
+	sampler: new TraceIdRatioBasedSampler(parseFloat(PUBLIC_TRACE_SAMPLE_RATIO))
 });
 provider.addSpanProcessor(
 	new BatchSpanProcessor(
