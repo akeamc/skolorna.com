@@ -76,44 +76,51 @@ export function isError<T>(obj: T | AuthError): obj is AuthError {
 	return (obj as AuthError)?.status !== undefined;
 }
 
-export function authenticate(req: TokenRequest): Promise<TokenResponse | AuthError> {
-	return tracer.startActiveSpan("authenticate", async (span) => {
-		authenticating.set(true);
-
-		try {
-			const res = await request(
-				`${API_URL}/token`,
-				{
-					method: "POST",
-					headers: {
-						"content-type": "application/x-www-form-urlencoded"
-					},
-					body: new URLSearchParams(req as unknown as Record<string, string>)
-				},
-				{ auth: false }
-			);
-
-			if (!res.ok) {
-				span.setStatus({
-					code: api.SpanStatusCode.ERROR
-				});
-				return { status: res.status, message: await res.text() };
+export const authenticate = (req: TokenRequest): Promise<TokenResponse | AuthError> =>
+	tracer.startActiveSpan(
+		"authenticate",
+		{
+			attributes: {
+				grant_type: req.grant_type
 			}
+		},
+		async (span) => {
+			authenticating.set(true);
 
-			const data: TokenResponse = await res.json();
-			ingestTokenResponse(data);
+			try {
+				const res = await request(
+					`${API_URL}/token`,
+					{
+						method: "POST",
+						headers: {
+							"content-type": "application/x-www-form-urlencoded"
+						},
+						body: new URLSearchParams(req as unknown as Record<string, string>)
+					},
+					{ auth: false }
+				);
 
-			span.setStatus({
-				code: api.SpanStatusCode.OK
-			});
+				if (!res.ok) {
+					span.setStatus({
+						code: api.SpanStatusCode.ERROR
+					});
+					return { status: res.status, message: await res.text() };
+				}
 
-			return data;
-		} finally {
-			authenticating.set(false);
-			span.end();
+				const data: TokenResponse = await res.json();
+				ingestTokenResponse(data);
+
+				span.setStatus({
+					code: api.SpanStatusCode.OK
+				});
+
+				return data;
+			} finally {
+				authenticating.set(false);
+				span.end();
+			}
 		}
-	});
-}
+	);
 
 interface LoginResponse {
 	token: string;
