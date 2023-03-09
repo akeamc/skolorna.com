@@ -1,5 +1,6 @@
 import { ODEN_URL } from "$lib/oden";
 import request from "$lib/request";
+import { catchySpan } from "$lib/util/tracing";
 import * as api from "@opentelemetry/api";
 import { SpanStatusCode } from "@opentelemetry/api";
 import { error } from "@sveltejs/kit";
@@ -7,25 +8,16 @@ import { error } from "@sveltejs/kit";
 const tracer = api.trace.getTracer("search-client");
 
 export function getKey(): Promise<string> {
-	return tracer.startActiveSpan("getKey", async (span) => {
-		try {
-			const res = await request(`${ODEN_URL}/key`, undefined, { auth: false });
-			if (!res.ok) {
-				throw error(res.status, "failed to get key");
-			}
-			const text = await res.text();
-			span.setStatus({
-				code: SpanStatusCode.OK
-			});
-			return text;
-		} catch (err) {
-			span.setStatus({
-				code: SpanStatusCode.ERROR
-			});
-			throw err;
-		} finally {
-			span.end();
+	return catchySpan(tracer, "getKey", async (span) => {
+		const res = await request(`${ODEN_URL}/key`, undefined, { auth: false });
+		if (!res.ok) {
+			throw error(res.status, "failed to get key");
 		}
+		const text = await res.text();
+		span.setStatus({
+			code: SpanStatusCode.OK
+		});
+		return text;
 	});
 }
 
@@ -63,38 +55,32 @@ export interface SearchRequest<T> {
 	attributesToHighlight?: (keyof T)[];
 }
 
-export async function search<T>(req: SearchRequest<T>, key: string): Promise<SearchResponse<T>> {
-	return tracer.startActiveSpan(
+export function search<T>(req: SearchRequest<T>, key: string): Promise<SearchResponse<T>> {
+	return catchySpan(
+		tracer,
 		"search",
 		{
 			attributes: {
-				q: req.q
+				query: req.q
 			}
 		},
 		async (span) => {
-			try {
-				const res = await request(
-					"https://api.skolorna.com/v03/search/indexes/menus/search",
-					{
-						method: "POST",
-						headers: {
-							authorization: `Bearer ${key}`,
-							"content-type": "application/json"
-						},
-						body: JSON.stringify(req)
+			const res = await request(
+				"https://api.skolorna.com/v03/search/indexes/menus/search",
+				{
+					method: "POST",
+					headers: {
+						authorization: `Bearer ${key}`,
+						"content-type": "application/json"
 					},
-					{ auth: false }
-				);
+					body: JSON.stringify(req)
+				},
+				{ auth: false }
+			);
 
-				const data = await res.json();
-				span.setStatus({ code: SpanStatusCode.OK });
-				return data;
-			} catch (err) {
-				span.setStatus({ code: SpanStatusCode.ERROR });
-				throw err;
-			} finally {
-				span.end();
-			}
+			const data = await res.json();
+			span.setStatus({ code: SpanStatusCode.OK });
+			return data;
 		}
 	);
 }

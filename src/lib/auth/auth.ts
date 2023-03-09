@@ -6,6 +6,7 @@ import { onMount } from "svelte";
 import { derived, get, writable } from "svelte/store";
 import { localStorageStore } from "../util/localstorage";
 import * as api from "@opentelemetry/api";
+import { catchySpan } from "$lib/util/tracing";
 
 export const API_URL = "https://api.skolorna.com/v0/auth";
 
@@ -233,26 +234,17 @@ authenticated.subscribe(async (v) => {
 });
 
 export function getUser(): Promise<User> {
-	return tracer.startActiveSpan("getUser", async (span) => {
-		try {
-			const res = await request(`${API_URL}/account`, undefined);
-			if (!res.ok) throw new Error(await res.text());
+	return catchySpan(tracer, "getUser", async (span) => {
+		const res = await request(`${API_URL}/account`, undefined);
+		if (!res.ok) throw new Error(await res.text());
 
-			const user: User = await res.json();
+		const user: User = await res.json();
 
-			span.setStatus({
-				code: api.SpanStatusCode.OK
-			});
+		span.setStatus({
+			code: api.SpanStatusCode.OK
+		});
 
-			return user;
-		} catch (err) {
-			span.setStatus({
-				code: api.SpanStatusCode.ERROR
-			});
-			throw err;
-		} finally {
-			span.end();
-		}
+		return user;
 	});
 }
 
@@ -275,23 +267,14 @@ export interface Profile {
 }
 
 export function getProfile(user: string): Promise<Profile> {
-	return tracer.startActiveSpan("getProfile", { attributes: { user } }, async (span) => {
-		try {
-			const res = await request(`${API_URL}/users/${user}/profile`, undefined, { auth: false });
-			if (!res.ok) throw new Error(await res.text());
-			const data = await res.json();
-			span.setStatus({
-				code: api.SpanStatusCode.OK
-			});
-			return data;
-		} catch (err) {
-			span.setStatus({
-				code: api.SpanStatusCode.ERROR
-			});
-			throw err;
-		} finally {
-			span.end();
-		}
+	return catchySpan(tracer, "getProfile", { attributes: { user } }, async (span) => {
+		const res = await request(`${API_URL}/users/${user}/profile`, undefined, { auth: false });
+		if (!res.ok) throw new Error(await res.text());
+		const data = await res.json();
+		span.setStatus({
+			code: api.SpanStatusCode.OK
+		});
+		return data;
 	});
 }
 
@@ -300,45 +283,36 @@ export interface ProfileUpdate {
 }
 
 export function updateProfile(update: ProfileUpdate): Promise<Profile> {
-	return tracer.startActiveSpan("updateProfile", async (span) => {
-		try {
-			await getAccessToken();
-			const userId = get(user)?.id;
-			if (!userId) throw new Error("not logged in");
+	return catchySpan(tracer, "updateProfile", async (span) => {
+		await getAccessToken();
+		const userId = get(user)?.id;
+		if (!userId) throw new Error("not logged in");
 
-			const res = await request(`${API_URL}/users/${userId}/profile`, {
-				method: "PATCH",
-				headers: {
-					"content-type": "application/json"
-				},
-				body: JSON.stringify(update)
-			});
+		const res = await request(`${API_URL}/users/${userId}/profile`, {
+			method: "PATCH",
+			headers: {
+				"content-type": "application/json"
+			},
+			body: JSON.stringify(update)
+		});
 
-			if (!res.ok) throw new Error(await res.text());
+		if (!res.ok) throw new Error(await res.text());
 
-			const profile: Profile = await res.json();
+		const profile: Profile = await res.json();
 
-			// todo: tidy this up
-			user.update((u) => {
-				if (u) {
-					return { ...u, full_name: profile.full_name };
-				}
+		// todo: tidy this up
+		user.update((u) => {
+			if (u) {
+				return { ...u, full_name: profile.full_name };
+			}
 
-				return u;
-			});
+			return u;
+		});
 
-			span.setStatus({
-				code: api.SpanStatusCode.OK
-			});
+		span.setStatus({
+			code: api.SpanStatusCode.OK
+		});
 
-			return profile;
-		} catch (err) {
-			span.setStatus({
-				code: api.SpanStatusCode.ERROR
-			});
-			throw err;
-		} finally {
-			span.end();
-		}
+		return profile;
 	});
 }

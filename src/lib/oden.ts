@@ -2,6 +2,7 @@ import { error } from "@sveltejs/kit";
 import type { DateTime } from "luxon";
 import request from "./request";
 import * as api from "@opentelemetry/api";
+import { catchySpan } from "./util/tracing";
 
 export const ODEN_URL = "https://api.skolorna.com/v03/oden";
 
@@ -13,24 +14,15 @@ export interface Stats {
 }
 
 export function getStats(): Promise<Response> {
-	return tracer.startActiveSpan("getStats", async (span) => {
-		try {
-			const res = await request(`${ODEN_URL}/stats`, undefined, { auth: false });
-			if (!res.ok) {
-				throw error(res.status, "failed to get stats");
-			}
-			span.setStatus({
-				code: api.SpanStatusCode.OK
-			});
-			return res;
-		} catch (err) {
-			span.setStatus({
-				code: api.SpanStatusCode.ERROR
-			});
-			throw err;
-		} finally {
-			span.end();
+	return catchySpan(tracer, "getStats", async (span) => {
+		const res = await request(`${ODEN_URL}/stats`, undefined, { auth: false });
+		if (!res.ok) {
+			throw error(res.status, "failed to get stats");
 		}
+		span.setStatus({
+			code: api.SpanStatusCode.OK
+		});
+		return res;
 	});
 }
 
@@ -42,22 +34,15 @@ export interface Menu {
 }
 
 export function getMenu(id: string): Promise<Response> {
-	return tracer.startActiveSpan("getMenu", async (span) => {
-		try {
-			const res = await request(`${ODEN_URL}/menus/${id}`, undefined, { auth: false });
-			if (!res.ok) {
-				throw error(res.status, "failed to get menu");
-			}
-			span.setStatus({
-				code: api.SpanStatusCode.OK
-			});
-			return res;
-		} catch (err) {
-			span.setStatus({
-				code: api.SpanStatusCode.ERROR
-			});
-			throw err;
+	return catchySpan(tracer, "getMenu", async (span) => {
+		const res = await request(`${ODEN_URL}/menus/${id}`, undefined, { auth: false });
+		if (!res.ok) {
+			throw error(res.status, "failed to get menu");
 		}
+		span.setStatus({
+			code: api.SpanStatusCode.OK
+		});
+		return res;
 	});
 }
 
@@ -75,29 +60,23 @@ export interface Day {
 	meals: Meal[];
 }
 
-export async function getDays(menu: string, first: DateTime, last: DateTime): Promise<Day[]> {
-	return tracer.startActiveSpan("getDays", async (span) => {
-		try {
-			const res = await request(
-				`${ODEN_URL}/menus/${menu}/days?first=${first.toISODate()}&last=${last.toISODate()}`,
-				undefined,
-				{ auth: false }
-			);
+export function getDays(menu: string, first: DateTime, last: DateTime): Promise<Day[]> {
+	return catchySpan(tracer, "getDays", async (span) => {
+		const res = await request(
+			`${ODEN_URL}/menus/${menu}/days?first=${first.toISODate()}&last=${last.toISODate()}`,
+			undefined,
+			{ auth: false }
+		);
 
-			if (res.ok) {
-				const data = await res.json();
-				return data;
-			}
+		if (!res.ok) throw error(res.status, await res.text());
 
-			throw error(res.status, await res.text());
-		} catch (err) {
-			span.setStatus({
-				code: api.SpanStatusCode.ERROR
-			});
-			throw err;
-		} finally {
-			span.end();
-		}
+		const data = await res.json();
+
+		span.setStatus({
+			code: api.SpanStatusCode.OK
+		});
+
+		return data;
 	});
 }
 
@@ -120,7 +99,8 @@ export interface Review {
 }
 
 export function getReviews(query: GetReviews): Promise<Review[]> {
-	return tracer.startActiveSpan(
+	return catchySpan(
+		tracer,
 		"getReviews",
 		{
 			attributes: {
@@ -130,29 +110,21 @@ export function getReviews(query: GetReviews): Promise<Review[]> {
 			}
 		},
 		async (span) => {
-			try {
-				const res = await request(
-					`${ODEN_URL}/reviews?${new URLSearchParams(query as Record<string, string>)}`,
-					undefined,
-					{ auth: false }
-				);
+			const res = await request(
+				`${ODEN_URL}/reviews?${new URLSearchParams(query as Record<string, string>)}`,
+				undefined,
+				{ auth: false }
+			);
 
-				const data = await res.json();
+			const data = await res.json();
 
-				if (!res.ok) throw error(res.status, data);
+			if (!res.ok) throw error(res.status, data);
 
-				span.setStatus({
-					code: api.SpanStatusCode.OK
-				});
-				return data;
-			} catch (err) {
-				span.setStatus({
-					code: api.SpanStatusCode.ERROR
-				});
-				throw err;
-			} finally {
-				span.end();
-			}
+			span.setStatus({
+				code: api.SpanStatusCode.OK
+			});
+
+			return data;
 		}
 	);
 }
@@ -178,7 +150,8 @@ interface CreateReview {
 }
 
 export function createReview(data: CreateReview): Promise<Review> {
-	return tracer.startActiveSpan(
+	return catchySpan(
+		tracer,
 		"createReview",
 		{
 			attributes: {
@@ -186,30 +159,24 @@ export function createReview(data: CreateReview): Promise<Review> {
 			}
 		},
 		async (span) => {
-			try {
-				const res = await request(`${ODEN_URL}/reviews`, {
-					method: "POST",
-					headers: {
-						"content-type": "application/json"
-					},
-					body: JSON.stringify(data)
-				});
+			const res = await request(`${ODEN_URL}/reviews`, {
+				method: "POST",
+				headers: {
+					"content-type": "application/json"
+				},
+				body: JSON.stringify(data)
+			});
 
-				const created = await res.json();
-				span.setStatus({ code: api.SpanStatusCode.OK });
-				return created;
-			} catch (err) {
-				span.setStatus({ code: api.SpanStatusCode.ERROR });
-				throw err;
-			} finally {
-				span.end();
-			}
+			const created = await res.json();
+			span.setStatus({ code: api.SpanStatusCode.OK });
+			return created;
 		}
 	);
 }
 
-export function deleteReview(id: string) {
-	tracer.startActiveSpan(
+export function deleteReview(id: string): Promise<void> {
+	return catchySpan(
+		tracer,
 		"deleteReview",
 		{
 			attributes: {
@@ -217,22 +184,13 @@ export function deleteReview(id: string) {
 			}
 		},
 		async (span) => {
-			try {
-				const res = await request(`${ODEN_URL}/reviews/${id}`, {
-					method: "DELETE"
-				});
+			const res = await request(`${ODEN_URL}/reviews/${id}`, {
+				method: "DELETE"
+			});
 
-				if (!res.ok) {
-					throw error(res.status, await res.text());
-				}
+			if (!res.ok) throw error(res.status, await res.text());
 
-				span.setStatus({ code: api.SpanStatusCode.OK });
-			} catch (err) {
-				span.setStatus({ code: api.SpanStatusCode.ERROR });
-				throw err;
-			} finally {
-				span.end();
-			}
+			span.setStatus({ code: api.SpanStatusCode.OK });
 		}
 	);
 }
