@@ -38,13 +38,6 @@
 	{:else}
 		<h1>Okänt fel</h1>
 		<p>Det verkar som att hemsidan faktiskt inte fungerar. Pinsamt.</p>
-		<p>Nödsammansatt matsedel för Södra Latin:</p>
-		{#each menus as menu}
-			<p>
-				<b>{DateTime.fromISO(menu.date).toLocaleString(DateTime.DATE_MED_WITH_WEEKDAY)}:</b>
-				{menu.meals.join(" · ")}
-			</p>
-		{/each}
 	{/if}
 </div>
 
