@@ -20,7 +20,6 @@
 		window.dataLayer = window.dataLayer || [];
 
 		function gtag() {
-			console.log("gtag", arguments);
 			dataLayer.push(arguments);
 		}
 
