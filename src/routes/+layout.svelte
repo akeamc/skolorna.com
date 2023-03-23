@@ -5,6 +5,7 @@
 	import { PUBLIC_GOOGLE_CLIENT_ID } from "$env/static/public";
 	import "../app.scss";
 	import GoogleId from "$lib/auth/GoogleId.svelte";
+	import Analytics from "$lib/Analytics.svelte";
 
 	const queryClient = new QueryClient({
 		defaultOptions: {
@@ -16,6 +17,8 @@
 </script>
 
 <QueryClientProvider client={queryClient}>
+	<Analytics />
+
 	<GoogleId clientId={PUBLIC_GOOGLE_CLIENT_ID} />
 
 	<Header />
