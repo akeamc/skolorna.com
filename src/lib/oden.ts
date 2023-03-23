@@ -159,6 +159,10 @@ export function createReview(data: CreateReview): Promise<Review> {
 			}
 		},
 		async (span) => {
+			gtag?.("event", "create_review", {
+				...data,
+			});
+
 			const res = await request(`${ODEN_URL}/reviews`, {
 				method: "POST",
 				headers: {
@@ -184,6 +188,10 @@ export function deleteReview(id: string): Promise<void> {
 			}
 		},
 		async (span) => {
+			gtag?.("event", "delete_review", {
+				id,
+			});
+
 			const res = await request(`${ODEN_URL}/reviews/${id}`, {
 				method: "DELETE"
 			});
