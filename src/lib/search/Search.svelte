@@ -1,33 +1,25 @@
 <script lang="ts">
 	import { goto } from "$app/navigation";
-	import { getKey, search, type IndexedMenu, type SearchResponse } from "./client";
+	import { createKeyQuery, createSearchQuery, type IndexedMenu } from "./client";
 	import { ArchiveIcon, SearchIcon } from "svelte-feather-icons";
 	import { DateTime } from "luxon";
-	import { createQuery } from "@tanstack/svelte-query";
+	import { get } from "svelte/store";
 
 	let query = "";
-	let response: SearchResponse<IndexedMenu>;
 	let focusedHit = 0;
 
-	$: key = createQuery({
-		queryKey: ["search", "apiKey"],
-		queryFn: getKey
-	});
+	const key = createKeyQuery();
 
-	$: {
-		if (!$key.data) break $;
+	$: search = createSearchQuery<IndexedMenu>(
+		{
+			q: query,
+			attributesToHighlight: ["title"],
+			sort: ["last_day:desc"]
+		},
+		$key.data
+	);
 
-		search<IndexedMenu>(
-			{ q: query, attributesToHighlight: ["title"], sort: ["last_day:desc"] },
-			$key.data
-		).then((r) => {
-			if (r.query == query) {
-				// prevent race condition
-				response = r;
-				focusedHit = 0;
-			}
-		});
-	}
+	$: response = $search?.data;
 
 	const scrollToFocused = () => {
 		const element = document.querySelector(`[data-hit-no="${focusedHit}"]`);
@@ -35,7 +27,8 @@
 	};
 
 	const handleKeyDown: svelte.JSX.KeyboardEventHandler<HTMLInputElement> = (e) => {
-		const hit = response?.hits[focusedHit];
+		const data = get(search)?.data;
+		const hit = data?.hits[focusedHit];
 
 		switch (e.key) {
 			case "Escape":
@@ -54,7 +47,7 @@
 				break;
 			case "ArrowDown":
 				e.preventDefault(); // don't move the cursor
-				focusedHit = Math.min((response?.hits.length || 0) - 1, focusedHit + 1);
+				focusedHit = Math.min((data?.hits.length || 0) - 1, focusedHit + 1);
 				scrollToFocused();
 				break;
 		}
@@ -77,7 +70,7 @@
 	{#if response}
 		<div class="response">
 			<ol>
-				{#each response.hits as hit, i (hit.id)}
+				{#each response?.hits as hit, i (hit.id)}
 					{@const lastDay = hit.last_day ? DateTime.fromISO(hit.last_day).setLocale("sv") : null}
 					{@const outdated = lastDay && lastDay < today}
 					<li>
