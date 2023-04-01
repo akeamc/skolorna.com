@@ -4,6 +4,7 @@ import { catchySpan } from "$lib/util/tracing";
 import * as api from "@opentelemetry/api";
 import { SpanStatusCode } from "@opentelemetry/api";
 import { error } from "@sveltejs/kit";
+import { createQuery } from "@tanstack/svelte-query";
 
 const tracer = api.trace.getTracer("search-client");
 
@@ -23,6 +24,7 @@ export function getKey(): Promise<string> {
 
 export type Hit<T> = T & {
 	_formatted?: T;
+	_geoDistance?: number;
 };
 
 export interface IndexedMenu {
@@ -47,7 +49,7 @@ type SortableAttribute = "updated_at" | "last_day";
 
 type Direction = "asc" | "desc";
 
-type Sort = `${SortableAttribute}:${Direction}`;
+type Sort = `${SortableAttribute}:${Direction}` | `_geoPoint(${number},${number}):${Direction}`;
 
 export interface SearchRequest<T> {
 	q: string;
@@ -84,3 +86,9 @@ export function search<T>(req: SearchRequest<T>, key: string): Promise<SearchRes
 		}
 	);
 }
+
+export const createKeyQuery = () =>
+	createQuery({
+		queryKey: ["search", "apiKey"],
+		queryFn: getKey
+	});
