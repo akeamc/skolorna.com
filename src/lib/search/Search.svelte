@@ -1,18 +1,14 @@
 <script lang="ts">
 	import { goto } from "$app/navigation";
-	import { getKey, search, type IndexedMenu, type SearchResponse } from "./client";
+	import { createKeyQuery, search, type IndexedMenu, type SearchResponse } from "./client";
 	import { ArchiveIcon, SearchIcon } from "svelte-feather-icons";
 	import { DateTime } from "luxon";
-	import { createQuery } from "@tanstack/svelte-query";
 
 	let query = "";
 	let response: SearchResponse<IndexedMenu>;
 	let focusedHit = 0;
 
-	$: key = createQuery({
-		queryKey: ["search", "apiKey"],
-		queryFn: getKey
-	});
+	const key = createKeyQuery();
 
 	$: {
 		if (!$key.data) break $;

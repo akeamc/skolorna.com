@@ -1,5 +1,6 @@
 <script lang="ts">
 	import MenuViewer from "$lib/oden/MenuViewer.svelte";
+	import NearbyMenus from "$lib/oden/NearbyMenus.svelte";
 	// import OsmId from "$lib/OsmId.svelte";
 	import Seo from "$lib/Seo.svelte";
 	import type { PageData } from "./$types";
@@ -20,6 +21,8 @@
 	</header>
 
 	<MenuViewer menu={data.id} />
+
+	<NearbyMenus menu={data} />
 </div>
 
 <style lang="scss">

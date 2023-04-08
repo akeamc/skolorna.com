@@ -7,18 +7,35 @@
 	import { getDays } from "../oden";
 	import { browser } from "$app/environment";
 	import DayComponent from "./Day.svelte";
+	import { page } from "$app/stores";
+	import { goto } from "$app/navigation";
 
 	export let menu: string;
 
-	let cursor = browser ? DateTime.now() : null;
+	$: d = $page.url.searchParams.get("d");
+	$: date = d && DateTime.fromISO(d).isValid ? DateTime.fromISO(d) : DateTime.now();
 
-	$: first = cursor?.startOf("week");
-	$: last = cursor?.endOf("week");
+	$: first = date?.startOf("week");
+	$: last = date?.endOf("week");
 	$: days = createQuery({
 		queryKey: ["days", menu, first?.toISODate(), last?.toISODate()],
-		queryFn: () => getDays(menu, first!, last!),
+		queryFn: () => {
+			if (!first || !last) throw new Error("unreachable");
+			return getDays(menu, first, last);
+		},
 		enabled: !!first && !!last
 	});
+
+	function setDate(date: DateTime | null) {
+		if (!date || date.hasSame(DateTime.now(), "week")) {
+			$page.url.searchParams.delete("d");
+		} else {
+			$page.url.searchParams.set("d", date.toISODate());
+		}
+		goto($page.url, {
+			invalidateAll: true
+		});
+	}
 
 	const now = DateTime.now();
 </script>
@@ -26,16 +43,16 @@
 <section>
 	<div class="toolbar">
 		<div class="buttons">
-			<button on:click={() => cursor && (cursor = cursor.minus({ weeks: 1 }))}>
+			<button on:click={() => setDate(date.minus({ weeks: 1 }))}>
 				<ChevronLeftIcon />
 			</button>
 			<button
 				class="wide"
 				on:click={() => {
-					cursor = DateTime.now();
+					setDate(null);
 				}}>Idag</button
 			>
-			<button on:click={() => cursor && (cursor = cursor.plus({ weeks: 1 }))}>
+			<button on:click={() => setDate(date.plus({ weeks: 1 }))}>
 				<ChevronRightIcon />
 			</button>
 		</div>

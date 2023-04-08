@@ -31,6 +31,7 @@ export interface Menu {
 	id: string;
 	checked_at: string;
 	osm_id: string | null;
+	location: { x: number; y: number } | null;
 }
 
 export function getMenu(id: string): Promise<Response> {

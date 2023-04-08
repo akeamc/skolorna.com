@@ -35,6 +35,7 @@
 		position: absolute;
 		top: calc((var(--seconds) - var(--offset)) * var(--second-height));
 		z-index: 1;
+		transition: top 0.5s cubic-bezier(0.52, 0.03, 0.38, 0.97);
 
 		&::before {
 			content: "";
