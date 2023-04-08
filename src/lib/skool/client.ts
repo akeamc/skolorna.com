@@ -145,6 +145,7 @@ export function getSchedule(year: number, week: number): Promise<Schedule | Skoo
 			if (!res.ok) {
 				if (res.status === 401) hasCredentials.set(false);
 				const message = await res.text();
+				span.setStatus({ code: api.SpanStatusCode.ERROR, message });
 
 				return {
 					status: res.status,
