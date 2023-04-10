@@ -5,7 +5,6 @@
 	import { DateTime } from "luxon";
 	import { spanfmt } from "../date";
 	import { getDays } from "../oden";
-	import { browser } from "$app/environment";
 	import DayComponent from "./Day.svelte";
 	import { page } from "$app/stores";
 	import { goto } from "$app/navigation";
