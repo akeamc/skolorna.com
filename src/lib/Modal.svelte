@@ -134,13 +134,24 @@
 	.close-button {
 		all: unset;
 		position: absolute;
-		inset-block-start: 1rem;
-		inset-inline-end: 1rem;
+		inset-block-start: 0.75rem;
+		inset-inline-end: 0.75rem;
 		color: var(--text0-muted);
 		display: flex;
 		cursor: pointer;
+		transition: background-color 0.1s;
+		border-radius: 0.25rem;
+		padding: 0.25rem;
 
-		&:focus {
+		&:hover {
+			background: var(--surface2);
+		}
+
+		&:active {
+			color: var(--text0);
+		}
+
+		&:focus-visible {
 			outline: var(--theme-hover) solid 2px;
 		}
 

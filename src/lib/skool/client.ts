@@ -186,6 +186,10 @@ export class Link {
 		return `https://skolorna.com/schedule?share=${this.id}`;
 	}
 
+	get icalUrl(): string {
+		return `https://api.skolorna.com/v0/skool/schedule/ical?share=${this.id}`;
+	}
+
 	copyToClipboard(): Promise<void> {
 		return navigator.clipboard.writeText(this.url);
 	}
