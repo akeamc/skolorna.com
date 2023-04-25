@@ -17,7 +17,7 @@ const Days: FunctionComponent<{ menu: string }> = ({ menu }) => {
 
   return (
     <div>
-      <div className="flex gap-2 border-b border-gray-300 py-2">
+      <div className="flex gap-2 border-b border-gray-200 py-2">
         <div
           className="inline-flex rounded-lg text-sm font-medium shadow-sm"
           role="group"

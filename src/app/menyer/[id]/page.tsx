@@ -1,6 +1,5 @@
 import Days from "@/components/oden/Days";
 import HistoryRecorder from "@/components/oden/HistoryRecorder";
-import MenuSearch from "@/components/oden/MenuSearch";
 import { Menu, ODEN_URL } from "@/lib/oden";
 import { notFound } from "next/navigation";
 
@@ -18,9 +17,8 @@ export default async function Page({ params: { id } }: { params: Params }) {
   const menu: Menu = await res.json();
 
   return (
-    <main className="mx-auto max-w-screen-lg px-2">
+    <main className="mx-auto max-w-screen-lg px-4">
       <HistoryRecorder menu={menu.id} />
-      <MenuSearch />
       <div className="my-8 flex max-sm:flex-col sm:items-center sm:justify-between sm:gap-2">
         <h1 className="text-2xl font-semibold tracking-tight sm:text-4xl">
           {menu.title}

@@ -8,7 +8,8 @@ const HistoryRecorder: FunctionComponent<{ menu: string }> = ({ menu }) => {
 
   useEffect(() => {
     record(menu);
-  }, [menu, record]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [menu]);
 
   return null;
 };

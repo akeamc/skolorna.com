@@ -8,22 +8,12 @@ export default async function Page() {
   ).then((res) => res.json());
 
   return (
-    <main className="mx-auto max-w-screen-lg px-2">
-      <SearchProvider index="menus">
-
-      </SearchProvider>
+    <main className="mx-auto max-w-screen-lg px-4">
+      <SearchProvider index="menus"></SearchProvider>
       <RecentMenus />
       <div className="my-8 flex max-sm:flex-col sm:items-center sm:justify-between sm:gap-2">
         <h1 className="text-2xl font-semibold tracking-tight sm:text-4xl">
-          Oden
-        </h1>
-      </div>
-      <div className="my-8 flex max-sm:flex-col sm:items-center sm:justify-between sm:gap-2">
-        <h1 className="text-2xl font-semibold tracking-tight sm:text-4xl">
-          {stats.menus} menyer
-        </h1>
-        <h1 className="text-2xl font-semibold tracking-tight sm:text-4xl">
-          {stats.meals?.toLocaleString("sv")} dagar
+          Skolorna
         </h1>
       </div>
     </main>

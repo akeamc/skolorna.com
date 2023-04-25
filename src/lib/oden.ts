@@ -118,23 +118,23 @@ export const useDays = ({
 // 	});
 // }
 
-// interface GetReviews {
-// 	menu?: string;
-// 	date?: string;
-// 	meal?: string;
-// }
+interface GetReviews {
+  menu?: string;
+  date?: string;
+  meal?: string;
+}
 
-// export interface Review {
-// 	id: string;
-// 	author: string;
-// 	menu_id: string;
-// 	date: string;
-// 	meal: string;
-// 	rating: number;
-// 	comment: string | null;
-// 	created_at: string;
-// 	edited_at: string | null;
-// }
+export interface Review {
+  id: string;
+  author: string;
+  menu_id: string;
+  date: string;
+  meal: string;
+  rating: number;
+  comment: string | null;
+  created_at: string;
+  edited_at: string | null;
+}
 
 // export function getReviews(query: GetReviews): Promise<Review[]> {
 // 	return catchySpan(

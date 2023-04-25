@@ -20,7 +20,7 @@ const RecentMenu: FunctionComponent<{ id: string }> = ({ id }) => {
   return (
     <Link
       href={`/menyer/${id}`}
-      className="h-full rounded-lg border border-gray-100 p-2 hover:bg-gray-50 transition-colors flex flex-col relative text-gray-500 group"
+      className="group relative flex h-full flex-col rounded-lg border border-gray-100 p-2 text-gray-500 transition-colors hover:bg-gray-50"
     >
       <h3 className="text-base font-medium text-gray-900">{menu?.title}</h3>
       <ul>
@@ -31,9 +31,14 @@ const RecentMenu: FunctionComponent<{ id: string }> = ({ id }) => {
         ))}
       </ul>
       {day && (
-        <p className="mt-auto block font-medium text-xs tracking-wide">{DateTime.fromISO(day?.date).toLocaleString({weekday: "short", day: "numeric", month: "short"}, { locale: "sv" })}</p>
+        <p className="mt-auto block text-xs font-medium tracking-wide">
+          {DateTime.fromISO(day?.date).toLocaleString(
+            { weekday: "short", day: "numeric", month: "short" },
+            { locale: "sv" }
+          )}
+        </p>
       )}
-      <ArrowRight className="absolute bottom-2 right-2 w-4 h-4 opacity-0 group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0 transition-all" />
+      <ArrowRight className="absolute bottom-2 right-2 h-4 w-4 -translate-x-1 opacity-0 transition-all group-hover:translate-x-0 group-hover:opacity-100" />
     </Link>
   );
 };
@@ -45,8 +50,8 @@ const RecentMenus: FunctionComponent = () => {
   const ids = recent.map(([id, _]) => id);
 
   return (
-    <ul className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3 my-4">
-      {ids.slice(0, 3).map(id => (
+    <ul className="my-4 grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3">
+      {ids.slice(0, 3).map((id) => (
         <li key={id}>
           <RecentMenu id={id} />
         </li>

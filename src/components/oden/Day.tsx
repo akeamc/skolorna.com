@@ -30,10 +30,10 @@ const Day: FunctionComponent<{ day: DayType }> = ({ day }) => {
   const isToday = now.toISODate() === day.date;
 
   return (
-    <div key={day.date} className="border-b border-gray-300 py-4">
+    <div key={day.date} className="border-b border-gray-200 py-4">
       <h2
         className={classNames(
-          "relative text-sm  font-semibold before:absolute before:-left-2 before:top-1/2 before:block before:h-1 before:w-1 before:rounded-full before:content-['']",
+          "relative text-sm  font-medium before:absolute before:-left-2 before:top-1/2 before:block before:h-1 before:w-1 before:rounded-full before:content-['']",
           isToday ? "text-blue-700 before:bg-blue-700" : "text-gray-500"
         )}
       >
