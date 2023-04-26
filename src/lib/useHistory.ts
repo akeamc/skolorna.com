@@ -1,22 +1,26 @@
 "use client";
 
+import { useCallback } from "react";
 import useLocalStorage from "./useLocalStorage";
 
 export default function useHistory() {
-  const [value, setValue] = useLocalStorage<Record<string, number>>(
+  const [ids, setIds] = useLocalStorage<Record<string, number>>(
     "recent-menus",
     {}
   );
 
   const record = (id: string, date = new Date()) => {
-    setValue({
-      ...value,
+    setIds((ids) => ({
+      ...ids,
       [id]: date.getTime(),
-    });
+    }));
   };
 
+  let idsArray = ids ? Object.entries(ids) : [];
+  idsArray.sort((a, b) => b[1] - a[1]);
+
   return {
-    value,
+    ids: idsArray.map(([id]) => id),
     record,
   };
 }

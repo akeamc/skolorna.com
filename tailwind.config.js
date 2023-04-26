@@ -12,6 +12,9 @@ module.exports = {
       fontFamily: {
         sans: ["var(--font-inter)", ...fontFamily.sans],
       },
+      animation: {
+        "spin-fast": "spin 0.5s linear infinite",
+      },
     },
   },
   plugins: [],

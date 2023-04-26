@@ -98,6 +98,17 @@ export const useDays = ({
     enabled: !!menu && !!first && !!last,
   });
 
+export const useNextDay = (menu?: string) => {
+  const today = DateTime.local().toISODate() || undefined;
+  const nextWeek = DateTime.local().plus({ weeks: 1 }).toISODate() || undefined;
+  const res = useDays({ menu, first: today, last: nextWeek });
+
+  return {
+    ...res,
+    data: res.data?.[0],
+  };
+};
+
 // export function getDays(menu: string, first: DateTime, last: DateTime): Promise<Day[]> {
 // 	return catchySpan(tracer, "getDays", async (span) => {
 // 		const res = await request(

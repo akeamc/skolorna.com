@@ -20,7 +20,7 @@ export interface IndexedMenu {
   title: string;
   slug: string;
   checked_at: string;
-  last_day: string;
+  last_day: string | null;
 }
 
 export interface Query<T> {
