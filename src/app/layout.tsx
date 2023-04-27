@@ -3,6 +3,7 @@ import { FunctionComponent, ReactNode } from "react";
 import { Inter } from "next/font/google";
 import { Metadata } from "next";
 import QueryProvider from "@/components/QueryProvider";
+import BigSearch from "@/components/oden/BigSearch";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
@@ -15,7 +16,14 @@ const RootLayout: FunctionComponent<{ children: ReactNode }> = ({
 }) => (
   <QueryProvider>
     <html lang="sv" className={`${inter.variable} font-sans`}>
-      <body>{children}</body>
+      <body>
+        <header className="w-full">
+          <div className="mx-auto max-w-screen-lg px-4">
+            <BigSearch />
+          </div>
+        </header>
+        {children}
+      </body>
     </html>
   </QueryProvider>
 );

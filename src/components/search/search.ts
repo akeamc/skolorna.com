@@ -33,12 +33,16 @@ export interface SearchContextData<T> {
   query: Query<T>;
   setQuery: (query: Query<T>) => void;
   response: SearchResponse<T> | null;
+  focused: boolean;
+  setFocused: (focused: boolean) => void;
 }
 
 export const SearchContext = createContext<SearchContextData<unknown>>({
   query: { q: "" },
   setQuery: () => {},
   response: null,
+  focused: false,
+  setFocused: () => {},
 });
 
 export const useSearch = <T>() =>

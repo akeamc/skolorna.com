@@ -1,3 +1,4 @@
+import BigSearch from "@/components/oden/BigSearch";
 import Days from "@/components/oden/Days";
 import HistoryRecorder from "@/components/oden/HistoryRecorder";
 import { Menu, ODEN_URL } from "@/lib/oden";
