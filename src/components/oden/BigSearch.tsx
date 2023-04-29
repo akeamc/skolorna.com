@@ -147,13 +147,11 @@ const ListItem: FunctionComponent<{ menu?: MenuProp | string }> = ({
   );
 };
 
-const Results: FunctionComponent = () => {
-  const { focused, query, response } = useSearch<IndexedMenu>();
+const Results: FunctionComponent<{ focused: boolean }> = ({ focused }) => {
+  const { query, response } = useSearch<IndexedMenu>();
   const { ids } = useHistory();
 
   const hits = query.q === "" ? ids.slice(0, 20) : response?.hits || [];
-
-  console.log(focused);
 
   return (
     <Transition
@@ -204,8 +202,11 @@ const Results: FunctionComponent = () => {
   );
 };
 
-const Box: FunctionComponent<{ stats?: Stats }> = ({ stats }) => {
-  const { setFocused, setQuery } = useSearch<IndexedMenu>();
+const Box: FunctionComponent<{
+  stats?: Stats;
+  setFocused: (focused: boolean) => void;
+}> = ({ stats, setFocused }) => {
+  const { setQuery } = useSearch<IndexedMenu>();
   const [input, setInput] = useState("");
 
   useEffect(() => {
@@ -233,6 +234,7 @@ const Box: FunctionComponent<{ stats?: Stats }> = ({ stats }) => {
 };
 
 const BigSearch: FunctionComponent<{ stats?: Stats }> = ({ stats }) => {
+  const [focused, setFocused] = useState(false);
   const router = useRouter();
 
   return (
@@ -242,8 +244,8 @@ const BigSearch: FunctionComponent<{ stats?: Stats }> = ({ stats }) => {
         className="relative z-10"
         onChange={({ id }) => router.push(`/menyer/${id}`)}
       >
-        <Box stats={stats} />
-        <Results />
+        <Box stats={stats} setFocused={setFocused} />
+        <Results focused={focused} />
       </Combobox>
     </SearchProvider>
   );

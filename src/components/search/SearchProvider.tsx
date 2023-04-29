@@ -18,7 +18,6 @@ export default function SearchProvider<T>({
   });
   const [query, setQuery] = useState<Query<T>>({ q: "" });
   const [response, setResponse] = useState<SearchResponse<T> | null>(null);
-  const [focused, setFocused] = useState(false);
 
   useQuery({
     queryKey: ["search", index, query],
@@ -46,8 +45,6 @@ export default function SearchProvider<T>({
         query: query as Query<unknown>,
         setQuery,
         response,
-        focused,
-        setFocused,
       }}
     >
       {children}
