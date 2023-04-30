@@ -14,8 +14,8 @@ import {
   AuthError,
   TokenRequest,
   TokenResponse,
-  getToken,
   isError,
+  requestToken,
 } from "./auth";
 
 interface AuthContextProps {
@@ -42,10 +42,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const authenticate = useCallback(
     async (req: TokenRequest) => {
       if (!accessToken) setAuthenticating(true);
-      const res = await getToken(req);
+      const res = await requestToken(req);
       if (!isError(res)) {
         setAccessToken(res.access_token);
-        setRefreshToken(res.refresh_token);
+        if (res.refresh_token) setRefreshToken(res.refresh_token);
       }
       setAuthenticating(false);
       return res;

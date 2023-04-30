@@ -4,8 +4,9 @@ import { Inter } from "next/font/google";
 import { Metadata } from "next";
 import QueryProvider from "@/components/QueryProvider";
 import { AuthProvider } from "@/lib/auth/context";
-import GoogleId from "@/components/auth/GoogleId";
 import Header from "@/components/Header";
+import { GoogleProvider } from "@/components/auth/GoogleContext";
+import GoogleIdPrompt from "@/components/auth/GoogleIdPrompt";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
@@ -18,13 +19,15 @@ const RootLayout: FunctionComponent<{ children: ReactNode }> = ({
 }) => (
   <QueryProvider>
     <AuthProvider>
-      <html lang="sv" className={`${inter.variable} font-sans`}>
-        <body>
-          <Header />
-          <GoogleId />
-          {children}
-        </body>
-      </html>
+      <GoogleProvider>
+        <html lang="sv" className={`${inter.variable} font-sans`}>
+          <body>
+            <Header />
+            <GoogleIdPrompt />
+            {children}
+          </body>
+        </html>
+      </GoogleProvider>
     </AuthProvider>
   </QueryProvider>
 );

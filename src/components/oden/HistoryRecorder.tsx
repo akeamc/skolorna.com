@@ -1,14 +1,13 @@
 "use client";
 
-import useHistory from "@/lib/useHistory";
+import { LOCALSTORAGE_KEY, getData } from "@/lib/oden/history";
 import { FunctionComponent, useEffect } from "react";
 
 const HistoryRecorder: FunctionComponent<{ menu: string }> = ({ menu }) => {
-  const { record } = useHistory();
-
   useEffect(() => {
-    record(menu);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const history = getData();
+    history[menu] = Date.now();
+    localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify(history));
   }, [menu]);
 
   return null;

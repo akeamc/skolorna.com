@@ -14,20 +14,20 @@ const XScale: FunctionComponent<{
   <>
     {header && (
       <div
-        className="absolute -top-12 left-[-1px] right-0 grid h-10 gap-[1px] border-x bg-gray-200"
+        className="absolute -top-12 left-[-1px] right-0 grid h-12 gap-[1px] border-x bg-gray-200"
         style={{ gridTemplateColumns: `repeat(${days.length}, 1fr)` }}
       >
         {days.map(({ date }) => (
           <div
             key={date.toISODate()}
-            className="flex items-center justify-center gap-1 bg-white"
+            className="flex flex-wrap items-center justify-center gap-x-1 bg-white pb-2"
           >
-            <span className="text-sm text-gray-500">
-              {date.toLocaleString({ weekday: "short" })}
+            <span className="text-sm leading-none text-gray-500">
+              {date.toLocaleString({ weekday: "short" }, { locale: "sv" })}
             </span>
             <span
               className={classNames(
-                "text-sm font-medium transition",
+                "text-sm font-medium leading-none transition",
                 date.hasSame(DateTime.now(), "day")
                   ? "flex h-8 w-8 items-center justify-center rounded-full bg-blue-700 text-white"
                   : "text-gray-900",

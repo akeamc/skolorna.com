@@ -40,7 +40,7 @@ export function isError<T>(obj: T | AuthError): obj is AuthError {
   return (obj as AuthError)?.status !== undefined;
 }
 
-export async function getToken(
+export async function requestToken(
   req: TokenRequest
 ): Promise<TokenResponse | AuthError> {
   try {

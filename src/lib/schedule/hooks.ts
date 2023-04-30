@@ -3,7 +3,7 @@ import { useAuth } from "../auth/context";
 import { Day, Schedule } from "./client";
 import { DateTime } from "luxon";
 
-export default function useDays(around: DateTime, count: number) {
+export function useDays(around: DateTime, count: number) {
   const { accessToken } = useAuth();
   const q = {
     year: around.weekYear,
@@ -43,4 +43,20 @@ export default function useDays(around: DateTime, count: number) {
   }
 
   return { days, status };
+}
+
+export function useClasses() {
+  const { accessToken } = useAuth();
+  return useQuery({
+    queryKey: ["skool", "classes"],
+    queryFn: async () => {
+      const res = await fetch(`https://api.skolorna.com/v0/skool/classes`, {
+        headers: {
+          authorization: `Bearer ${accessToken}`,
+        },
+      });
+      return await res.json();
+    },
+    enabled: !!accessToken,
+  });
 }

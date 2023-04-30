@@ -3,16 +3,17 @@
 import { Fragment, FunctionComponent, useEffect, useState } from "react";
 import SearchProvider from "../search/SearchProvider";
 import { Hit, IndexedMenu, useSearch } from "../search/search";
-import { Menu, Stats, useMenu, useNextDay } from "@/lib/oden";
+import { Menu, useMenu, useNextDay } from "@/lib/oden";
 import { Clock, Search as SearchIcon } from "react-feather";
 import Link from "next/link";
 import sanitize from "sanitize-html";
 import { DateTime } from "luxon";
 import Spinner from "../Spinner";
-import useHistory from "@/lib/useHistory";
 import classNames from "classnames";
 import { Combobox, Transition } from "@headlessui/react";
 import { useRouter } from "next/navigation";
+import { useStats } from "@/lib/oden/hooks";
+import { useHistory } from "@/lib/oden/history";
 
 type MenuProp = Hit<IndexedMenu> | Menu;
 
@@ -58,7 +59,8 @@ const HighlightedMenu: FunctionComponent<{ menu?: MenuProp | string }> = ({
     case "success":
       if (day) {
         footer = DateTime.fromISO(day.date).toLocaleString(
-          DateTime.DATE_MED_WITH_WEEKDAY
+          DateTime.DATE_MED_WITH_WEEKDAY,
+          { locale: "sv" }
         );
       } else {
         footer = "Ingen data";
@@ -131,7 +133,9 @@ const ListItem: FunctionComponent<{ menu?: MenuProp | string }> = ({
             )}
           >
             {lastDay
-              ? `-> ${lastDay.toLocaleString(DateTime.DATE_SHORT)}`
+              ? `-> ${lastDay.toLocaleString(DateTime.DATE_SHORT, {
+                  locale: "sv",
+                })}`
               : "Ingen information"}
           </span>
           <hr className="mt-1" />
@@ -149,7 +153,7 @@ const ListItem: FunctionComponent<{ menu?: MenuProp | string }> = ({
 
 const Results: FunctionComponent<{ focused: boolean }> = ({ focused }) => {
   const { query, response } = useSearch<IndexedMenu>();
-  const { ids } = useHistory();
+  const ids = useHistory();
 
   const hits = query.q === "" ? ids.slice(0, 20) : response?.hits || [];
 
@@ -203,9 +207,9 @@ const Results: FunctionComponent<{ focused: boolean }> = ({ focused }) => {
 };
 
 const Box: FunctionComponent<{
-  stats?: Stats;
   setFocused: (focused: boolean) => void;
-}> = ({ stats, setFocused }) => {
+}> = ({ setFocused }) => {
+  const { data: stats } = useStats();
   const { setQuery } = useSearch<IndexedMenu>();
   const [input, setInput] = useState("");
 
@@ -222,7 +226,7 @@ const Box: FunctionComponent<{
       <SearchIcon className="absolute left-2 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
       <Combobox.Input
         type="search"
-        className="w-full rounded-lg border border-gray-100 bg-white p-4  pl-8 text-base font-medium outline-none ring-inset ring-blue-600 focus:ring-2"
+        className="w-full rounded-lg border border-gray-100 bg-white p-3 pl-8 text-base font-medium outline-none ring-inset ring-blue-600 focus:ring-2"
         placeholder={`Sök bland ${stats?.menus || "tusentals"} menyer`}
         onChange={(e) => setInput(e.target.value)}
         displayValue={({ title }) => title}
@@ -233,7 +237,9 @@ const Box: FunctionComponent<{
   );
 };
 
-const BigSearch: FunctionComponent<{ stats?: Stats }> = ({ stats }) => {
+const BigSearch: FunctionComponent<{ className?: string }> = ({
+  className,
+}) => {
   const [focused, setFocused] = useState(false);
   const router = useRouter();
 
@@ -241,10 +247,10 @@ const BigSearch: FunctionComponent<{ stats?: Stats }> = ({ stats }) => {
     <SearchProvider index="menus">
       <Combobox
         as="div"
-        className="relative z-10"
+        className={classNames("relative z-10", className)}
         onChange={({ id }) => router.push(`/menyer/${id}`)}
       >
-        <Box stats={stats} setFocused={setFocused} />
+        <Box setFocused={setFocused} />
         <Results focused={focused} />
       </Combobox>
     </SearchProvider>

@@ -1,16 +1,13 @@
 "use client";
 
-import { Fragment, FunctionComponent, Key, ReactNode } from "react";
+import { Fragment, FunctionComponent, ReactNode } from "react";
 import { Menu, Transition } from "@headlessui/react";
-import {
-  ChevronDown,
-  ChevronLeft,
-  ChevronRight,
-  MoreHorizontal,
-} from "react-feather";
+import { Check, ChevronDown, MoreHorizontal } from "react-feather";
 import { View, useSchedule } from "@/lib/schedule/context";
 import classNames from "classnames";
 import { DateTime } from "luxon";
+import Scroller from "../Scroller";
+import { useClasses } from "@/lib/schedule/hooks";
 
 const LABELS: Record<View, string> = {
   month: "Månad",
@@ -19,17 +16,16 @@ const LABELS: Record<View, string> = {
 };
 
 const MenuItem: FunctionComponent<{
-  key: Key;
   children: ReactNode;
   onClick: () => void;
-}> = ({ key, children, onClick }) => (
-  <Menu.Item key={key}>
+}> = ({ children, onClick }) => (
+  <Menu.Item>
     {({ active }) => (
       <button
         onClick={onClick}
         className={classNames(
           active ? "bg-gray-100 text-gray-900" : "text-gray-700",
-          "block w-full px-4 py-2 text-left text-sm"
+          "flex w-full items-center px-4 py-2 text-left text-sm"
         )}
       >
         {children}
@@ -56,38 +52,6 @@ const DropdownMenu: FunctionComponent<{ children: ReactNode }> = ({
   </Transition>
 );
 
-const Scroller: FunctionComponent = () => {
-  const { view, setCursor } = useSchedule();
-
-  function scroll(steps: number) {
-    setCursor((prev) => prev.plus({ [view]: steps }));
-  }
-
-  return (
-    <div className="inline-flex w-full items-center justify-center overflow-hidden rounded-md border border-gray-300 bg-white shadow-sm">
-      <button
-        className="p-1.5 text-gray-400 hover:bg-gray-100"
-        onClick={() => scroll(-1)}
-      >
-        <ChevronLeft className="h-5 w-5" />
-      </button>
-      <hr className="h-6 border-l sm:hidden" />
-      <button
-        className="px-3 py-1.5 text-sm font-semibold  text-gray-900 hover:bg-gray-100 max-sm:hidden"
-        onClick={() => setCursor(DateTime.now())}
-      >
-        Idag
-      </button>
-      <button
-        className="p-1.5 text-gray-400 hover:bg-gray-100"
-        onClick={() => scroll(1)}
-      >
-        <ChevronRight className="h-5 w-5" />
-      </button>
-    </div>
-  );
-};
-
 function ViewDropdown() {
   const { view, setView } = useSchedule();
 
@@ -106,6 +70,7 @@ function ViewDropdown() {
         {Object.entries(LABELS).map(([key, label]) => (
           <MenuItem key={key} onClick={() => setView(key as View)}>
             {label}
+            {key === view && <Check className="ml-auto h-4 w-4" />}
           </MenuItem>
         ))}
       </DropdownMenu>
@@ -114,7 +79,7 @@ function ViewDropdown() {
 }
 
 function Options() {
-  const { setView, setCursor } = useSchedule();
+  const { view, setView, setCursor } = useSchedule();
 
   return (
     <Menu as="div" className="relative inline-block text-left sm:hidden">
@@ -131,6 +96,7 @@ function Options() {
         {Object.entries(LABELS).map(([key, label]) => (
           <MenuItem key={key} onClick={() => setView(key as View)}>
             {label}
+            {key === view && <Check className="ml-auto h-4 w-4" />}
           </MenuItem>
         ))}
       </DropdownMenu>
@@ -145,14 +111,15 @@ const HEADING_DATE_FORMAT: Record<View, Intl.DateTimeFormatOptions> = {
 };
 
 export default function CalendarHeader() {
-  const { cursor, view } = useSchedule();
+  useClasses();
+  const { cursor, setCursor, view } = useSchedule();
   let subheading;
   switch (view) {
     case "week":
       subheading = `Vecka ${cursor.weekNumber}`;
       break;
     case "day":
-      subheading = cursor.toLocaleString({ weekday: "long" });
+      subheading = cursor.toLocaleString({ weekday: "long" }, { locale: "sv" });
       break;
   }
 
@@ -160,12 +127,15 @@ export default function CalendarHeader() {
     <header className="mb-2 flex h-12 items-center justify-between">
       <div>
         <h1 className="text-lg font-semibold tracking-tight">
-          {cursor.toLocaleString(HEADING_DATE_FORMAT[view])}
+          {cursor.toLocaleString(HEADING_DATE_FORMAT[view], { locale: "sv" })}
         </h1>
         {subheading && <h2 className="text-sm text-gray-500">{subheading}</h2>}
       </div>
       <div className="flex items-center gap-2">
-        <Scroller />
+        <Scroller
+          onScroll={(steps) => setCursor((c) => c.plus({ [view]: steps }))}
+          onReset={() => setCursor(DateTime.now())}
+        />
         <ViewDropdown />
         <Options />
       </div>

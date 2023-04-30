@@ -2,13 +2,17 @@
 
 import { useAuth } from "@/lib/auth/context";
 import Script from "next/script";
-import { FunctionComponent, useEffect, useId, useState } from "react";
+import { createContext, useContext, useId, useState } from "react";
 
 const CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
 
-const GoogleId: FunctionComponent = () => {
+const GoogleContext = createContext<
+  { initialized: boolean; promptParentId: string } | undefined
+>(undefined);
+
+export const GoogleProvider = ({ children }: { children: React.ReactNode }) => {
   const [initialized, setInitialized] = useState(false);
-  const parentId = useId();
+  const promptParentId = useId();
   const { authenticate, status } = useAuth();
 
   const onResponse = (res: any, nonce: string) => {
@@ -31,27 +35,28 @@ const GoogleId: FunctionComponent = () => {
       client_id: CLIENT_ID,
       callback: (res) => onResponse(res, nonce),
       nonce,
-      prompt_parent_id: parentId,
+      prompt_parent_id: promptParentId,
     });
 
     setInitialized(true);
   };
 
-  useEffect(() => {
-    if (initialized && status === "unauthenticated")
-      google.accounts.id.prompt();
-  }, [initialized, status]);
-
   return (
-    <>
+    <GoogleContext.Provider value={{ initialized, promptParentId }}>
       <Script
         src="https://accounts.google.com/gsi/client"
         strategy="afterInteractive"
         onLoad={onLoad}
       />
-      <div id={parentId} />
-    </>
+      {children}
+    </GoogleContext.Provider>
   );
 };
 
-export default GoogleId;
+export function useGoogle() {
+  const context = useContext(GoogleContext);
+  if (context === undefined) {
+    throw new Error("useGoogle must be used within a GoogleProvider");
+  }
+  return context;
+}

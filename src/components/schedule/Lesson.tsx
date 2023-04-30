@@ -60,7 +60,7 @@ const LessonDetails: FunctionComponent<{
                       className="m-auto h-3 w-3 rounded-sm"
                       style={{ backgroundColor: lesson.accent().hex() }}
                     />
-                    <Dialog.Title className="flex flex-col">
+                    <Dialog.Title className="flex flex-col" as="div">
                       <h3 className="text-base font-semibold leading-6 text-gray-900">
                         {lesson.course}
                       </h3>
@@ -74,8 +74,13 @@ const LessonDetails: FunctionComponent<{
                           { locale: "sv" }
                         )}{" "}
                         &middot;{" "}
-                        {lesson.start.toLocaleString(DateTime.TIME_SIMPLE)}–
-                        {lesson.end.toLocaleString(DateTime.TIME_SIMPLE)}
+                        {lesson.start.toLocaleString(DateTime.TIME_SIMPLE, {
+                          locale: "sv",
+                        })}
+                        –
+                        {lesson.end.toLocaleString(DateTime.TIME_SIMPLE, {
+                          locale: "sv",
+                        })}
                       </time>
                     </Dialog.Title>
                     <MapPin className="m-auto h-5 w-5 text-gray-500" />
@@ -106,7 +111,7 @@ const Lesson: FunctionComponent<{ lesson: TLesson }> = ({ lesson }) => {
       <div className="mx-1 h-full">
         <button
           className={classNames(
-            "flex h-full w-full gap-2 rounded-md bg-[var(--bg)] p-1 text-left hover:bg-[var(--bg-hover)]",
+            "flex h-full w-full gap-2 overflow-hidden break-all rounded-md bg-[var(--bg)] p-1 text-left hover:bg-[var(--bg-hover)]",
             lesson.duration() < 2700
               ? "items-center justify-between"
               : "flex-col"
@@ -118,9 +123,11 @@ const Lesson: FunctionComponent<{ lesson: TLesson }> = ({ lesson }) => {
           }}
           onClick={() => setOpen(true)}
         >
-          <time className="text-xs">
-            {lesson.start.toLocaleString(DateTime.TIME_SIMPLE)}–
-            {lesson.end.toLocaleString(DateTime.TIME_SIMPLE)}
+          <time className="text-xs max-sm:hidden">
+            {lesson.start.toLocaleString(DateTime.TIME_SIMPLE, {
+              locale: "sv",
+            })}
+            –{lesson.end.toLocaleString(DateTime.TIME_SIMPLE, { locale: "sv" })}
           </time>
           <h3 className="text-xs font-medium">{lesson.course}</h3>
         </button>

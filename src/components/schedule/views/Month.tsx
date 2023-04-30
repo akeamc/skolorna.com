@@ -1,6 +1,6 @@
 import { Lesson } from "@/lib/schedule/client";
 import { useSchedule } from "@/lib/schedule/context";
-import useDays from "@/lib/schedule/useDays";
+import { useDays } from "@/lib/schedule/hooks";
 import classNames from "classnames";
 import { DateTime } from "luxon";
 import { FunctionComponent } from "react";

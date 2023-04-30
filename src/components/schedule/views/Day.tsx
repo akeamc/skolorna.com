@@ -1,6 +1,6 @@
 import Days from "@/components/schedule/Days";
 import { useSchedule } from "@/lib/schedule/context";
-import useDays from "@/lib/schedule/useDays";
+import { useDays } from "@/lib/schedule/hooks";
 
 export default function DayView() {
   const { cursor, daysPerWeek } = useSchedule();
