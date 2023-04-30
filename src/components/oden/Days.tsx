@@ -1,9 +1,7 @@
 "use client";
 
-import { Day as DayType, Menu, ODEN_URL, useDays } from "@/lib/oden";
-import { useQuery } from "@tanstack/react-query";
+import { useDays } from "@/lib/oden";
 import { FunctionComponent, useState } from "react";
-import Meal from "./Meal";
 import Day from "./Day";
 import { DateTime } from "luxon";
 import { ArrowLeft, ArrowRight } from "react-feather";

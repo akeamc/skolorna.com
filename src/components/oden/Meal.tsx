@@ -1,7 +1,6 @@
 import { Meal as MealType } from "@/lib/oden";
 import { FunctionComponent, useState } from "react";
 import ReviewDialog from "./ReviewDialog";
-import Star from "../stars/Star";
 import Stars from "../stars/Stars";
 
 const Meal: FunctionComponent<{ meal: MealType }> = ({ meal }) => {

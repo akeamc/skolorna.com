@@ -1,6 +1,5 @@
 "use client";
 
-import { useCallback } from "react";
 import useLocalStorage from "./useLocalStorage";
 
 export default function useHistory() {

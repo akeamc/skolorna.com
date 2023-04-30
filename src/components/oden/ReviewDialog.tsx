@@ -2,7 +2,6 @@ import { Fragment, FunctionComponent, useRef } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { Meal, ODEN_URL, Review } from "@/lib/oden";
 import { X } from "react-feather";
-import Stars from "../stars/Stars";
 import { useQuery } from "@tanstack/react-query";
 
 const ReviewDialog: FunctionComponent<{

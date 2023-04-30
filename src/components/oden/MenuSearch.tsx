@@ -11,7 +11,7 @@ import SearchProvider from "../search/SearchProvider";
 import { Hit as HitType, IndexedMenu, useSearch } from "../search/search";
 import sanitizeHtml from "sanitize-html";
 import Link from "next/link";
-import { Combobox, Dialog, Transition } from "@headlessui/react";
+import { Combobox, Transition } from "@headlessui/react";
 import { Check, ChevronsDown } from "react-feather";
 import classNames from "classnames";
 
