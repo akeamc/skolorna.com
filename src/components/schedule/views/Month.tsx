@@ -100,7 +100,7 @@ export default function MonthView() {
 
   return (
     <div
-      className="grid gap-[1px] overflow-hidden rounded-lg border bg-gray-200"
+      className="grid gap-px overflow-hidden rounded-lg border bg-gray-200"
       style={{
         gridTemplateColumns: `1.5rem repeat(${daysPerWeek}, 1fr)`,
       }}

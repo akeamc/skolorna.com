@@ -7,9 +7,9 @@ const Account = () => {
   const { logout } = useAuth();
 
   return (
-    <div>
+    <main className="mx-auto max-w-screen-lg px-4">
       <button onClick={logout}>Logga ut</button>
-    </div>
+    </main>
   );
 };
 

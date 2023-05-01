@@ -71,7 +71,7 @@ const HighlightedMenu: FunctionComponent<{ menu?: MenuProp | string }> = ({
     <Combobox.Option value={menu} as={Fragment}>
       <Link
         href={url}
-        className="group mb-[1px] rounded-lg px-2 text-gray-500 outline-none ring-inset ring-blue-600 hover:bg-blue-100 focus-visible:ring-2 active:bg-blue-200 ui-active:bg-blue-100"
+        className="group mb-px rounded-lg px-2 text-gray-500 outline-none ring-inset ring-blue-600 hover:bg-blue-100 focus-visible:ring-2 active:bg-blue-200 ui-active:bg-blue-100"
       >
         <div className="mb-[-1px] flex h-48 flex-col overflow-hidden border-b py-2">
           <h3 className="font-medium text-gray-900">
