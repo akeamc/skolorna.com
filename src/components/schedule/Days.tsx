@@ -1,10 +1,55 @@
 import { Day } from "@/lib/schedule/client";
 import { useSchedule } from "@/lib/schedule/context";
-import { Fragment, FunctionComponent } from "react";
+import {
+  Fragment,
+  FunctionComponent,
+  useCallback,
+  useEffect,
+  useRef,
+} from "react";
 import Lesson from "./Lesson";
 import classNames from "classnames";
 import { DateTime } from "luxon";
 import { QueryStatus } from "@tanstack/react-query";
+
+const Indicator: FunctionComponent<{
+  days: Day[];
+  min: number;
+  max: number;
+}> = ({ days, min, max }) => {
+  const indicatorRef = useRef<HTMLDivElement>(null);
+
+  const update = useCallback(() => {
+    if (!indicatorRef.current) return;
+    const now = DateTime.now();
+    const day = days.findIndex((day) => day.date.hasSame(now, "day"));
+    const progress =
+      (now.hour * 3600 + now.minute * 60 + now.second - min) / (max - min);
+
+    indicatorRef.current.style.top = `${progress * 100}%`;
+    indicatorRef.current.style.left = `${(100 * day) / days.length}%`;
+
+    const visible = day !== -1 && progress >= 0 && progress <= 1;
+
+      indicatorRef.current.style.display = visible ? "block" : "none";
+  }, [days, max, min]);
+
+  useEffect(() => {
+    update();
+    const interval = setInterval(update, 1000);
+    return () => clearInterval(interval);
+  }, [update]);
+
+  return (
+    <div
+      ref={indicatorRef}
+      className="absolute h-px bg-blue-700 transition-all before:absolute before:-left-1 before:top-1/2 before:block before:h-2 before:w-2 before:-translate-y-1/2 before:rounded-full before:bg-blue-700 before:content-['']"
+      style={{
+        width: `${100 / days.length}%`,
+      }}
+    />
+  );
+};
 
 const XScale: FunctionComponent<{
   days: Day[];
@@ -98,6 +143,7 @@ const Days: FunctionComponent<{
       >
         <XScale days={days} header={header} status={status} />
         <YScale start={min} hours={hours} />
+        <Indicator days={days} min={min} max={max} />
         <ol>
           {days.map(({ date, lessons }, i) => (
             <Fragment key={date.toISODate()}>
