@@ -9,7 +9,6 @@ export default function GoogleLoginButton() {
 
   useEffect(() => {
     if (!initialized || !container.current) return;
-    console.log("rendering button");
     google.accounts.id.renderButton(container.current, {
       type: "standard",
       size: "large",

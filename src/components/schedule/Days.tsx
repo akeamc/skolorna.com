@@ -31,7 +31,7 @@ const Indicator: FunctionComponent<{
 
     const visible = day !== -1 && progress >= 0 && progress <= 1;
 
-      indicatorRef.current.style.display = visible ? "block" : "none";
+    indicatorRef.current.style.display = visible ? "block" : "none";
   }, [days, max, min]);
 
   useEffect(() => {
@@ -59,7 +59,7 @@ const XScale: FunctionComponent<{
   <>
     {header && (
       <div
-        className="absolute -top-12 left-[-1px] right-0 grid h-12 gap-[1px] border-x bg-gray-200"
+        className="absolute -top-12 left-[-1px] right-0 grid h-12 gap-px border-x bg-gray-200"
         style={{ gridTemplateColumns: `repeat(${days.length}, 1fr)` }}
       >
         {days.map(({ date }) => (

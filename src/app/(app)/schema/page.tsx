@@ -1,5 +1,5 @@
 import { ScheduleProvider } from "@/lib/schedule/context";
-import Calendar from "../../components/schedule/Calendar";
+import Calendar from "../../../components/schedule/Calendar";
 
 export default function Page() {
   return (

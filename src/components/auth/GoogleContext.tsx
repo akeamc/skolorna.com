@@ -13,9 +13,12 @@ const GoogleContext = createContext<
 export const GoogleProvider = ({ children }: { children: React.ReactNode }) => {
   const [initialized, setInitialized] = useState(false);
   const promptParentId = useId();
-  const { authenticate, status } = useAuth();
+  const { authenticate } = useAuth();
 
-  const onResponse = (res: any, nonce: string) => {
+  const onResponse = (
+    res: google.accounts.id.CredentialResponse,
+    nonce: string
+  ) => {
     authenticate({
       grant_type: "id_token",
       provider: "google",
