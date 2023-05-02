@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "./context";
 import { ComponentType, FunctionComponent, useEffect } from "react";
 
-export default function withAuth<P extends JSX.IntrinsicAttributes>(
+export default function withAuth<P extends JSX.IntrinsicAttributes = {}>(
   Component: ComponentType<P>
 ): FunctionComponent<P> {
   // eslint-disable-next-line react/display-name

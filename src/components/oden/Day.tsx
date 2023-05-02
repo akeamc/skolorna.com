@@ -1,33 +1,15 @@
 "use client";
 
 import { Day as DayType } from "@/lib/oden";
-import { FunctionComponent, useEffect, useState } from "react";
+import { FunctionComponent } from "react";
 import Meal from "./Meal";
 import classNames from "classnames";
 import { DateTime } from "luxon";
-
-function useDate(interval = 1000): DateTime {
-  const [date, setDate] = useState(DateTime.now);
-
-  useEffect(() => {
-    const i = setInterval(() => {
-      setDate(DateTime.now);
-    }, interval);
-
-    return () => clearInterval(i);
-  }, [interval]);
-
-  return date;
-}
+import useHasSameComponent from "@/lib/useHasSameComponent";
 
 const Day: FunctionComponent<{ day: DayType }> = ({ day }) => {
-  const now = useDate();
-  const formatter = new Intl.DateTimeFormat("sv", {
-    month: "short",
-    day: "numeric",
-    weekday: "short",
-  });
-  const isToday = now.toISODate() === day.date;
+  const date = DateTime.fromISO(day.date);
+  const isToday = useHasSameComponent(date, "day");
 
   return (
     <div key={day.date} className="border-b border-gray-200 py-4">
@@ -37,7 +19,10 @@ const Day: FunctionComponent<{ day: DayType }> = ({ day }) => {
           isToday ? "text-blue-700 before:bg-blue-700" : "text-gray-500"
         )}
       >
-        {formatter.format(new Date(day.date))}
+        {date.toLocaleString(
+          { weekday: "short", day: "numeric", month: "long" },
+          { locale: "sv" }
+        )}
       </h2>
       <ul>
         {day.meals.map((meal) => (

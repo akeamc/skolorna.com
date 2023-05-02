@@ -1,23 +1,15 @@
 "use client";
 
 import { DateTime } from "luxon";
-import {
-  Dispatch,
-  FunctionComponent,
-  ReactNode,
-  SetStateAction,
-  createContext,
-  useContext,
-  useState,
-} from "react";
-
-export type View = "month" | "week" | "day";
+import { FunctionComponent, ReactNode, createContext, useContext } from "react";
+import { View } from ".";
+import { useRouter } from "next/navigation";
 
 interface ScheduleContextType {
   view: View;
   setView: (view: View) => void;
   cursor: DateTime;
-  setCursor: Dispatch<SetStateAction<DateTime>>;
+  setCursor: (cursor: DateTime) => void;
   /**
    * The time bounds of every day (in seconds since midnight).
    */
@@ -29,19 +21,25 @@ const ScheduleContext = createContext<ScheduleContextType | undefined>(
   undefined
 );
 
-export const ScheduleProvider: FunctionComponent<{ children: ReactNode }> = ({
-  children,
-}) => {
-  const [view, setView] = useState<View>("week");
-  const [cursor, setCursor] = useState(DateTime.local());
+export const ScheduleProvider: FunctionComponent<{
+  children: ReactNode;
+  view: View;
+  cursor: string;
+}> = ({ children, view, cursor: isoCursor }) => {
+  const cursor = DateTime.fromISO(isoCursor);
+  const router = useRouter();
+
+  function pushState(view: View, cursor: DateTime) {
+    router.push(`/schema/${view}/${cursor.year}/${cursor.month}/${cursor.day}`);
+  }
 
   return (
     <ScheduleContext.Provider
       value={{
         view,
-        setView,
+        setView: (view) => pushState(view, cursor),
         cursor,
-        setCursor,
+        setCursor: (cursor) => pushState(view, cursor),
         timeBounds: [7 * 3600, 20 * 3600],
         daysPerWeek: 7,
       }}

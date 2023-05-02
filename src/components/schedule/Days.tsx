@@ -46,6 +46,7 @@ const Indicator: FunctionComponent<{
       className="absolute h-px bg-blue-700 transition-all before:absolute before:-left-1 before:top-1/2 before:block before:h-2 before:w-2 before:-translate-y-1/2 before:rounded-full before:bg-blue-700 before:content-['']"
       style={{
         width: `${100 / days.length}%`,
+        display: "none", // hidden before first update
       }}
     />
   );

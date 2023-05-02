@@ -3,11 +3,12 @@
 import { Fragment, FunctionComponent, ReactNode } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { Check, ChevronDown, MoreHorizontal } from "react-feather";
-import { View, useSchedule } from "@/lib/schedule/context";
+import { useSchedule } from "@/lib/schedule/context";
 import classNames from "classnames";
 import { DateTime } from "luxon";
 import Scroller from "../Scroller";
 import { useClasses } from "@/lib/schedule/hooks";
+import { View } from "@/lib/schedule";
 
 const LABELS: Record<View, string> = {
   month: "Månad",
@@ -133,7 +134,7 @@ export default function CalendarHeader() {
       </div>
       <div className="flex items-center gap-2">
         <Scroller
-          onScroll={(steps) => setCursor((c) => c.plus({ [view]: steps }))}
+          onScroll={(steps) => setCursor(cursor.plus({ [view]: steps }))}
           onReset={() => setCursor(DateTime.now())}
         />
         <ViewDropdown />

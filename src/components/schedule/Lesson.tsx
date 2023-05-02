@@ -2,9 +2,17 @@
 
 import { Lesson as TLesson } from "@/lib/schedule/client";
 import { Dialog, Transition } from "@headlessui/react";
+import useResizeObserver from "@react-hook/resize-observer";
 import classNames from "classnames";
 import { DateTime } from "luxon";
-import { Fragment, FunctionComponent, useState } from "react";
+import {
+  Fragment,
+  FunctionComponent,
+  RefObject,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import { Clock, MapPin, User, X } from "react-feather";
 
 const LessonDetails: FunctionComponent<{
@@ -102,19 +110,38 @@ const LessonDetails: FunctionComponent<{
   );
 };
 
+function useVisibiliy(target: RefObject<HTMLElement>) {
+  const [size, setSize] = useState<DOMRect>();
+  const width = size?.width || 0;
+
+  useLayoutEffect(() => {
+    setSize(target.current?.getBoundingClientRect());
+  }, [target]);
+
+  // Where the magic happens
+  useResizeObserver(target, (entry) => setSize(entry.contentRect));
+  return {
+    showEnd: width > 96,
+    showLocation: width > 64,
+  };
+}
+
 const Lesson: FunctionComponent<{ lesson: TLesson }> = ({ lesson }) => {
   const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLButtonElement>(null);
+  const { showEnd, showLocation } = useVisibiliy(ref);
 
   return (
     <>
       <LessonDetails lesson={lesson} open={open} setOpen={setOpen} />
       <div className="mx-1 h-full">
         <button
+          ref={ref}
           className={classNames(
-            "flex h-full w-full gap-2 overflow-hidden break-all rounded-md bg-[var(--bg)] p-1 text-left hover:bg-[var(--bg-hover)]",
+            "flex h-full w-full overflow-hidden break-all rounded-md bg-[var(--bg)] p-1 text-left text-xs hover:bg-[var(--bg-hover)]",
             lesson.duration() < 2700
               ? "items-center justify-between"
-              : "flex-col"
+              : "flex-col gap-2"
           )}
           style={{
             color: lesson.foreground().hex(),
@@ -123,13 +150,20 @@ const Lesson: FunctionComponent<{ lesson: TLesson }> = ({ lesson }) => {
           }}
           onClick={() => setOpen(true)}
         >
-          <time className="text-xs max-sm:hidden">
-            {lesson.start.toLocaleString(DateTime.TIME_SIMPLE, {
-              locale: "sv",
-            })}
-            –{lesson.end.toLocaleString(DateTime.TIME_SIMPLE, { locale: "sv" })}
-          </time>
-          <h3 className="text-xs font-medium">{lesson.course}</h3>
+          <span>
+            <time>
+              {lesson.start.toLocaleString(DateTime.TIME_SIMPLE, {
+                locale: "sv",
+              })}
+              {showEnd
+                ? `–${lesson.end.toLocaleString(DateTime.TIME_SIMPLE, {
+                    locale: "sv",
+                  })}`
+                : ""}
+            </time>
+            {showLocation && lesson.location ? ` · ${lesson.location}` : ""}
+          </span>
+          <h3 className="font-medium">{lesson.course}</h3>
         </button>
       </div>
     </>

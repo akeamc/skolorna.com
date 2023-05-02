@@ -60,3 +60,19 @@ export function useClasses() {
     enabled: !!accessToken,
   });
 }
+
+export function useCredentials() {
+  const { accessToken } = useAuth();
+  return useQuery({
+    queryKey: ["skool", "credentials"],
+    queryFn: async () => {
+      const res = await fetch(`https://api.skolorna.com/v0/skool/credentials`, {
+        headers: {
+          authorization: `Bearer ${accessToken}`,
+        },
+      });
+      return await res.json();
+    },
+    enabled: !!accessToken,
+  });
+}

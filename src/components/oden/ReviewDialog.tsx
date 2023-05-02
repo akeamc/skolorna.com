@@ -84,7 +84,7 @@ const ReviewDialog: FunctionComponent<{
                               <div className="h-2 w-full rounded-full bg-gray-200">
                                 <div
                                   style={{
-                                    width: reviews
+                                    width: reviews?.length
                                       ? `${(count / reviews.length) * 100}%`
                                       : 0,
                                   }}
