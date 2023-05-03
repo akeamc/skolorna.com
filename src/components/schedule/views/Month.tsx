@@ -77,7 +77,7 @@ const Week: FunctionComponent<{ cursor: DateTime; activeMonth: number }> = ({
                 : date.month === activeMonth
                 ? "text-gray-900"
                 : "text-gray-400",
-              { blur: status === "loading" }
+              { blur: status === "pending" }
             )}
           >
             {date.day}

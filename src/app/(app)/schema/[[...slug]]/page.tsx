@@ -4,6 +4,8 @@ import { DateTime } from "luxon";
 import { redirect } from "next/navigation";
 import { View, isView } from "@/lib/schedule";
 
+export const config = { runtime: "edge" };
+
 function parseParams(params: string[]): {
   view: View | null;
   cursor: DateTime | null;

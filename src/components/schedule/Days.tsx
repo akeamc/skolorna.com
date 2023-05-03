@@ -77,7 +77,7 @@ const XScale: FunctionComponent<{
                 date.hasSame(DateTime.now(), "day")
                   ? "flex h-8 w-8 items-center justify-center rounded-full bg-blue-700 text-white"
                   : "text-gray-900",
-                { blur: status === "loading" }
+                { blur: status === "pending" }
               )}
             >
               {date.day}
