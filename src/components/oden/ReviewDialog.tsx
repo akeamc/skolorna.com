@@ -66,14 +66,12 @@ const ReviewDialog: FunctionComponent<{
                   <X className="h-6 w-6" />
                 </button>
                 <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
-                  <div className="mb-3 mr-6">
-                    <Dialog.Title
-                      as="h3"
-                      className="text-base font-semibold leading-6 text-gray-900"
-                    >
-                      {meal.value}
-                    </Dialog.Title>
-                  </div>
+                  <Dialog.Title
+                    as="h3"
+                    className="mb-3 mr-6 text-base font-semibold leading-6 text-gray-900"
+                  >
+                    {meal.value}
+                  </Dialog.Title>
                   <div className="flex gap-2">
                     <table className="grow">
                       <tbody>

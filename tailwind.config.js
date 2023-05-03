@@ -11,6 +11,7 @@ module.exports = {
     extend: {
       fontFamily: {
         sans: ["var(--font-inter)", ...fontFamily.sans],
+        mono: ["var(--font-martian)", ...fontFamily.mono],
       },
       animation: {
         "spin-fast": "spin 0.5s linear infinite",

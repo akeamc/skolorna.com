@@ -3,8 +3,9 @@ import Calendar from "../../../../components/schedule/Calendar";
 import { DateTime } from "luxon";
 import { redirect } from "next/navigation";
 import { View, isView } from "@/lib/schedule";
+import Footer from "@/components/schedule/Footer";
 
-export const config = { runtime: "edge" };
+// export const runtime = "edge";
 
 function parseParams(params: string[]): {
   view: View | null;
@@ -38,10 +39,13 @@ export default function Page({ params }: { params: { slug?: string[] } }) {
   }
 
   return (
-    <main className="mx-auto max-w-screen-lg px-4">
-      <ScheduleProvider view={view} cursor={cursor.toISODate() || ""}>
-        <Calendar />
-      </ScheduleProvider>
-    </main>
+    <div className="mx-auto max-w-screen-lg px-4">
+      <main>
+        <ScheduleProvider view={view} cursor={cursor.toISODate() || ""}>
+          <Calendar />
+        </ScheduleProvider>
+      </main>
+      <Footer />
+    </div>
   );
 }

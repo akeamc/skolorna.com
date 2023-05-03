@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useAuth } from "../auth/context";
 import { Day, Schedule } from "./client";
 import { DateTime } from "luxon";
@@ -61,6 +61,13 @@ export function useClasses() {
   });
 }
 
+interface CredentialsStat {
+  username: string;
+  updated_at: string;
+  school: string;
+  class: string;
+}
+
 export function useCredentials() {
   const { accessToken } = useAuth();
   return useQuery({
@@ -71,8 +78,32 @@ export function useCredentials() {
           authorization: `Bearer ${accessToken}`,
         },
       });
-      return await res.json();
+      return (await res.json()) as CredentialsStat;
     },
     enabled: !!accessToken,
+  });
+}
+
+interface Credentials {
+  service: "skolplattformen";
+  username: string;
+  password: string;
+}
+
+export function useCredentialsMutation() {
+  const { accessToken } = useAuth();
+  return useMutation({
+    mutationKey: ["skool", "credentials"],
+    mutationFn: async (credentials: Credentials) => {
+      const res = await fetch(`https://api.skolorna.com/v0/skool/credentials`, {
+        headers: {
+          authorization: `Bearer ${accessToken}`,
+          "content-type": "application/json",
+        },
+        method: "PUT",
+        body: JSON.stringify(credentials),
+      });
+      return (await res.json()) as CredentialsStat;
+    },
   });
 }
