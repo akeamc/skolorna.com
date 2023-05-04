@@ -1,6 +1,6 @@
 "use client";
 
-import { FunctionComponent, useState } from "react";
+import { FunctionComponent, useEffect, useState } from "react";
 import { Dialog } from "@headlessui/react";
 import { Menu, X } from "react-feather";
 import Link from "next/link";
@@ -8,6 +8,7 @@ import BigSearch from "./oden/BigSearch";
 import { useAuth } from "@/lib/auth/context";
 import useProfile from "@/lib/auth/useProfile";
 import Logo from "./Logo";
+import { usePathname } from "next/navigation";
 
 const LogoLink: FunctionComponent = () => (
   <Link href="/" className="-m-1.5 p-1.5">
@@ -19,6 +20,11 @@ export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { userId, status } = useAuth();
   const { data: profile } = useProfile(userId || undefined);
+  const pathname = usePathname();
+
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [pathname]);
 
   return (
     <header className="bg-white">

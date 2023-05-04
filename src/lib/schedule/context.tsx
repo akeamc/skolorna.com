@@ -41,7 +41,7 @@ export const ScheduleProvider: FunctionComponent<{
         cursor,
         setCursor: (cursor) => pushState(view, cursor),
         timeBounds: [7 * 3600, 20 * 3600],
-        daysPerWeek: 7,
+        daysPerWeek: 5,
       }}
     >
       {children}
