@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "../auth/context";
 import { Day, Schedule } from "./client";
 import { DateTime } from "luxon";
@@ -90,20 +90,42 @@ interface Credentials {
   password: string;
 }
 
+async function deleteCredentials(accessToken: string) {
+  const res = await fetch("https://api.skolorna.com/v0/skool/credentials", {
+    method: "DELETE",
+    headers: {
+      authorization: `Bearer ${accessToken}`,
+    },
+  });
+
+  if (!res.ok) {
+    throw new Error(await res.text());
+  }
+}
+
+async function setCredentials(
+  credentials: Credentials | null,
+  accessToken: string
+): Promise<CredentialsStat | null> {
+  if (!credentials) {
+    await deleteCredentials(accessToken);
+    return null;
+  }
+
+  console.log("setting credentials to", credentials);
+
+  return null;
+}
+
 export function useCredentialsMutation() {
   const { accessToken } = useAuth();
+  const client = useQueryClient();
   return useMutation({
     mutationKey: ["skool", "credentials"],
-    mutationFn: async (credentials: Credentials) => {
-      const res = await fetch(`https://api.skolorna.com/v0/skool/credentials`, {
-        headers: {
-          authorization: `Bearer ${accessToken}`,
-          "content-type": "application/json",
-        },
-        method: "PUT",
-        body: JSON.stringify(credentials),
-      });
-      return (await res.json()) as CredentialsStat;
+    mutationFn: async (d: Credentials | null) => {
+      if (!accessToken) return;
+      const credentials = await setCredentials(d, accessToken);
+      client.setQueryData(["skool", "credentials"], credentials);
     },
   });
 }
