@@ -9,6 +9,7 @@ import { useAuth } from "@/lib/auth/context";
 import useProfile from "@/lib/auth/useProfile";
 import Logo from "./Logo";
 import { usePathname } from "next/navigation";
+import Spinner from "./Spinner";
 
 const LogoLink: FunctionComponent = () => (
   <Link href="/" className="-m-1.5 p-1.5">
@@ -46,20 +47,24 @@ export default function Header() {
             <Menu className="h-6 w-6" aria-hidden="true" />
           </button>
         </div>
-        <div className="hidden text-sm font-semibold leading-6 text-gray-900 lg:flex lg:gap-x-12">
+        <div className="hidden items-center text-sm font-semibold leading-6 text-gray-900 lg:flex lg:gap-x-12">
           <Link href="/schema">Schema</Link>
-          <Link
-            href={status === "authenticated" ? "/konto" : "/login"}
-            className="text-sm font-semibold leading-6 text-gray-900"
-          >
-            {profile ? (
-              profile.full_name
-            ) : (
-              <>
-                Logga in <span aria-hidden="true">-&gt;</span>
-              </>
-            )}
-          </Link>
+          {status !== "unauthenticated" && !profile ? (
+            <Spinner />
+          ) : (
+            <Link
+              href={status === "authenticated" ? "/konto" : "/login"}
+              className="text-sm font-semibold leading-6 text-gray-900"
+            >
+              {profile ? (
+                profile.full_name
+              ) : (
+                <>
+                  Logga in <span aria-hidden="true">-&gt;</span>
+                </>
+              )}
+            </Link>
+          )}
         </div>
       </nav>
       <Dialog

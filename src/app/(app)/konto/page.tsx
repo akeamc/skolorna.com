@@ -2,11 +2,29 @@
 
 import { useAuth } from "@/lib/auth/context";
 import useProfile from "@/lib/auth/useProfile";
-import withAuth from "@/lib/auth/withAuth";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect } from "react";
 
-const Account = () => {
-  const { logout, userId } = useAuth();
+export default function Account() {
+  const { status, logout, userId, justLoggedOut } = useAuth();
   const { data: profile } = useProfile(userId || undefined);
+  const router = useRouter();
+  const path = usePathname();
+
+  function onLogoutClick() {
+    router.push("/");
+    logout();
+  }
+
+  useEffect(() => {
+    if (status === "unauthenticated" && !justLoggedOut) {
+      router.push(`/login?next=${encodeURIComponent(path)}`);
+    }
+  }, [status, router, path, justLoggedOut]);
+
+  if (status !== "authenticated") {
+    return null;
+  }
 
   return (
     <main className="mx-auto max-w-screen-lg px-4">
@@ -19,13 +37,11 @@ const Account = () => {
         <p className="mb-4">Inloggad som {profile?.full_name}.</p>
         <button
           className="rounded bg-blue-600 px-4 py-2 text-sm font-semibold text-white outline-none ring-blue-700 ring-offset-2 hover:bg-blue-700 focus-visible:ring-2"
-          onClick={logout}
+          onClick={onLogoutClick}
         >
           Logga ut
         </button>
       </section>
     </main>
   );
-};
-
-export default withAuth(Account);
+}

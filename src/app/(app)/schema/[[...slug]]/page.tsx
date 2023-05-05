@@ -4,6 +4,7 @@ import { DateTime } from "luxon";
 import { redirect } from "next/navigation";
 import { View, isView } from "@/lib/schedule";
 import Footer from "@/components/schedule/Footer";
+import AuthRedirecter from "@/components/auth/AuthRedirecter";
 
 // export const runtime = "edge";
 
@@ -40,6 +41,7 @@ export default function Page({ params }: { params: { slug?: string[] } }) {
 
   return (
     <div className="mx-auto max-w-screen-lg px-4">
+      <AuthRedirecter />
       <main>
         <ScheduleProvider view={view} cursor={cursor.toISODate() || ""}>
           <Calendar />

@@ -1,6 +1,12 @@
 "use client";
 
-import { Fragment, FunctionComponent, useEffect, useState } from "react";
+import {
+  Fragment,
+  FunctionComponent,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import SearchProvider from "../search/SearchProvider";
 import { Hit, IndexedMenu, useSearch } from "../search/search";
 import { Menu, useMenu, useNextDay } from "@/lib/oden";
@@ -11,7 +17,7 @@ import { DateTime } from "luxon";
 import Spinner from "../Spinner";
 import classNames from "classnames";
 import { Combobox, Transition } from "@headlessui/react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useStats } from "@/lib/oden/hooks";
 import { useHistory } from "@/lib/oden/history";
 
@@ -212,6 +218,8 @@ const Box: FunctionComponent<{
   const { data: stats } = useStats();
   const { setQuery } = useSearch<IndexedMenu>();
   const [input, setInput] = useState("");
+  const ref = useRef<HTMLInputElement>(null);
+  const path = usePathname();
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -220,6 +228,11 @@ const Box: FunctionComponent<{
 
     return () => clearTimeout(timeout);
   }, [input, setQuery]);
+
+  // hide results on navigation
+  useEffect(() => {
+    ref.current?.blur();
+  }, [path]);
 
   return (
     <div className="relative">
@@ -232,6 +245,7 @@ const Box: FunctionComponent<{
         displayValue={({ title }) => title}
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
+        ref={ref}
       />
     </div>
   );
