@@ -1,6 +1,5 @@
 "use client";
 
-
 export default function Page() {
   return (
     <main className="mx-auto max-w-screen-lg px-4">

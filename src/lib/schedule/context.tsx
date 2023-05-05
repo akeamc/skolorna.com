@@ -10,6 +10,7 @@ interface ScheduleContextType {
   setView: (view: View) => void;
   cursor: DateTime;
   setCursor: (cursor: DateTime) => void;
+  pushState: (view: View, cursor: DateTime) => void;
   /**
    * The time bounds of every day (in seconds since midnight).
    */
@@ -40,6 +41,7 @@ export const ScheduleProvider: FunctionComponent<{
         setView: (view) => pushState(view, cursor),
         cursor,
         setCursor: (cursor) => pushState(view, cursor),
+        pushState,
         timeBounds: [7 * 3600, 20 * 3600],
         daysPerWeek: 5,
       }}

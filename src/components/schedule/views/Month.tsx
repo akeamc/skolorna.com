@@ -42,14 +42,9 @@ const Week: FunctionComponent<{ cursor: DateTime; activeMonth: number }> = ({
   activeMonth,
 }) => {
   const today = DateTime.local();
-  const { setCursor, setView, daysPerWeek } = useSchedule();
+  const { pushState, daysPerWeek } = useSchedule();
   cursor = cursor.startOf("week");
   const { days, status } = useDays(cursor, daysPerWeek);
-
-  function focusDay(day: DateTime) {
-    setCursor(day);
-    setView("day");
-  }
 
   return (
     <>
@@ -67,7 +62,7 @@ const Week: FunctionComponent<{ cursor: DateTime; activeMonth: number }> = ({
             date.month === activeMonth ? "bg-white" : "bg-gray-50"
           )}
           style={{ gridColumn: date.weekday + 1 }}
-          onClick={() => focusDay(date)}
+          onClick={() => pushState("day", date)}
         >
           <time
             className={classNames(

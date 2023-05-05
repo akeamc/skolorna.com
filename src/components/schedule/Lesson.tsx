@@ -4,17 +4,78 @@ import { Lesson as TLesson } from "@/lib/schedule/client";
 import { Dialog } from "@headlessui/react";
 import useResizeObserver from "@react-hook/resize-observer";
 import classNames from "classnames";
-import { DateTime } from "luxon";
+import { DateTime, Interval } from "luxon";
 import {
-  Fragment,
   FunctionComponent,
   RefObject,
   useLayoutEffect,
   useRef,
   useState,
 } from "react";
-import { Clock, MapPin, User } from "react-feather";
+import { MapPin, User } from "react-feather";
 import Modal from "../Modal";
+import useNow from "@/lib/useNow";
+
+const Clock: FunctionComponent<{ className?: string; animated?: boolean }> = ({
+  className,
+  animated = false,
+}) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    className={className}
+  >
+    <circle cx="12" cy="12" r="10" />
+    <polyline points="12 6 12 12">
+      {animated && (
+        <animateTransform
+          attributeName="transform"
+          type="rotate"
+          from="0 12 12"
+          to="360 12 12"
+          dur="2s"
+          repeatCount="indefinite"
+        />
+      )}
+    </polyline>
+    <polyline points="12 12 16 14">
+      {animated && (
+        <animateTransform
+          attributeName="transform"
+          type="rotate"
+          from="-26.55 12 12" // make the hands line up properly by offsetting the start
+          to="333.45 12 12"
+          dur="24s"
+          repeatCount="indefinite"
+        />
+      )}
+    </polyline>
+    {/* <polyline points="12 6 12 12 16 14" /> */}
+  </svg>
+);
+
+const Countdown: FunctionComponent<{ lesson: TLesson }> = ({ lesson }) => {
+  const now = useNow();
+  const remaining = now
+    ? Interval.fromDateTimes(now, lesson.end).toDuration()
+    : undefined;
+  const live = now && now >= lesson.start && now < lesson.end;
+
+  if (!live) return null;
+
+  return (
+    <span className="rounded-md bg-orange-100 px-1.5 py-1 text-xs font-medium tabular-nums text-orange-500">
+      {remaining?.toFormat("hh:mm:ss")}
+    </span>
+  );
+};
 
 const LessonDetails: FunctionComponent<{
   lesson: TLesson;
@@ -32,29 +93,35 @@ const LessonDetails: FunctionComponent<{
             className="m-auto h-3 w-3 rounded-sm"
             style={{ backgroundColor: lesson.accent().hex() }}
           />
-          <Dialog.Title className="flex flex-col" as="div">
-            <h3 className="text-base font-semibold leading-6 text-gray-900">
+          <div className="flex flex-col">
+            <Dialog.Title
+              as="h3"
+              className="text-base font-semibold leading-6 text-gray-900"
+            >
               {lesson.course}
-            </h3>
-            <time className="text-sm font-normal">
-              {lesson.start.toLocaleString(
-                {
-                  weekday: "long",
-                  day: "numeric",
-                  month: "long",
-                },
-                { locale: "sv" }
-              )}{" "}
-              &middot;{" "}
-              {lesson.start.toLocaleString(DateTime.TIME_SIMPLE, {
-                locale: "sv",
-              })}
-              –
-              {lesson.end.toLocaleString(DateTime.TIME_SIMPLE, {
-                locale: "sv",
-              })}
-            </time>
-          </Dialog.Title>
+            </Dialog.Title>
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+              <time className="text-sm font-normal">
+                {lesson.start.toLocaleString(
+                  {
+                    weekday: "long",
+                    day: "numeric",
+                    month: "long",
+                  },
+                  { locale: "sv" }
+                )}{" "}
+                &middot;{" "}
+                {lesson.start.toLocaleString(DateTime.TIME_SIMPLE, {
+                  locale: "sv",
+                })}
+                –
+                {lesson.end.toLocaleString(DateTime.TIME_SIMPLE, {
+                  locale: "sv",
+                })}
+              </time>
+              <Countdown lesson={lesson} />
+            </div>
+          </div>
           <MapPin className="m-auto h-5 w-5 text-gray-500" />
           <span className="text-sm">{lesson.location || "–"}</span>
           <User className="m-auto h-5 w-5 text-gray-500" />
