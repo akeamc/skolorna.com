@@ -1,10 +1,10 @@
 "use client";
 
 import { Lesson as TLesson } from "@/lib/schedule/client";
-import { Dialog } from "@headlessui/react";
+import { Dialog, Transition } from "@headlessui/react";
 import useResizeObserver from "@react-hook/resize-observer";
 import classNames from "classnames";
-import { DateTime, Interval } from "luxon";
+import { DateTime, Duration, Interval } from "luxon";
 import {
   FunctionComponent,
   RefObject,
@@ -27,9 +27,9 @@ const Clock: FunctionComponent<{ className?: string; animated?: boolean }> = ({
     viewBox="0 0 24 24"
     fill="none"
     stroke="currentColor"
-    stroke-width="2"
-    stroke-linecap="round"
-    stroke-linejoin="round"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
     className={className}
   >
     <circle cx="12" cy="12" r="10" />
@@ -63,17 +63,27 @@ const Clock: FunctionComponent<{ className?: string; animated?: boolean }> = ({
 
 const Countdown: FunctionComponent<{ lesson: TLesson }> = ({ lesson }) => {
   const now = useNow();
-  const remaining = now
+  let remaining = now
     ? Interval.fromDateTimes(now, lesson.end).toDuration()
     : undefined;
+  if (!remaining?.isValid) remaining = Duration.fromMillis(0);
   const live = now && now >= lesson.start && now < lesson.end;
 
-  if (!live) return null;
-
   return (
-    <span className="rounded-md bg-orange-100 px-1.5 py-1 text-xs font-medium tabular-nums text-orange-500">
-      {remaining?.toFormat("hh:mm:ss")}
-    </span>
+    <Transition
+      show={live}
+      appear
+      enter="transition-opacity duration-150"
+      enterFrom="opacity-0"
+      enterTo="opacity-100"
+      leave="transition duration-1000"
+      leaveFrom="opacity-100"
+      leaveTo="opacity-0 blur"
+    >
+      <span className="rounded-md bg-orange-100 px-1.5 py-0.5 text-xs font-medium tabular-nums text-orange-500">
+        {remaining?.toFormat("hh:mm:ss")}
+      </span>
+    </Transition>
   );
 };
 
@@ -101,7 +111,7 @@ const LessonDetails: FunctionComponent<{
               {lesson.course}
             </Dialog.Title>
             <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-              <time className="text-sm font-normal">
+              <time className="text-sm font-normal leading-6">
                 {lesson.start.toLocaleString(
                   {
                     weekday: "long",
