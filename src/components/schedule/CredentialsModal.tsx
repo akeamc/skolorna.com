@@ -3,12 +3,7 @@ import {
   useCredentials,
   useCredentialsMutation,
 } from "@/lib/schedule/hooks";
-import {
-  FormEvent,
-  FunctionComponent,
-  useId,
-  useRef,
-} from "react";
+import { FormEvent, FunctionComponent, useId, useRef } from "react";
 import { Dialog } from "@headlessui/react";
 import { Lock } from "react-feather";
 import { DateTime } from "luxon";

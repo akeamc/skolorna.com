@@ -3,7 +3,7 @@ import HistoryRecorder from "@/components/oden/HistoryRecorder";
 import { Menu, ODEN_URL } from "@/lib/oden";
 import { notFound } from "next/navigation";
 
-export const config = { runtime: "edge" };
+export const runtime = "edge";
 
 interface Params {
   id: string;

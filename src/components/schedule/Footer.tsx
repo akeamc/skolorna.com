@@ -1,10 +1,7 @@
 "use client";
 
 import { useCredentials } from "@/lib/schedule/hooks";
-import {
-  useEffect,
-  useState,
-} from "react";
+import { useEffect, useState } from "react";
 import CredentialsModal from "./CredentialsModal";
 
 export default function Footer() {

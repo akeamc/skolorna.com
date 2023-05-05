@@ -6,7 +6,7 @@ import withAuth from "@/lib/auth/withAuth";
 
 const Account = () => {
   const { logout, userId } = useAuth();
-  const { data: profile } = useProfile(userId);
+  const { data: profile } = useProfile(userId || undefined);
 
   return (
     <main className="mx-auto max-w-screen-lg px-4">
