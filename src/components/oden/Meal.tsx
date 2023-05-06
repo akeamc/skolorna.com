@@ -3,20 +3,26 @@ import { FunctionComponent, useState } from "react";
 import ReviewDialog from "./ReviewDialog";
 import Stars from "../stars/Stars";
 
-const Meal: FunctionComponent<{ meal: MealType }> = ({ meal }) => {
+const Meal: FunctionComponent<{
+  menu: string;
+  date: string;
+  meal: MealType;
+}> = (props) => {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="my-1">
-      <ReviewDialog open={open} setOpen={setOpen} meal={meal} />
-      <h3 className="text-lg font-medium tracking-tight">{meal.value}</h3>
+    <>
+      <ReviewDialog open={open} setOpen={setOpen} {...props} />
       <button
-        className="text-sm font-medium text-gray-500"
+        className="block w-full rounded-md px-1 py-0.5 text-left hover:bg-gray-100"
         onClick={() => setOpen(true)}
       >
-        <Stars level={(meal.rating || 0) / 5} />
+        <h3 className="text-lg font-medium tracking-tight">
+          {props.meal.value}
+        </h3>
+        <Stars filled={props.meal.rating || 0} />
       </button>
-    </div>
+    </>
   );
 };
 

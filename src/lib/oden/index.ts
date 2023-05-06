@@ -190,64 +190,50 @@ export interface Review {
 // 	return histogram;
 // }
 
-// interface CreateReview {
-// 	menu_id: string;
-// 	date: string;
-// 	meal: string;
-// 	rating: number;
-// 	comment?: string;
-// }
+export interface CreateReview {
+  menu_id: string;
+  date: string;
+  meal: string;
+  rating: number;
+  comment?: string;
+}
 
-// export function createReview(data: CreateReview): Promise<Review> {
-// 	return catchySpan(
-// 		tracer,
-// 		"createReview",
-// 		{
-// 			attributes: {
-// 				menu_id: data.menu_id
-// 			}
-// 		},
-// 		async (span) => {
-// 			gtag?.("event", "create_review", {
-// 				...data
-// 			});
+export async function createReview(
+  data: CreateReview,
+  accessToken: string
+): Promise<Review> {
+  // gtag?.("event", "create_review", {
+  // 	...data
+  // });
 
-// 			const res = await request(`${ODEN_URL}/reviews`, {
-// 				method: "POST",
-// 				headers: {
-// 					"content-type": "application/json"
-// 				},
-// 				body: JSON.stringify(data)
-// 			});
+  const res = await fetch(`${ODEN_URL}/reviews`, {
+    method: "POST",
+    headers: {
+      authorization: `Bearer ${accessToken}`,
+      "content-type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
 
-// 			const created = await res.json();
-// 			span.setStatus({ code: api.SpanStatusCode.OK });
-// 			return created;
-// 		}
-// 	);
-// }
+  const created = await res.json();
+  // span.setStatus({ code: api.SpanStatusCode.OK });
+  return created;
+}
 
-// export function deleteReview(id: string): Promise<void> {
-// 	return catchySpan(
-// 		tracer,
-// 		"deleteReview",
-// 		{
-// 			attributes: {
-// 				id
-// 			}
-// 		},
-// 		async (span) => {
-// 			gtag?.("event", "delete_review", {
-// 				id
-// 			});
+export async function deleteReview(
+  id: string,
+  accessToken: string
+): Promise<void> {
+  // gtag?.("event", "delete_review", {
+  // 	id
+  // });
 
-// 			const res = await request(`${ODEN_URL}/reviews/${id}`, {
-// 				method: "DELETE"
-// 			});
+  const res = await fetch(`${ODEN_URL}/reviews/${id}`, {
+    method: "DELETE",
+    headers: {
+      authorization: `Bearer ${accessToken}`,
+    },
+  });
 
-// 			if (!res.ok) throw error(res.status, await res.text());
-
-// 			span.setStatus({ code: api.SpanStatusCode.OK });
-// 		}
-// 	);
-// }
+  if (!res.ok) throw new Error(await res.text());
+}

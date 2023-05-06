@@ -7,7 +7,10 @@ import classNames from "classnames";
 import { DateTime } from "luxon";
 import useHasSameComponent from "@/lib/useHasSameComponent";
 
-const Day: FunctionComponent<{ day: DayType }> = ({ day }) => {
+const Day: FunctionComponent<{ menu: string; day: DayType }> = ({
+  menu,
+  day,
+}) => {
   const date = DateTime.fromISO(day.date);
   const isToday = useHasSameComponent(date, "day");
 
@@ -24,9 +27,9 @@ const Day: FunctionComponent<{ day: DayType }> = ({ day }) => {
           { locale: "sv" }
         )}
       </h2>
-      <ul>
+      <ul className="-mx-1">
         {day.meals.map((meal) => (
-          <Meal key={meal.value} meal={meal} />
+          <Meal menu={menu} date={day.date} key={meal.value} meal={meal} />
         ))}
       </ul>
     </div>

@@ -177,6 +177,8 @@ const Results: FunctionComponent<{ focused: boolean }> = ({ focused }) => {
         static
         as="div"
         className="absolute z-10 mt-1 h-96 w-full overflow-y-auto overflow-x-hidden rounded-lg border bg-white shadow-xl"
+        // @ts-expect-error
+        tabindex={-1}
       >
         {query.q === "" && (
           <div className="px-2 py-1 text-xs font-medium text-gray-500">
@@ -239,7 +241,7 @@ const Box: FunctionComponent<{
       <SearchIcon className="absolute left-2 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
       <Combobox.Input
         type="search"
-        className="w-full rounded-lg border border-gray-100 bg-white p-3 pl-8 text-base font-medium outline-none ring-inset ring-blue-600 focus:ring-2"
+        className="h-10 w-full rounded-lg border border-gray-100 bg-white pl-8 text-base font-medium outline-none ring-inset ring-blue-600 focus:ring-2 sm:text-sm"
         placeholder={`Sök bland ${stats?.menus || "tusentals"} menyer`}
         onChange={(e) => setInput(e.target.value)}
         displayValue={({ title }) => title}

@@ -1,7 +1,7 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
-import { ODEN_URL, Stats } from ".";
+import { QueryClient, useQuery } from "@tanstack/react-query";
+import { Meal, ODEN_URL, Review, Stats } from ".";
 
 export const useStats = () =>
   useQuery({
@@ -13,3 +13,17 @@ export const useStats = () =>
       return stats;
     },
   });
+
+export function onReviewChange(
+  client: QueryClient,
+  menu: string,
+  meal: Meal,
+  updateFn: (old: Review[]) => Review[]
+) {
+  client.invalidateQueries({ queryKey: ["oden", "menus", menu, "days"] });
+  client.setQueryData<Review[]>(["oden", "reviews", meal.value], (old) => {
+    if (!old) return undefined;
+
+    return updateFn(old);
+  });
+}

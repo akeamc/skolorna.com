@@ -1,11 +1,12 @@
 import { FunctionComponent, useId } from "react";
 import styles from "./Star.module.css";
 
-const Star: FunctionComponent<{
+export interface StarProps {
   level: number;
-  interactive?: boolean;
   size?: number;
-}> = ({ level, interactive = false, size = 16 }) => {
+}
+
+const Star: FunctionComponent<StarProps> = ({ level, size = 16 }) => {
   const gradientId = useId();
 
   return (

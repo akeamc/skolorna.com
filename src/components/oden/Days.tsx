@@ -12,7 +12,7 @@ const Days: FunctionComponent<{ menu: string }> = ({ menu }) => {
   const first = cursor.startOf("week");
   const last = cursor.endOf("week");
 
-  const { data, isLoading } = useDays({
+  const { data, isSuccess } = useDays({
     menu,
     first: first.toISODate() || undefined,
     last: last.toISODate() || undefined,
@@ -30,7 +30,7 @@ const Days: FunctionComponent<{ menu: string }> = ({ menu }) => {
         </h2>
       </div>
       {data?.map((day) => (
-        <Day day={day} key={day.date} />
+        <Day menu={menu} day={day} key={day.date} />
       ))}
       {!data?.length && (
         <div className="flex h-64 flex-col items-center justify-center text-center text-sm font-medium text-gray-500 sm:h-96">
@@ -40,7 +40,7 @@ const Days: FunctionComponent<{ menu: string }> = ({ menu }) => {
               till lunch.
             </p>
           )}
-          {isLoading && <Spinner />}
+          {!isSuccess && <Spinner />}
         </div>
       )}
     </div>
