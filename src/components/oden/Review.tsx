@@ -65,7 +65,7 @@ export default function Review({
           leaveFrom="transform opacity-100 scale-100"
           leaveTo="transform opacity-0 scale-95"
         >
-          <Menu.Items className="absolute right-0 z-10 w-32 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+          <Menu.Items className="absolute bottom-8 right-0 z-10 w-32 origin-bottom-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
             <div className="py-1">
               <Menu.Item>
                 {({ active }) => (
@@ -73,7 +73,7 @@ export default function Review({
                     onClick={() => mutate(review.id)}
                     className={classNames(
                       active ? "bg-gray-100 text-gray-900" : "text-gray-700",
-                      "flex w-full items-center px-4 py-2 text-left text-xs font-medium"
+                      "flex w-full items-center px-4 py-2 text-left text-sm font-medium"
                     )}
                   >
                     Radera

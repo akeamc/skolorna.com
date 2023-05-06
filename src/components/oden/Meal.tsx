@@ -14,10 +14,10 @@ const Meal: FunctionComponent<{
     <>
       <ReviewDialog open={open} setOpen={setOpen} {...props} />
       <button
-        className="block w-full rounded-md px-1 py-0.5 text-left hover:bg-gray-100"
+        className="block w-full rounded-md p-1 text-left hover:bg-gray-100"
         onClick={() => setOpen(true)}
       >
-        <h3 className="text-lg font-medium tracking-tight">
+        <h3 className="mb-1 text-base font-medium leading-tight tracking-tight sm:text-lg">
           {props.meal.value}
         </h3>
         <Stars filled={props.meal.rating || 0} />
