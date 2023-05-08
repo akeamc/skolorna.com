@@ -138,7 +138,9 @@ const ReviewDialog: FunctionComponent<{
   const { data: reviews } = useQuery<ReviewType[]>({
     queryKey: ["oden", "reviews", meal.value],
     queryFn: async () => {
-      const res = await fetch(`${ODEN_URL}/reviews?meal=${meal.value}`);
+      const res = await fetch(
+        `${ODEN_URL}/reviews?meal=${encodeURIComponent(meal.value)}`
+      );
       return res.json();
     },
     enabled: open,
