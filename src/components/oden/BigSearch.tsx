@@ -225,7 +225,11 @@ const Box: FunctionComponent<{
 
   useEffect(() => {
     const timeout = setTimeout(() => {
-      setQuery({ q: input, attributesToHighlight: ["title"] });
+      setQuery({
+        q: input,
+        attributesToHighlight: ["title"],
+        sort: ["last_day:desc"],
+      });
     }, 100);
 
     return () => clearTimeout(timeout);

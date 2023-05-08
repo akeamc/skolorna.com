@@ -23,9 +23,11 @@ export interface IndexedMenu {
   last_day: string | null;
 }
 
+type Sort<T> = `${keyof T & string}:${"asc" | "desc"}`;
+
 export interface Query<T> {
   q: string;
-  sort?: string[];
+  sort?: Sort<T>[];
   attributesToHighlight?: (keyof T)[];
 }
 
