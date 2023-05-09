@@ -6,10 +6,10 @@ import { Menu, X } from "react-feather";
 import Link from "next/link";
 import BigSearch from "./oden/BigSearch";
 import { useAuth } from "@/lib/auth/context";
-import useProfile from "@/lib/auth/useProfile";
 import Logo from "./Logo";
 import { usePathname } from "next/navigation";
 import Spinner from "./Spinner";
+import { useAccount } from "@/lib/auth/hooks";
 
 const LogoLink: FunctionComponent = () => (
   <Link href="/" className="-m-1.5 p-1.5">
@@ -19,8 +19,8 @@ const LogoLink: FunctionComponent = () => (
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { userId, status } = useAuth();
-  const { data: profile } = useProfile(userId || undefined);
+  const { status } = useAuth();
+  const { data: account } = useAccount();
   const pathname = usePathname();
 
   useEffect(() => {
@@ -49,15 +49,15 @@ export default function Header() {
         </div>
         <div className="hidden items-center text-sm font-semibold leading-6 text-gray-900 lg:flex lg:gap-x-12">
           <Link href="/schema">Schema</Link>
-          {status !== "unauthenticated" && !profile ? (
+          {status !== "unauthenticated" && !account ? (
             <Spinner />
           ) : (
             <Link
               href={status === "authenticated" ? "/konto" : "/login"}
               className="text-sm font-semibold leading-6 text-gray-900"
             >
-              {profile ? (
-                profile.full_name
+              {account ? (
+                account.full_name
               ) : (
                 <>
                   Logga in <span aria-hidden="true">-&gt;</span>
@@ -102,8 +102,8 @@ export default function Header() {
                   href={status === "authenticated" ? "/konto" : "/login"}
                   className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                 >
-                  {profile ? (
-                    profile.full_name
+                  {account ? (
+                    account.full_name
                   ) : (
                     <>
                       Logga in <span aria-hidden="true">-&gt;</span>

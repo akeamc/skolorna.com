@@ -243,3 +243,10 @@ export interface Profile {
   full_name: string;
   created_at: string;
 }
+
+export interface Account {
+  id: string;
+  email: string;
+  full_name: string;
+  created_at: string;
+}

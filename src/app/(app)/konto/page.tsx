@@ -1,13 +1,13 @@
 "use client";
 
 import { useAuth } from "@/lib/auth/context";
-import useProfile from "@/lib/auth/useProfile";
+import { useAccount } from "@/lib/auth/hooks";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 export default function Account() {
-  const { status, logout, userId, justLoggedOut } = useAuth();
-  const { data: profile } = useProfile(userId || undefined);
+  const { status, logout, justLoggedOut } = useAuth();
+  const { data: account } = useAccount();
   const router = useRouter();
   const path = usePathname();
 
@@ -34,7 +34,7 @@ export default function Account() {
         </h1>
       </div>
       <section>
-        <p className="mb-4">Inloggad som {profile?.full_name}.</p>
+        <p className="mb-4">Inloggad som {account?.full_name}.</p>
         <button
           className="rounded bg-blue-600 px-4 py-2 text-sm font-semibold text-white outline-none ring-blue-700 ring-offset-2 hover:bg-blue-700 focus-visible:ring-2"
           onClick={onLogoutClick}

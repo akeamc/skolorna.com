@@ -4,12 +4,11 @@ import {
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
-import { useAuth } from "../auth/context";
 import { Day, Schedule } from "./client";
 import { DateTime } from "luxon";
+import request from "../request";
 
 export function useDays(around: DateTime, count: number) {
-  const { accessToken } = useAuth();
   const q = {
     year: around.weekYear,
     week: around.weekNumber,
@@ -17,18 +16,14 @@ export function useDays(around: DateTime, count: number) {
   const { data: schedule, status } = useQuery({
     queryKey: ["skool", "schedule", q],
     queryFn: async () => {
-      const res = await fetch(
+      const res = await request(
         `https://api.skolorna.com/v0/skool/schedule?year=${q.year}&week=${q.week}`,
         {
-          headers: {
-            authorization: `Bearer ${accessToken}`,
-          },
           cache: "no-cache",
         }
       );
       return Schedule.fromJSON(await res.json());
     },
-    enabled: !!accessToken,
   });
   const start = around.startOf("week");
 
@@ -52,18 +47,12 @@ export function useDays(around: DateTime, count: number) {
 }
 
 export function useClasses() {
-  const { accessToken } = useAuth();
   return useQuery({
     queryKey: ["skool", "classes"],
     queryFn: async () => {
-      const res = await fetch(`https://api.skolorna.com/v0/skool/classes`, {
-        headers: {
-          authorization: `Bearer ${accessToken}`,
-        },
-      });
+      const res = await request(`https://api.skolorna.com/v0/skool/classes`);
       return await res.json();
     },
-    enabled: !!accessToken,
   });
 }
 
@@ -75,21 +64,17 @@ interface CredentialsStat {
 }
 
 export function useCredentials() {
-  const { accessToken } = useAuth();
   return useQuery({
     queryKey: ["skool", "credentials"],
     queryFn: async () => {
-      const res = await fetch(`https://api.skolorna.com/v0/skool/credentials`, {
-        headers: {
-          authorization: `Bearer ${accessToken}`,
-        },
-      });
+      const res = await request(
+        `https://api.skolorna.com/v0/skool/credentials`
+      );
 
       if (res.status === 404) return null;
 
       return (await res.json()) as CredentialsStat;
     },
-    enabled: !!accessToken,
   });
 }
 
@@ -99,12 +84,9 @@ interface Credentials {
   password: string;
 }
 
-async function deleteCredentials(accessToken: string) {
-  const res = await fetch("https://api.skolorna.com/v0/skool/credentials", {
+async function deleteCredentials() {
+  const res = await request("https://api.skolorna.com/v0/skool/credentials", {
     method: "DELETE",
-    headers: {
-      authorization: `Bearer ${accessToken}`,
-    },
   });
 
   if (!res.ok) {
@@ -113,18 +95,16 @@ async function deleteCredentials(accessToken: string) {
 }
 
 async function setCredentials(
-  credentials: Credentials | null,
-  accessToken: string
+  credentials: Credentials | null
 ): Promise<CredentialsStat | null> {
   if (!credentials) {
-    await deleteCredentials(accessToken);
+    await deleteCredentials();
     return null;
   }
 
-  const res = await fetch("https://api.skolorna.com/v0/skool/credentials", {
+  const res = await request("https://api.skolorna.com/v0/skool/credentials", {
     method: "PUT",
     headers: {
-      authorization: `Bearer ${accessToken}`,
       "content-type": "application/json",
     },
     body: JSON.stringify(credentials),
@@ -172,7 +152,6 @@ export function useCredentialsMutation(
     Credentials | null
   >
 ) {
-  const { accessToken } = useAuth();
   const client = useQueryClient();
   return useMutation<
     CredentialsStat | null,
@@ -181,9 +160,7 @@ export function useCredentialsMutation(
   >({
     mutationKey: ["skool", "credentials"],
     mutationFn: async (d: Credentials | null) => {
-      if (!accessToken)
-        throw { code: "not_logged_in" } satisfies SetCredentialsError;
-      const credentials = await setCredentials(d, accessToken);
+      const credentials = await setCredentials(d);
 
       client.setQueryData(["skool", "credentials"], credentials);
       client.invalidateQueries({ queryKey: ["skool"] });

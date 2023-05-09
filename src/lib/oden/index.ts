@@ -5,6 +5,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { DateTime } from "luxon";
+import request from "../request";
 
 export const ODEN_URL = "https://api.skolorna.com/v03/oden";
 
@@ -129,12 +130,6 @@ export const useNextDay = (menu?: string) => {
 // 	});
 // }
 
-interface GetReviews {
-  menu?: string;
-  date?: string;
-  meal?: string;
-}
-
 export interface Review {
   id: string;
   author: string;
@@ -198,18 +193,14 @@ export interface CreateReview {
   comment?: string;
 }
 
-export async function createReview(
-  data: CreateReview,
-  accessToken: string
-): Promise<Review> {
+export async function createReview(data: CreateReview): Promise<Review> {
   // gtag?.("event", "create_review", {
   // 	...data
   // });
 
-  const res = await fetch(`${ODEN_URL}/reviews`, {
+  const res = await request(`${ODEN_URL}/reviews`, {
     method: "POST",
     headers: {
-      authorization: `Bearer ${accessToken}`,
       "content-type": "application/json",
     },
     body: JSON.stringify(data),
@@ -220,19 +211,13 @@ export async function createReview(
   return created;
 }
 
-export async function deleteReview(
-  id: string,
-  accessToken: string
-): Promise<void> {
+export async function deleteReview(id: string): Promise<void> {
   // gtag?.("event", "delete_review", {
   // 	id
   // });
 
-  const res = await fetch(`${ODEN_URL}/reviews/${id}`, {
+  const res = await request(`${ODEN_URL}/reviews/${id}`, {
     method: "DELETE",
-    headers: {
-      authorization: `Bearer ${accessToken}`,
-    },
   });
 
   if (!res.ok) throw new Error(await res.text());

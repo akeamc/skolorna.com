@@ -2,12 +2,12 @@ import { Meal, Review as ReviewType, deleteReview } from "@/lib/oden";
 import { DateTime } from "luxon";
 import Stars from "../stars/Stars";
 import classNames from "classnames";
-import { useAuth } from "@/lib/auth/context";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { onReviewChange } from "@/lib/oden/hooks";
 import { MoreHorizontal } from "react-feather";
 import { Menu, Transition } from "@headlessui/react";
 import { Fragment } from "react";
+import { useAccount } from "@/lib/auth/hooks";
 
 export default function Review({
   review,
@@ -20,13 +20,12 @@ export default function Review({
   meal: Meal;
   highlighted?: boolean;
 }) {
-  const { userId, accessToken } = useAuth();
-  const isOwnReview = review.author === userId;
+  const { data: account } = useAccount();
+  const isOwnReview = review.author === account?.id;
   const client = useQueryClient();
-  const { mutate, isPending } = useMutation({
+  const { mutate } = useMutation({
     mutationFn: (id: string) => {
-      if (!accessToken) throw new Error("Not authenticated");
-      return deleteReview(id, accessToken);
+      return deleteReview(id);
     },
     onSuccess: (_, id) =>
       onReviewChange(client, menu, meal, (old) =>

@@ -1,8 +1,8 @@
 "use client";
 
-import { PropsWithChildren, useEffect, useState } from "react";
-import { Query, SearchContext, SearchResponse } from "./search";
-import { useQuery } from "@tanstack/react-query";
+import { PropsWithChildren, useState } from "react";
+import { Query, SearchContext } from "./search";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { ODEN_URL } from "@/lib/oden";
 
 export default function SearchProvider<T>({
@@ -17,7 +17,6 @@ export default function SearchProvider<T>({
     },
   });
   const [query, setQuery] = useState<Query<T>>({ q: "" });
-  const [response, setResponse] = useState<SearchResponse<T> | null>(null);
 
   const { data } = useQuery({
     queryKey: ["search", index, query],
@@ -36,20 +35,15 @@ export default function SearchProvider<T>({
       return res.json();
     },
     enabled: !!key,
+    placeholderData: keepPreviousData,
   });
-
-  useEffect(() => {
-    if (data) {
-      setResponse(data);
-    }
-  }, [data]);
 
   return (
     <SearchContext.Provider
       value={{
         query: query as Query<unknown>,
         setQuery,
-        response,
+        response: data,
       }}
     >
       {children}

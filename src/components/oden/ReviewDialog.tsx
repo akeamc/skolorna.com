@@ -2,13 +2,7 @@
 
 import { FormEvent, FunctionComponent, useRef, useState } from "react";
 import { Dialog } from "@headlessui/react";
-import {
-  CreateReview,
-  Meal,
-  ODEN_URL,
-  Review as ReviewType,
-  createReview,
-} from "@/lib/oden";
+import { Meal, ODEN_URL, Review as ReviewType, createReview } from "@/lib/oden";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Modal from "../Modal";
 import { useAuth } from "@/lib/auth/context";
@@ -18,6 +12,7 @@ import Stars from "../stars/Stars";
 import Review from "./Review";
 import { onReviewChange } from "@/lib/oden/hooks";
 import Spinner from "../Spinner";
+import { useAccount } from "@/lib/auth/hooks";
 
 const Rating: FunctionComponent<{ meal: Meal; reviews?: ReviewType[] }> = ({
   meal,
@@ -76,14 +71,10 @@ const ReviewForm: FunctionComponent<{
   date: string;
   meal: Meal;
 }> = ({ menu, date, meal }) => {
-  const { status, userId, accessToken } = useAuth();
   const [rating, setRating] = useState(0);
   const client = useQueryClient();
   const { mutate, isPending } = useMutation({
-    mutationFn: (review: CreateReview) => {
-      if (!accessToken) throw new Error("Not authenticated");
-      return createReview(review, accessToken);
-    },
+    mutationFn: createReview,
     onSuccess: (review) =>
       onReviewChange(client, menu, meal, (old) => [review, ...old]),
   });
@@ -133,7 +124,8 @@ const ReviewDialog: FunctionComponent<{
   date: string;
   meal: Meal;
 }> = ({ open, setOpen, menu, date, meal }) => {
-  const { status, userId } = useAuth();
+  const { status } = useAuth();
+  const { data } = useAccount();
   const cancelButtonRef = useRef(null);
   const { data: reviews } = useQuery<ReviewType[]>({
     queryKey: ["oden", "reviews", meal.value],
@@ -149,9 +141,9 @@ const ReviewDialog: FunctionComponent<{
   const mayReview =
     status === "authenticated" &&
     !reviews?.some(
-      (review) => review.author === userId && review.date === date
+      (review) => review.author === data?.id && review.date === date
     );
-  const ownReviews = reviews?.filter((review) => review.author === userId);
+  const ownReviews = reviews?.filter((review) => review.author === data?.id);
 
   return (
     <Modal open={open} setOpen={setOpen} initialFocus={cancelButtonRef}>
@@ -190,7 +182,7 @@ const ReviewDialog: FunctionComponent<{
               </h4>
               <div className="space-y-4">
                 {reviews
-                  ?.filter((review) => review.author === userId)
+                  ?.filter((review) => review.author === data?.id)
                   .map((review) => (
                     <Review
                       key={review.id}
