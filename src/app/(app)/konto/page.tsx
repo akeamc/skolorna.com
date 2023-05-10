@@ -34,7 +34,9 @@ export default function Account() {
         </h1>
       </div>
       <section>
-        <p className="mb-4">Inloggad som {account?.full_name}.</p>
+        <p className="mb-4">
+          Inloggad som {account?.full_name} ({account?.email}).
+        </p>
         <button
           type="button"
           className="inline-flex justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500"
