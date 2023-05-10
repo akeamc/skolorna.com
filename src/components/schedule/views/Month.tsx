@@ -21,7 +21,7 @@ const Miniature: FunctionComponent<{ lessons: Lesson[] }> = ({ lessons }) => {
   });
 
   return (
-    <div className="relative grow overflow-hidden">
+    <div className="relative w-full grow overflow-hidden">
       {blocks.map(({ id, offset, size, color }) => (
         <div
           key={id}

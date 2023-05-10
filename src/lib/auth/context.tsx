@@ -33,17 +33,21 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [justLoggedOut, setJustLoggedOut] = useState(false);
   const [status, setStatus] = useState<AuthContextProps["status"]>(null);
 
-  const authenticate = useCallback(async (req: TokenRequest) => {
-    if (!localStorage.getItem("access_token")) setAuthenticating(true);
-    const res = await requestToken(req);
-    if (!isError(res)) {
-      localStorage.setItem("access_token", res.access_token);
-      if (res.refresh_token)
-        localStorage.setItem("refresh_token", res.refresh_token);
-    }
-    setAuthenticating(false);
-    return res;
-  }, []);
+  const authenticate = useCallback(
+    async (req: TokenRequest) => {
+      if (!localStorage.getItem("access_token")) setAuthenticating(true);
+      const res = await requestToken(req);
+      if (!isError(res)) {
+        localStorage.setItem("access_token", res.access_token);
+        if (res.refresh_token)
+          localStorage.setItem("refresh_token", res.refresh_token);
+      }
+      setAuthenticating(false);
+      refetch();
+      return res;
+    },
+    [refetch]
+  );
 
   useEffect(() => {
     if (localStorage.getItem("access_token")) {
