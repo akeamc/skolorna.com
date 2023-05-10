@@ -36,7 +36,8 @@ export default function Account() {
       <section>
         <p className="mb-4">Inloggad som {account?.full_name}.</p>
         <button
-          className="rounded bg-blue-600 px-4 py-2 text-sm font-semibold text-white outline-none ring-blue-700 ring-offset-2 hover:bg-blue-700 focus-visible:ring-2"
+          type="button"
+          className="inline-flex justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500"
           onClick={onLogoutClick}
         >
           Logga ut

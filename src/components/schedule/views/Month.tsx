@@ -48,12 +48,13 @@ const Week: FunctionComponent<{ cursor: DateTime; activeMonth: number }> = ({
 
   return (
     <>
-      <span
-        className="flex flex-col px-1 py-2.5 text-right text-xs"
+      <button
+        className="flex flex-col px-1 py-2.5 text-right text-xs hover:bg-gray-300"
         style={{ gridColumn: 1 }}
+        onClick={() => pushState("week", cursor)}
       >
         {cursor.weekNumber}
-      </span>
+      </button>
       {days?.map(({ date, lessons }) => (
         <button
           key={date.day}

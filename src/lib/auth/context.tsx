@@ -29,7 +29,7 @@ export const AuthContext = createContext<AuthContextProps | undefined>(
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [authenticating, setAuthenticating] = useState(false);
-  const { refetch } = useAccount();
+  const { data: account, isSuccess, refetch } = useAccount();
   const [justLoggedOut, setJustLoggedOut] = useState(false);
   const [status, setStatus] = useState<AuthContextProps["status"]>(null);
 
@@ -43,19 +43,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           localStorage.setItem("refresh_token", res.refresh_token);
       }
       setAuthenticating(false);
+      setStatus("authenticated");
       refetch();
       return res;
     },
     [refetch]
   );
-
-  useEffect(() => {
-    if (localStorage.getItem("access_token")) {
-      setStatus("authenticated");
-    } else {
-      setStatus("unauthenticated");
-    }
-  }, []);
 
   const logout = useCallback(() => {
     localStorage.removeItem("access_token");
@@ -63,6 +56,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setJustLoggedOut(true);
     refetch();
   }, [refetch]);
+
+  useEffect(() => {
+    if (!isSuccess) return;
+    if (account) {
+      setStatus("authenticated");
+      setJustLoggedOut(false);
+    } else {
+      setStatus("unauthenticated");
+    }
+  }, [account, isSuccess]);
 
   return (
     <AuthContext.Provider
