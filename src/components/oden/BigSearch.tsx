@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  Fragment,
-  FunctionComponent,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { FunctionComponent, useEffect, useState } from "react";
 import SearchProvider from "../search/SearchProvider";
 import { Hit, IndexedMenu, useSearch } from "../search/search";
 import { Menu, useMenu, useNextDay } from "@/lib/oden";
@@ -16,8 +10,7 @@ import sanitize from "sanitize-html";
 import { DateTime } from "luxon";
 import Spinner from "../Spinner";
 import classNames from "classnames";
-import { Combobox, Transition } from "@headlessui/react";
-import { usePathname, useRouter } from "next/navigation";
+import { Transition } from "@headlessui/react";
 import { useStats } from "@/lib/oden/hooks";
 import { useHistory } from "@/lib/oden/history";
 
@@ -74,33 +67,32 @@ const HighlightedMenu: FunctionComponent<{ menu?: MenuProp | string }> = ({
   }
 
   return (
-    <Combobox.Option value={menu} as={Fragment}>
-      <Link
-        href={url}
-        className="group mb-px rounded-lg px-2 text-gray-500 outline-none ring-inset ring-blue-600 hover:bg-blue-100 focus-visible:ring-2 active:bg-blue-200 ui-active:bg-blue-100"
-      >
-        <div className="mb-[-1px] flex h-48 flex-col overflow-hidden border-b py-2">
-          <h3 className="font-medium text-gray-900">
-            <Title menu={menu} />
-          </h3>
-          {isLoading && <Spinner className="m-auto" />}
-          <ul className="relative mb-2 line-clamp-6 h-full after:absolute after:bottom-0 after:block after:h-12 after:w-full after:bg-gradient-to-b after:from-transparent after:to-white after:content-[''] group-hover:after:to-blue-100 group-active:after:to-blue-200 ui-active:after:to-blue-100">
-            {day?.meals.map((meal) => (
-              <li key={meal.value} className="my-1 text-sm">
-                {meal.value}
-              </li>
-            ))}
-          </ul>
-          <span className="mt-auto text-xs font-medium">{footer}</span>
-        </div>
-        <style jsx>{`
-          h3 :global(em) {
-            font-style: normal;
-            text-decoration: underline;
-          }
-        `}</style>
-      </Link>
-    </Combobox.Option>
+    <Link
+      href={url}
+      className="group mb-px rounded-lg px-2 text-gray-500 outline-none ring-inset ring-blue-600 hover:bg-blue-100 focus-visible:ring-2 active:bg-blue-200"
+      tabIndex={-1}
+    >
+      <div className="mb-[-1px] flex h-48 flex-col overflow-hidden border-b py-2">
+        <h3 className="font-medium text-gray-900">
+          <Title menu={menu} />
+        </h3>
+        {isLoading && <Spinner className="m-auto" />}
+        <ul className="relative mb-2 line-clamp-6 h-full after:absolute after:bottom-0 after:block after:h-12 after:w-full after:bg-gradient-to-b after:from-transparent after:to-white after:content-[''] group-hover:after:to-blue-100 group-active:after:to-blue-200">
+          {day?.meals.map((meal) => (
+            <li key={meal.value} className="my-1 text-sm">
+              {meal.value}
+            </li>
+          ))}
+        </ul>
+        <span className="mt-auto text-xs font-medium">{footer}</span>
+      </div>
+      <style jsx>{`
+        h3 :global(em) {
+          font-style: normal;
+          text-decoration: underline;
+        }
+      `}</style>
+    </Link>
   );
 };
 
@@ -122,31 +114,30 @@ const ListItem: FunctionComponent<{ menu?: MenuProp | string }> = ({
 
   return (
     <>
-      <Combobox.Option value={menu} as={Fragment}>
-        <Link
-          href={url}
-          className="block rounded-lg p-1 px-2 pb-0 text-sm font-medium text-gray-900 outline-none ring-inset ring-blue-600 hover:bg-blue-100 focus-visible:ring-2 active:bg-blue-200 ui-active:bg-blue-100"
+      <Link
+        href={url}
+        className="block rounded-lg p-1 px-2 pb-0 text-sm font-medium text-gray-900 outline-none ring-inset ring-blue-600 hover:bg-blue-100 focus-visible:ring-2 active:bg-blue-200"
+        tabIndex={-1}
+      >
+        <h3>
+          <Title menu={menu} />
+        </h3>
+        <span
+          className={classNames(
+            "text-xs",
+            lastDay && +lastDay < +DateTime.now()
+              ? "text-gray-400"
+              : "text-gray-500"
+          )}
         >
-          <h3>
-            <Title menu={menu} />
-          </h3>
-          <span
-            className={classNames(
-              "text-xs",
-              lastDay && +lastDay < +DateTime.now()
-                ? "text-gray-400"
-                : "text-gray-500"
-            )}
-          >
-            {lastDay
-              ? `-> ${lastDay.toLocaleString(DateTime.DATE_SHORT, {
-                  locale: "sv",
-                })}`
-              : "Ingen information"}
-          </span>
-          <hr className="mt-1" />
-        </Link>
-      </Combobox.Option>
+          {lastDay
+            ? `-> ${lastDay.toLocaleString(DateTime.DATE_SHORT, {
+                locale: "sv",
+              })}`
+            : "Ingen information"}
+        </span>
+        <hr className="mt-1" />
+      </Link>
       <style jsx>{`
         h3 :global(em) {
           font-style: normal;
@@ -173,9 +164,7 @@ const Results: FunctionComponent<{ focused: boolean }> = ({ focused }) => {
       leaveTo="transform scale-95 opacity-0"
       show={focused}
     >
-      <Combobox.Options
-        static
-        as="div"
+      <div
         className="absolute z-10 mt-1 h-96 w-full overflow-y-auto overflow-x-hidden rounded-lg border bg-white shadow-xl"
         // @ts-expect-error
         tabindex={-1}
@@ -209,19 +198,17 @@ const Results: FunctionComponent<{ focused: boolean }> = ({ focused }) => {
             sekunder)
           </span>
         )}
-      </Combobox.Options>
+      </div>
     </Transition>
   );
 };
 
-const Box: FunctionComponent<{
-  setFocused: (focused: boolean) => void;
-}> = ({ setFocused }) => {
+const Box: FunctionComponent<{ setFocused: (focused: boolean) => void }> = ({
+  setFocused,
+}) => {
   const { data: stats } = useStats();
   const { setQuery } = useSearch<IndexedMenu>();
   const [input, setInput] = useState("");
-  const ref = useRef<HTMLInputElement>(null);
-  const path = usePathname();
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -235,23 +222,16 @@ const Box: FunctionComponent<{
     return () => clearTimeout(timeout);
   }, [input, setQuery]);
 
-  // hide results on navigation
-  useEffect(() => {
-    ref.current?.blur();
-  }, [path]);
-
   return (
     <div className="relative">
       <SearchIcon className="absolute left-2 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-      <Combobox.Input
+      <input
         type="search"
-        className="h-10 w-full rounded-lg border border-gray-100 bg-white pl-8 text-base font-medium outline-none ring-inset ring-blue-600 focus:ring-2 sm:text-sm"
+        className="h-10 w-full rounded-lg border border-gray-100 bg-white pl-8 text-base font-medium outline-none ring-inset ring-blue-600 focus:ring-1 sm:text-sm"
         placeholder={`Sök bland ${stats?.menus || "tusentals"} menyer`}
         onChange={(e) => setInput(e.target.value)}
-        displayValue={({ title }) => title}
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
-        ref={ref}
       />
     </div>
   );
@@ -261,18 +241,13 @@ const BigSearch: FunctionComponent<{ className?: string }> = ({
   className,
 }) => {
   const [focused, setFocused] = useState(false);
-  const router = useRouter();
 
   return (
     <SearchProvider index="menus">
-      <Combobox
-        as="div"
-        className={classNames("relative z-10", className)}
-        onChange={({ id }) => router.push(`/menyer/${id}`)}
-      >
+      <div className={classNames("relative z-10", className)}>
         <Box setFocused={setFocused} />
         <Results focused={focused} />
-      </Combobox>
+      </div>
     </SearchProvider>
   );
 };
