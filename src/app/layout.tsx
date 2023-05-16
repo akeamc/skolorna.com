@@ -5,6 +5,7 @@ import { Metadata } from "next";
 import QueryProvider from "@/components/QueryProvider";
 import { AuthProvider } from "@/lib/auth/context";
 import { GoogleProvider } from "@/components/auth/GoogleContext";
+import Analytics from "@/components/Analytics";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
@@ -23,6 +24,7 @@ const RootLayout: FunctionComponent<{ children: ReactNode }> = ({
   <QueryProvider>
     <AuthProvider>
       <GoogleProvider>
+        <Analytics />
         <html
           lang="sv"
           className={`${inter.variable} ${martian.variable} font-sans`}

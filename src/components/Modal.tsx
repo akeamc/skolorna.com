@@ -2,16 +2,18 @@ import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, MutableRefObject, PropsWithChildren } from "react";
 import { X } from "react-feather";
 
+export interface ModalProps {
+  open: boolean;
+  setOpen: (open: boolean) => void;
+  initialFocus?: MutableRefObject<HTMLElement | null>;
+}
+
 export default function Modal({
   open,
   setOpen,
   initialFocus,
   children,
-}: PropsWithChildren<{
-  open: boolean;
-  setOpen: (open: boolean) => void;
-  initialFocus?: MutableRefObject<HTMLElement | null>;
-}>) {
+}: PropsWithChildren<ModalProps>) {
   return (
     <Transition.Root show={open} as={Fragment}>
       <Dialog

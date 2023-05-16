@@ -174,7 +174,7 @@ const Lesson: FunctionComponent<{ lesson: TLesson }> = ({ lesson }) => {
         <button
           ref={ref}
           className={classNames(
-            "flex h-full w-full overflow-hidden break-all rounded-md bg-[var(--bg)] p-1 text-left text-xs hover:bg-[var(--bg-hover)]",
+            "relative flex h-full w-full overflow-hidden break-all rounded-md bg-[var(--bg)] p-1 text-left text-xs hover:bg-[var(--bg-hover)] focus:z-10",
             lesson.duration() < 2700
               ? "items-center justify-between"
               : "flex-col gap-2"

@@ -8,15 +8,12 @@ import { Dialog } from "@headlessui/react";
 import { Lock } from "react-feather";
 import { DateTime } from "luxon";
 import Spinner from "../Spinner";
-import Modal from "../Modal";
+import Modal, { ModalProps } from "../Modal";
 import { useRouter } from "next/navigation";
 
-interface ModalProps {
-  open: boolean;
-  setOpen: (open: boolean) => void;
-}
+type Props = Omit<ModalProps, "initialFocus">;
 
-const Login: FunctionComponent<ModalProps> = ({ open, setOpen }) => {
+const Login: FunctionComponent<Props> = ({ open, setOpen }) => {
   const usernameId = useId();
   const passwordId = useId();
   const { mutate, isPending, error } = useCredentialsMutation({
@@ -116,7 +113,7 @@ const Login: FunctionComponent<ModalProps> = ({ open, setOpen }) => {
   );
 };
 
-const Deletion: FunctionComponent<ModalProps> = ({ open, setOpen }) => {
+const Deletion: FunctionComponent<Props> = ({ open, setOpen }) => {
   const router = useRouter();
   const cancelButtonRef = useRef(null);
   const { data: credentials } = useCredentials();
@@ -186,7 +183,7 @@ const Deletion: FunctionComponent<ModalProps> = ({ open, setOpen }) => {
   );
 };
 
-export default function CredentialsModal(props: ModalProps) {
+export default function CredentialsModal(props: Props) {
   const { data: credentials, isSuccess } = useCredentials();
 
   if (!isSuccess) {
