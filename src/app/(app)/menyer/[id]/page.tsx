@@ -1,6 +1,7 @@
 import Days from "@/components/oden/Days";
 import HistoryRecorder from "@/components/oden/HistoryRecorder";
 import { Menu, ODEN_URL } from "@/lib/oden";
+import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 export const runtime = "edge";
@@ -9,7 +10,11 @@ interface Params {
   id: string;
 }
 
-export default async function Page({ params: { id } }: { params: Params }) {
+interface Props {
+  params: Params;
+}
+
+async function getMenu(id: string) {
   const res = await fetch(`${ODEN_URL}/menus/${id}`, {
     next: {
       revalidate: 300,
@@ -17,6 +22,19 @@ export default async function Page({ params: { id } }: { params: Params }) {
   });
   if (!res.ok) return notFound();
   const menu: Menu = await res.json();
+  return menu;
+}
+
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const menu = await getMenu(props.params.id);
+
+  return {
+    title: menu.title,
+  };
+}
+
+export default async function Page({ params: { id } }: Props) {
+  const menu = await getMenu(id);
 
   return (
     <main className="mx-auto max-w-screen-lg px-4">

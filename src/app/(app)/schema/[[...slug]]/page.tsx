@@ -5,8 +5,13 @@ import { redirect } from "next/navigation";
 import { View, isView } from "@/lib/schedule";
 import Footer from "@/components/schedule/Footer";
 import AuthRedirecter from "@/components/auth/AuthRedirecter";
+import { Metadata } from "next";
 
 // export const runtime = "edge";
+
+export const metadata: Metadata = {
+  title: "Schema",
+};
 
 function parseParams(params: string[]): {
   view: View | null;

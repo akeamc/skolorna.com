@@ -16,6 +16,7 @@ const martian = Martian_Mono({
 
 export const metadata: Metadata = {
   title: "Skolorna",
+  description: "Vi vet vad det blir till lunch.",
 };
 
 const RootLayout: FunctionComponent<{ children: ReactNode }> = ({
