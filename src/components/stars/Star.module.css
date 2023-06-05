@@ -1,0 +1,7 @@
+.filled {
+  stop-color: theme(colors.gray.900);
+}
+
+.unfilled {
+  stop-color: theme(colors.gray.300);
+}

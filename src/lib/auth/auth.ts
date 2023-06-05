@@ -1,318 +1,252 @@
-import { goto } from "$app/navigation";
-import { navigating, page } from "$app/stores";
-import request from "$lib/request";
-import { decodeJwt } from "jose";
-import { onMount } from "svelte";
-import { derived, get, writable } from "svelte/store";
-import { localStorageStore } from "../util/localstorage";
-import * as api from "@opentelemetry/api";
-import { catchySpan } from "$lib/util/tracing";
-
 export const API_URL = "https://api.skolorna.com/v0/auth";
 
-const tracer = api.trace.getTracer("auth-client");
-
 interface OtpTokenRequest {
-	grant_type: "otp";
-	token: string;
-	otp: string;
+  grant_type: "otp";
+  token: string;
+  otp: string;
 }
 
 interface RefreshTokenRequest {
-	grant_type: "refresh_token";
-	refresh_token: string;
+  grant_type: "refresh_token";
+  refresh_token: string;
 }
 
 type OpenIdProvider = "google";
 
 interface IdTokenRequest {
-	grant_type: "id_token";
-	provider: OpenIdProvider;
-	id_token: string;
-	nonce: string;
+  grant_type: "id_token";
+  provider: OpenIdProvider;
+  id_token: string;
+  nonce: string;
 }
 
-type TokenRequest = OtpTokenRequest | RefreshTokenRequest | IdTokenRequest;
+export type TokenRequest =
+  | OtpTokenRequest
+  | RefreshTokenRequest
+  | IdTokenRequest;
 
-interface TokenResponse {
-	access_token: string;
-	expires_in: number;
-	refresh_token?: string;
-}
-
-export const refreshToken = localStorageStore("refresh_token");
-export const accessToken = localStorageStore("access_token");
-export const loginToken = localStorageStore("login_token");
-
-export const authenticating = writable(false);
-export const authenticated = derived([accessToken], ([token]) => !!token);
-
-derived([refreshToken, accessToken], (v) => v).subscribe(([refresh, access]) => {
-	if (refresh && !access) {
-		authenticate({ grant_type: "refresh_token", refresh_token: refresh });
-	}
-});
-
-export function logout(next?: string): void {
-	if (next) goto(next);
-	refreshToken.set(null);
-	accessToken.set(null);
-	loginToken.set(null);
-}
-
-function ingestTokenResponse(response: TokenResponse) {
-	accessToken.set(response.access_token);
-
-	if (response.refresh_token) refreshToken.set(response.refresh_token);
-
-	loginToken.set(null);
+export interface TokenResponse {
+  access_token: string;
+  expires_in: number;
+  refresh_token?: string;
 }
 
 export interface AuthError {
-	status: number;
-	message: string;
+  status: number;
+  message: string;
 }
 
 export function isError<T>(obj: T | AuthError): obj is AuthError {
-	return (obj as AuthError)?.status !== undefined;
+  return (obj as AuthError)?.status !== undefined;
 }
 
-export const authenticate = (req: TokenRequest): Promise<TokenResponse | AuthError> =>
-	tracer.startActiveSpan(
-		"authenticate",
-		{
-			attributes: {
-				grant_type: req.grant_type
-			}
-		},
-		async (span) => {
-			authenticating.set(true);
+export async function requestToken(
+  req: TokenRequest
+): Promise<TokenResponse | AuthError> {
+  try {
+    const res = await fetch(`${API_URL}/token`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/x-www-form-urlencoded",
+      },
+      body: new URLSearchParams(req as unknown as Record<string, string>),
+    });
 
-			try {
-				const res = await request(
-					`${API_URL}/token`,
-					{
-						method: "POST",
-						headers: {
-							"content-type": "application/x-www-form-urlencoded"
-						},
-						body: new URLSearchParams(req as unknown as Record<string, string>)
-					},
-					{ auth: false }
-				);
+    if (!res.ok) {
+      return { status: res.status, message: await res.text() };
+    }
 
-				if (!res.ok) {
-					span.setStatus({
-						code: api.SpanStatusCode.ERROR
-					});
-					return { status: res.status, message: await res.text() };
-				}
-
-				const data: TokenResponse = await res.json();
-				ingestTokenResponse(data);
-
-				span.setStatus({
-					code: api.SpanStatusCode.OK
-				});
-
-				return data;
-			} finally {
-				authenticating.set(false);
-				span.end();
-			}
-		}
-	);
-
-interface LoginResponse {
-	token: string;
+    const data: TokenResponse = await res.json();
+    return data;
+  } catch (error) {
+    if (error instanceof Error) {
+      return { status: 500, message: error.message };
+    }
+    console.error(error);
+    return { status: 500, message: "Unknown error" };
+  }
 }
 
-export async function login(email: string): Promise<void | AuthError> {
-	const res = await request(
-		`${API_URL}/login`,
-		{
-			method: "POST",
-			headers: {
-				"content-type": "application/json"
-			},
-			body: JSON.stringify({ email })
-		},
-		{ auth: false }
-	);
+// interface LoginResponse {
+// 	token: string;
+// }
 
-	if (!res.ok) {
-		authenticating.set(false);
-		return { status: res.status, message: await res.text() };
-	}
+// export async function login(email: string): Promise<void | AuthError> {
+// 	const res = await request(
+// 		`${API_URL}/login`,
+// 		{
+// 			method: "POST",
+// 			headers: {
+// 				"content-type": "application/json"
+// 			},
+// 			body: JSON.stringify({ email })
+// 		},
+// 		{ auth: false }
+// 	);
 
-	const data: LoginResponse = await res.json();
+// 	if (!res.ok) {
+// 		authenticating.set(false);
+// 		return { status: res.status, message: await res.text() };
+// 	}
 
-	loginToken.set(data.token);
-}
+// 	const data: LoginResponse = await res.json();
 
-export interface RegistrationRequest {
-	email: string;
-	full_name: string;
-}
+// 	loginToken.set(data.token);
+// }
 
-export async function register(req: RegistrationRequest): Promise<void | AuthError> {
-	const res = await request(
-		`${API_URL}/account`,
-		{
-			method: "POST",
-			headers: {
-				"content-type": "application/json"
-			},
-			body: JSON.stringify(req)
-		},
-		{ auth: false }
-	);
+// export interface RegistrationRequest {
+// 	email: string;
+// 	full_name: string;
+// }
 
-	if (!res.ok) {
-		const message = await res.text();
-		authenticating.set(false);
-		return { status: res.status, message };
-	}
+// export async function register(req: RegistrationRequest): Promise<void | AuthError> {
+// 	const res = await request(
+// 		`${API_URL}/account`,
+// 		{
+// 			method: "POST",
+// 			headers: {
+// 				"content-type": "application/json"
+// 			},
+// 			body: JSON.stringify(req)
+// 		},
+// 		{ auth: false }
+// 	);
 
-	const data: LoginResponse = await res.json();
+// 	if (!res.ok) {
+// 		const message = await res.text();
+// 		authenticating.set(false);
+// 		return { status: res.status, message };
+// 	}
 
-	loginToken.set(data.token);
-}
+// 	const data: LoginResponse = await res.json();
 
-export function getAccessToken(minimumValidity = 5): Promise<string | null> {
-	return tracer.startActiveSpan(
-		"getAccessToken",
-		{ attributes: { minimumValidity, cached: false } },
-		async (span) => {
-			const token = get(accessToken);
+// 	loginToken.set(data.token);
+// }
 
-			if (token) {
-				const { exp = 0 } = decodeJwt(token);
-				const now = Math.floor(Date.now() / 1000);
+// export function getAccessToken(minimumValidity = 5): Promise<string | null> {
+// 	return tracer.startActiveSpan(
+// 		"getAccessToken",
+// 		{ attributes: { minimumValidity, cached: false } },
+// 		async (span) => {
+// 			const token = get(accessToken);
 
-				if (exp > now + minimumValidity) {
-					span.setAttribute("cached", true);
-					span.end();
-					return token;
-				}
-			}
+// 			if (token) {
+// 				const { exp = 0 } = decodeJwt(token);
+// 				const now = Math.floor(Date.now() / 1000);
 
-			accessToken.set(null); // trigger refresh
+// 				if (exp > now + minimumValidity) {
+// 					span.setAttribute("cached", true);
+// 					span.end();
+// 					return token;
+// 				}
+// 			}
 
-			if (get(authenticating)) {
-				return new Promise<string>((resolve) => {
-					const unsubscribe = accessToken.subscribe((v) => {
-						if (v) {
-							unsubscribe();
-							resolve(v);
-						}
-					});
-				});
-			}
+// 			accessToken.set(null); // trigger refresh
 
-			span.end();
+// 			if (get(authenticating)) {
+// 				return new Promise<string>((resolve) => {
+// 					const unsubscribe = accessToken.subscribe((v) => {
+// 						if (v) {
+// 							unsubscribe();
+// 							resolve(v);
+// 						}
+// 					});
+// 				});
+// 			}
 
-			return null;
-		}
-	);
-}
+// 			span.end();
 
-interface User {
-	id: string;
-	email: string;
-	full_name: string;
-	created_at: string;
-	last_login: string;
-}
+// 			return null;
+// 		}
+// 	);
+// }
 
-export const user = writable<User | null>(null);
+// interface User {
+// 	id: string;
+// 	email: string;
+// 	full_name: string;
+// 	created_at: string;
+// 	last_login: string;
+// }
 
-authenticated.subscribe(async (v) => {
-	if (!v) return user.set(null);
+// export const user = writable<User | null>(null);
 
-	user.set(await getUser());
-});
+// authenticated.subscribe(async (v) => {
+// 	if (!v) return user.set(null);
 
-export function getUser(): Promise<User> {
-	return catchySpan(tracer, "getUser", async (span) => {
-		const res = await request(`${API_URL}/account`, undefined);
-		if (!res.ok) throw new Error(await res.text());
+// 	user.set(await getUser());
+// });
 
-		const user: User = await res.json();
+// export function getUser(): Promise<User> {
+// 	return catchySpan(tracer, "getUser", async (span) => {
+// 		const res = await request(`${API_URL}/account`, undefined);
+// 		if (!res.ok) throw new Error(await res.text());
 
-		span.setStatus({
-			code: api.SpanStatusCode.OK
-		});
+// 		const user: User = await res.json();
 
-		return user;
-	});
-}
+// 		span.setStatus({
+// 			code: api.SpanStatusCode.OK
+// 		});
 
-export function requireAuth(next?: string): void {
-	const s = derived([authenticated, authenticating, navigating], (v) => v);
+// 		return user;
+// 	});
+// }
 
-	onMount(() =>
-		s.subscribe(([auth, authing, nav]) => {
-			if (!auth && !authing && !nav) {
-				goto(`/login?next=${next || get(page).url.pathname}`);
-			}
-		})
-	);
-}
+// export interface Profile {
+// 	id: string;
+// 	full_name: string;
+// 	created_at: string;
+// }
+
+// export async function getProfile(user: string): Promise<Profile> {
+// 		const res = await request(`${API_URL}/users/${user}/profile`, undefined, { auth: false });
+// 		if (!res.ok) throw new Error(await res.text());
+// 		const data = await res.json();
+// 		return data;
+// }
+
+// export interface ProfileUpdate {
+// 	full_name?: string;
+// }
+
+// export async function updateProfile(update: ProfileUpdate): Promise<Profile> {
+// 		await getAccessToken();
+// 		const userId = get(user)?.id;
+// 		if (!userId) throw new Error("not logged in");
+
+// 		const res = await request(`${API_URL}/users/${userId}/profile`, {
+// 			method: "PATCH",
+// 			headers: {
+// 				"content-type": "application/json"
+// 			},
+// 			body: JSON.stringify(update)
+// 		});
+
+// 		if (!res.ok) throw new Error(await res.text());
+
+// 		const profile: Profile = await res.json();
+
+// 		// todo: tidy this up
+// 		user.update((u) => {
+// 			if (u) {
+// 				return { ...u, full_name: profile.full_name };
+// 			}
+
+// 			return u;
+// 		});
+
+// 		return profile;
+// }
 
 export interface Profile {
-	id: string;
-	full_name: string;
-	created_at: string;
+  id: string;
+  full_name: string;
+  created_at: string;
 }
 
-export function getProfile(user: string): Promise<Profile> {
-	return catchySpan(tracer, "getProfile", { attributes: { user } }, async (span) => {
-		const res = await request(`${API_URL}/users/${user}/profile`, undefined, { auth: false });
-		if (!res.ok) throw new Error(await res.text());
-		const data = await res.json();
-		span.setStatus({
-			code: api.SpanStatusCode.OK
-		});
-		return data;
-	});
-}
-
-export interface ProfileUpdate {
-	full_name?: string;
-}
-
-export function updateProfile(update: ProfileUpdate): Promise<Profile> {
-	return catchySpan(tracer, "updateProfile", async (span) => {
-		await getAccessToken();
-		const userId = get(user)?.id;
-		if (!userId) throw new Error("not logged in");
-
-		const res = await request(`${API_URL}/users/${userId}/profile`, {
-			method: "PATCH",
-			headers: {
-				"content-type": "application/json"
-			},
-			body: JSON.stringify(update)
-		});
-
-		if (!res.ok) throw new Error(await res.text());
-
-		const profile: Profile = await res.json();
-
-		// todo: tidy this up
-		user.update((u) => {
-			if (u) {
-				return { ...u, full_name: profile.full_name };
-			}
-
-			return u;
-		});
-
-		span.setStatus({
-			code: api.SpanStatusCode.OK
-		});
-
-		return profile;
-	});
+export interface Account {
+  id: string;
+  email: string;
+  full_name: string;
+  created_at: string;
 }
