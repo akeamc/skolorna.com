@@ -13,7 +13,7 @@ const GoogleContext = createContext<
 export const GoogleProvider = ({ children }: { children: React.ReactNode }) => {
   const [initialized, setInitialized] = useState(false);
   const promptParentId = useId();
-  const { authenticate } = useAuth();
+  const { login: authenticate } = useAuth();
 
   const onResponse = (
     res: google.accounts.id.CredentialResponse,

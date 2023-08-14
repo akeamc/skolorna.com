@@ -1,6 +1,7 @@
 import Days from "@/components/oden/Days";
 import HistoryRecorder from "@/components/oden/HistoryRecorder";
-import { Menu, ODEN_URL } from "@/lib/oden";
+import { API_URL } from "@/lib/api/config";
+import { Menu } from "@/lib/oden";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
@@ -15,7 +16,7 @@ interface Props {
 }
 
 async function getMenu(id: string) {
-  const res = await fetch(`${ODEN_URL}/menus/${id}`, {
+  const res = await fetch(`${API_URL}/menus/${id}`, {
     next: {
       revalidate: 300,
     },
