@@ -203,6 +203,7 @@ export async function createReview(data: CreateReview): Promise<Review> {
       "content-type": "application/json",
     },
     body: JSON.stringify(data),
+    credentials: "include",
   });
 
   const created = await res.json();
@@ -217,6 +218,7 @@ export async function deleteReview(id: string): Promise<void> {
 
   const res = await request(`${API_URL}/reviews/${id}`, {
     method: "DELETE",
+    credentials: "include"
   });
 
   if (!res.ok) throw new Error(await res.text());
