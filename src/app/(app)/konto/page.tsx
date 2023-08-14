@@ -35,7 +35,7 @@ export default function Account() {
       </div>
       <section>
         <p className="mb-4">
-          Inloggad som {account?.full_name} ({account?.email}).
+          Inloggad som {account?.name} ({account?.email}).
         </p>
         <button
           type="button"

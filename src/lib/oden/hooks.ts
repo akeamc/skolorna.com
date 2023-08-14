@@ -1,13 +1,14 @@
 "use client";
 
 import { QueryClient, useQuery } from "@tanstack/react-query";
-import { Meal, ODEN_URL, Review, Stats } from ".";
+import { Meal, Review, Stats } from ".";
+import { API_URL } from "../api/config";
 
 export const useStats = () =>
   useQuery({
     queryKey: ["oden", "stats"],
     queryFn: async () => {
-      const res = await fetch(`${ODEN_URL}/stats`);
+      const res = await fetch(`${API_URL}/stats`);
       if (!res.ok) throw new Error("failed to get stats");
       const stats: Stats = await res.json();
       return stats;

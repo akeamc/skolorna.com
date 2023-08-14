@@ -57,7 +57,16 @@ export default function Header() {
               className="text-sm font-semibold leading-6 text-gray-900"
             >
               {account ? (
-                account.full_name
+                // eslint-disable-next-line @next/next/no-img-element
+                account.picture ? (
+                  <img
+                    alt={account.name || undefined}
+                    className="h-8 w-8 rounded-full"
+                    src={account.picture || undefined}
+                  />
+                ) : (
+                  account.name
+                )
               ) : (
                 <>
                   Logga in <span aria-hidden="true">-&gt;</span>
@@ -103,7 +112,7 @@ export default function Header() {
                   className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                 >
                   {account ? (
-                    account.full_name
+                    account.name
                   ) : (
                     <>
                       Logga in <span aria-hidden="true">-&gt;</span>

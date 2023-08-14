@@ -6,8 +6,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { DateTime } from "luxon";
 import request from "../request";
-
-export const ODEN_URL = "https://api.skolorna.com/v03/oden";
+import { API_URL } from "../api/config";
 
 // const tracer = api.trace.getTracer("oden-client");
 
@@ -18,7 +17,7 @@ export interface Stats {
 
 // export function getStats(): Promise<Response> {
 // 	return catchySpan(tracer, "getStats", async (span) => {
-// 		const res = await request(`${ODEN_URL}/stats`, undefined, { auth: false });
+// 		const res = await request(`${API_URL}/stats`, undefined, { auth: false });
 // 		if (!res.ok) {
 // 			throw error(res.status, "failed to get stats");
 // 		}
@@ -38,9 +37,9 @@ export interface Menu {
 }
 
 export async function getMenu(id: string): Promise<Response> {
-  return fetch(`${ODEN_URL}/menus/${id}`);
+  return fetch(`${API_URL}/menus/${id}`);
   // return catchySpan(tracer, "getMenu", async (span) => {
-  // const res = await request(`${ODEN_URL}/menus/${id}`, undefined, { auth: false });
+  // const res = await request(`${API_URL}/menus/${id}`, undefined, { auth: false });
   // if (!res.ok) {
   // throw error(res.status, "failed to get menu");
   // }
@@ -56,7 +55,7 @@ export const useMenu = (id?: string) =>
     queryKey: ["oden", "menus", id],
     queryFn: async () => {
       if (!id) throw new Error("missing id");
-      const res = await fetch(`${ODEN_URL}/menus/${id}`);
+      const res = await fetch(`${API_URL}/menus/${id}`);
       if (!res.ok) throw new Error("failed to get menu");
       const menu: Menu = await res.json();
       return menu;
@@ -91,7 +90,7 @@ export const useDays = ({
     queryKey: ["oden", "menus", menu, "days", first, last],
     queryFn: async () => {
       const res = await fetch(
-        `${ODEN_URL}/menus/${menu}/days?first=${first}&last=${last}`
+        `${API_URL}/menus/${menu}/days?first=${first}&last=${last}`
       );
       const days: Day[] = await res.json();
       return days;
@@ -113,7 +112,7 @@ export const useNextDay = (menu?: string) => {
 // export function getDays(menu: string, first: DateTime, last: DateTime): Promise<Day[]> {
 // 	return catchySpan(tracer, "getDays", async (span) => {
 // 		const res = await request(
-// 			`${ODEN_URL}/menus/${menu}/days?first=${first.toISODate()}&last=${last.toISODate()}`,
+// 			`${API_URL}/menus/${menu}/days?first=${first.toISODate()}&last=${last.toISODate()}`,
 // 			undefined,
 // 			{ auth: false }
 // 		);
@@ -155,7 +154,7 @@ export interface Review {
 // 		},
 // 		async (span) => {
 // 			const res = await request(
-// 				`${ODEN_URL}/reviews?${new URLSearchParams(query as Record<string, string>)}`,
+// 				`${API_URL}/reviews?${new URLSearchParams(query as Record<string, string>)}`,
 // 				undefined,
 // 				{ auth: false }
 // 			);
@@ -198,7 +197,7 @@ export async function createReview(data: CreateReview): Promise<Review> {
   // 	...data
   // });
 
-  const res = await request(`${ODEN_URL}/reviews`, {
+  const res = await request(`${API_URL}/reviews`, {
     method: "POST",
     headers: {
       "content-type": "application/json",
@@ -216,7 +215,7 @@ export async function deleteReview(id: string): Promise<void> {
   // 	id
   // });
 
-  const res = await request(`${ODEN_URL}/reviews/${id}`, {
+  const res = await request(`${API_URL}/reviews/${id}`, {
     method: "DELETE",
   });
 

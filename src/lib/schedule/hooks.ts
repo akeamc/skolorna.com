@@ -7,6 +7,7 @@ import {
 import { Day, Schedule } from "./client";
 import { DateTime } from "luxon";
 import request from "../request";
+import { API_URL } from "../api/config";
 
 export function useDays(around: DateTime, count: number) {
   const q = {
@@ -17,9 +18,10 @@ export function useDays(around: DateTime, count: number) {
     queryKey: ["skool", "schedule", q],
     queryFn: async () => {
       const res = await request(
-        `https://api.skolorna.com/v0/skool/schedule?year=${q.year}&week=${q.week}`,
+        `${API_URL}/skool/schedule?year=${q.year}&week=${q.week}`,
         {
           cache: "no-cache",
+          credentials: "include",
         }
       );
       return Schedule.fromJSON(await res.json());
@@ -50,7 +52,9 @@ export function useClasses() {
   return useQuery({
     queryKey: ["skool", "classes"],
     queryFn: async () => {
-      const res = await request(`https://api.skolorna.com/v0/skool/classes`);
+      const res = await request(`${API_URL}/skool/classes`, {
+        credentials: "include",
+      });
       return await res.json();
     },
   });
@@ -67,11 +71,11 @@ export function useCredentials() {
   return useQuery({
     queryKey: ["skool", "credentials"],
     queryFn: async () => {
-      const res = await request(
-        `https://api.skolorna.com/v0/skool/credentials`
-      );
+      const res = await request(`${API_URL}/skool/credentials`, {
+        credentials: "include",
+      });
 
-      if (res.status === 404) return null;
+      if (res.status === 401) return null;
 
       return (await res.json()) as CredentialsStat;
     },
@@ -85,8 +89,9 @@ interface Credentials {
 }
 
 async function deleteCredentials() {
-  const res = await request("https://api.skolorna.com/v0/skool/credentials", {
+  const res = await request(`${API_URL}/skool/credentials`, {
     method: "DELETE",
+    credentials: "include",
   });
 
   if (!res.ok) {
@@ -102,12 +107,13 @@ async function setCredentials(
     return null;
   }
 
-  const res = await request("https://api.skolorna.com/v0/skool/credentials", {
+  const res = await request(`${API_URL}/skool/credentials`, {
     method: "PUT",
     headers: {
       "content-type": "application/json",
     },
     body: JSON.stringify(credentials),
+    credentials: "include",
   });
 
   if (res.status === 400) {

@@ -7,19 +7,15 @@ import {
   useEffect,
   useState,
 } from "react";
-import {
-  AuthError,
-  TokenRequest,
-  TokenResponse,
-  isError,
-  requestToken,
-} from "./auth";
+import * as auth from "./auth";
 import { useAccount } from "./hooks";
 
 interface AuthContextProps {
-  authenticate: (req: TokenRequest) => Promise<TokenResponse | AuthError>;
+  login: (
+    req: auth.LoginRequest
+  ) => Promise<auth.LoginSuccess | auth.AuthError>;
   status: "authenticating" | "authenticated" | "unauthenticated" | null;
-  logout: () => void;
+  logout: () => Promise<void>;
   justLoggedOut: boolean;
 }
 
@@ -33,15 +29,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [justLoggedOut, setJustLoggedOut] = useState(false);
   const [status, setStatus] = useState<AuthContextProps["status"]>(null);
 
-  const authenticate = useCallback(
-    async (req: TokenRequest) => {
-      if (!localStorage.getItem("access_token")) setAuthenticating(true);
-      const res = await requestToken(req);
-      if (!isError(res)) {
-        localStorage.setItem("access_token", res.access_token);
-        if (res.refresh_token)
-          localStorage.setItem("refresh_token", res.refresh_token);
-      }
+  const login = useCallback(
+    async (req: auth.LoginRequest) => {
+      setAuthenticating(true);
+      const res = await auth.login(req);
       setAuthenticating(false);
       setStatus("authenticated");
       refetch();
@@ -50,9 +41,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     [refetch]
   );
 
-  const logout = useCallback(() => {
-    localStorage.removeItem("access_token");
-    localStorage.removeItem("refresh_token");
+  const logout = useCallback(async () => {
+    await auth.logout();
+    setStatus("unauthenticated");
     setJustLoggedOut(true);
     refetch();
   }, [refetch]);
@@ -70,7 +61,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   return (
     <AuthContext.Provider
       value={{
-        authenticate,
+        login,
         status:
           authenticating && status !== "authenticated"
             ? "authenticating"

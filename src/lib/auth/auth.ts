@@ -1,35 +1,15 @@
-export const API_URL = "https://api.skolorna.com/v0/auth";
-
-interface OtpTokenRequest {
-  grant_type: "otp";
-  token: string;
-  otp: string;
-}
-
-interface RefreshTokenRequest {
-  grant_type: "refresh_token";
-  refresh_token: string;
-}
+import { API_URL } from "../api/config";
 
 type OpenIdProvider = "google";
 
-interface IdTokenRequest {
+export interface LoginRequest {
   grant_type: "id_token";
   provider: OpenIdProvider;
   id_token: string;
   nonce: string;
 }
 
-export type TokenRequest =
-  | OtpTokenRequest
-  | RefreshTokenRequest
-  | IdTokenRequest;
-
-export interface TokenResponse {
-  access_token: string;
-  expires_in: number;
-  refresh_token?: string;
-}
+export interface LoginSuccess {}
 
 export interface AuthError {
   status: number;
@@ -40,23 +20,24 @@ export function isError<T>(obj: T | AuthError): obj is AuthError {
   return (obj as AuthError)?.status !== undefined;
 }
 
-export async function requestToken(
-  req: TokenRequest
-): Promise<TokenResponse | AuthError> {
+export async function login(
+  req: LoginRequest
+): Promise<LoginSuccess | AuthError> {
   try {
-    const res = await fetch(`${API_URL}/token`, {
+    const res = await fetch(`${API_URL}/login`, {
       method: "POST",
       headers: {
-        "content-type": "application/x-www-form-urlencoded",
+        "content-type": "application/json",
       },
-      body: new URLSearchParams(req as unknown as Record<string, string>),
+      body: JSON.stringify(req),
+      credentials: "include",
     });
 
     if (!res.ok) {
       return { status: res.status, message: await res.text() };
     }
 
-    const data: TokenResponse = await res.json();
+    const data: LoginSuccess = await res.json();
     return data;
   } catch (error) {
     if (error instanceof Error) {
@@ -64,6 +45,17 @@ export async function requestToken(
     }
     console.error(error);
     return { status: 500, message: "Unknown error" };
+  }
+}
+
+export async function logout(): Promise<void> {
+  const res = await fetch(`${API_URL}/logout`, {
+    method: "POST",
+    credentials: "include",
+  });
+
+  if (!res.ok) {
+    throw new Error(await res.text());
   }
 }
 
@@ -240,13 +232,14 @@ export async function requestToken(
 
 export interface Profile {
   id: string;
-  full_name: string;
+  name: string;
   created_at: string;
 }
 
 export interface Account {
   id: string;
   email: string;
-  full_name: string;
+  name: string | null;
+  picture: string | null;
   created_at: string;
 }

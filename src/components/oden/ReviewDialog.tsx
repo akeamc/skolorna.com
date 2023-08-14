@@ -2,7 +2,7 @@
 
 import { FormEvent, FunctionComponent, useRef, useState } from "react";
 import { Dialog } from "@headlessui/react";
-import { Meal, ODEN_URL, Review as ReviewType, createReview } from "@/lib/oden";
+import { Meal, Review as ReviewType, createReview } from "@/lib/oden";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Modal from "../Modal";
 import { useAuth } from "@/lib/auth/context";
@@ -13,6 +13,7 @@ import Review from "./Review";
 import { onReviewChange } from "@/lib/oden/hooks";
 import Spinner from "../Spinner";
 import { useAccount } from "@/lib/auth/hooks";
+import { API_URL } from "@/lib/api/config";
 
 const Rating: FunctionComponent<{ meal: Meal; reviews?: ReviewType[] }> = ({
   meal,
@@ -131,7 +132,7 @@ const ReviewDialog: FunctionComponent<{
     queryKey: ["oden", "reviews", meal.value],
     queryFn: async () => {
       const res = await fetch(
-        `${ODEN_URL}/reviews?meal=${encodeURIComponent(meal.value)}`
+        `${API_URL}/reviews?meal=${encodeURIComponent(meal.value)}`
       );
       return res.json();
     },
