@@ -103,23 +103,29 @@ const XScale: FunctionComponent<{
 const YScale: FunctionComponent<{
   start: number;
   hours: number;
-}> = ({ start, hours }) => (
-  <>
-    {Array.from({ length: hours }).map((_, i) => (
-      <div
-        key={i}
-        className="absolute left-0 right-0 border-t"
-        style={{
-          top: `${(i / hours) * 100}%`,
-        }}
-      >
-        <span className="absolute -left-10 w-8 -translate-y-1/2 text-right text-xs leading-none text-gray-400">
-          {i + start / 3600}:00
-        </span>
-      </div>
-    ))}
-  </>
-);
+  hideOnSmall?: boolean;
+}> = ({ start, hours, hideOnSmall = false }) => {
+  const className = classNames(
+    "absolute -left-10 w-8 -translate-y-1/2 text-right text-xs leading-none text-gray-400",
+    { "max-sm:hidden": hideOnSmall }
+  );
+
+  return (
+    <>
+      {Array.from({ length: hours }).map((_, i) => (
+        <div
+          key={i}
+          className="absolute left-0 right-0 border-t"
+          style={{
+            top: `${(i / hours) * 100}%`,
+          }}
+        >
+          <span className={className}>{i + start / 3600}:00</span>
+        </div>
+      ))}
+    </>
+  );
+};
 
 const Days: FunctionComponent<{
   days: Day[];
@@ -134,16 +140,17 @@ const Days: FunctionComponent<{
   if (!Number.isInteger(hours)) throw new Error("`hours` must be an integer");
 
   return (
-    <div className="flex w-full">
+    <div className="flex max-md:-mx-4">
       <div
         className={classNames(
-          "relative ml-10 flex w-full",
-          header ? "mt-12" : "mt-4"
+          "relative flex w-full",
+          header ? "mt-12" : "mt-4",
+          days.length > 1 ? "sm:ml-10" : "ml-10"
         )}
         style={{ height: `${hours * 4}rem` }}
       >
         <XScale days={days} header={header} status={status} />
-        <YScale start={min} hours={hours} />
+        <YScale start={min} hours={hours} hideOnSmall={days.length > 1} />
         <Indicator days={days} min={min} max={max} />
         <ol>
           {days.map(({ date, lessons }, i) => (
