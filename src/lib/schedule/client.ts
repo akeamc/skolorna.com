@@ -2,6 +2,8 @@
 
 import chroma, { Color } from "chroma-js";
 import { DateTime } from "luxon";
+import { API_URL } from "../api/config";
+import request from "../request";
 
 export class Lesson {
   constructor(
@@ -108,4 +110,54 @@ export class Schedule {
 export interface Day {
   date: DateTime;
   lessons: Lesson[];
+}
+
+class ScheduleLink {
+  constructor(public id: string) {}
+
+  static fromJSON(json: unknown): ScheduleLink {
+    if (typeof json !== "object" || json === null)
+      throw new Error("invalid json");
+
+    const { id } = json as Record<string, unknown>;
+
+    if (typeof id !== "string") throw new Error("invalid id");
+
+    return new ScheduleLink(id);
+  }
+
+  icalUrl(): string {
+    return `${API_URL}/skool/schedule/ical?share=${this.id}`;
+  }
+}
+
+export async function getScheduleLinks(): Promise<ScheduleLink[]> {
+  const res = await request(`${API_URL}/skool/schedule/links`, {
+    credentials: "include",
+  });
+  const json = await res.json();
+  if (!Array.isArray(json))
+    throw new Error("unexpected response (wanted array)");
+  return json.map(ScheduleLink.fromJSON);
+}
+
+export async function createScheduleLink(): Promise<ScheduleLink> {
+  const res = await request(`${API_URL}/skool/schedule/links`, {
+    method: "POST",
+    credentials: "include",
+    headers: {
+      "content-type": "application/json",
+    },
+    body: JSON.stringify({}),
+  });
+  if (!res.ok) throw new Error(await res.text());
+  return ScheduleLink.fromJSON(await res.json());
+}
+
+export async function getScheduleLink(): Promise<ScheduleLink> {
+  const links = await getScheduleLinks();
+
+  if (links.length === 0) return createScheduleLink();
+
+  return links[0];
 }

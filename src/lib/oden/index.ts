@@ -218,7 +218,7 @@ export async function deleteReview(id: string): Promise<void> {
 
   const res = await request(`${API_URL}/reviews/${id}`, {
     method: "DELETE",
-    credentials: "include"
+    credentials: "include",
   });
 
   if (!res.ok) throw new Error(await res.text());

@@ -3,13 +3,12 @@
 import { useCredentials } from "@/lib/schedule/hooks";
 import { useEffect, useState } from "react";
 import CredentialsModal from "./CredentialsModal";
-// import { Share } from "react-feather";
-// import ShareModal from "./ShareModal";
+import ShareModal from "./ShareModal";
 
 export default function Footer() {
   const { data: credentials, isSuccess } = useCredentials();
   const [credentialsModal, setCredentialsModal] = useState(false);
-  // const [shareModal, setShareModal] = useState(false);
+  const [shareModal, setShareModal] = useState(false);
 
   useEffect(() => {
     if (isSuccess && !credentials) setCredentialsModal(true);
@@ -18,7 +17,7 @@ export default function Footer() {
   return (
     <footer className="my-8 flex items-center justify-between">
       <CredentialsModal open={credentialsModal} setOpen={setCredentialsModal} />
-      {/* <ShareModal open={shareModal} setOpen={setShareModal} /> */}
+      <ShareModal open={shareModal} setOpen={setShareModal} />
       <div>
         <p className="text-sm text-gray-500">
           Ansluten till{" "}
@@ -27,16 +26,22 @@ export default function Footer() {
           </code>{" "}
           på ✨Skolplattformen✨
         </p>
-        <button
-          className="mt-2 text-sm text-gray-500 underline"
-          onClick={() => setCredentialsModal(true)}
-        >
-          Hantera anslutning
-        </button>
+        <div className="mt-2 text-sm text-gray-500">
+          <button
+            className="underline"
+            onClick={() => setCredentialsModal(true)}
+          >
+            Hantera anslutning
+          </button>
+          <span className="mx-2">·</span>
+          <button onClick={() => setShareModal(true)}>
+            <span className="underline">Synkronisera med kalender</span>
+            <span className="ml-1 rounded-sm bg-blue-600 px-1 py-0.5 text-xs font-medium uppercase text-white">
+              Ny
+            </span>
+          </button>
+        </div>
       </div>
-      {/* <button className="text-gray-500 flex" title="Dela" onClick={() => setShareModal(true)}>
-        <Share className="w-5 h-5" />
-      </button> */}
     </footer>
   );
 }

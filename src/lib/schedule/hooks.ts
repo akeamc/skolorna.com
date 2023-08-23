@@ -116,9 +116,9 @@ async function setCredentials(
     credentials: "include",
   });
 
-  if (res.status === 400) {
+  if (res.status === 401) {
     throw {
-      code: "invalid_credentials",
+      code: "bad_credentials",
       message: await res.text(),
     } satisfies SetCredentialsError;
   }
@@ -134,7 +134,7 @@ async function setCredentials(
 }
 
 interface SetCredentialsError {
-  code: "not_logged_in" | "invalid_credentials" | "unknown";
+  code: "not_logged_in" | "bad_credentials" | "unknown";
   message?: string;
 }
 
@@ -143,7 +143,7 @@ const HUMAN_ERRORS: Record<
   string
 > = {
   not_logged_in: "Du är inte inloggad.",
-  invalid_credentials: "Fel användarnamn eller lösenord.",
+  bad_credentials: "Fel användarnamn eller lösenord.",
 };
 
 export function errorToString(e: SetCredentialsError): string {

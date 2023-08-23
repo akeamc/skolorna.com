@@ -57,8 +57,8 @@ export default function Header() {
               className="text-sm font-semibold leading-6 text-gray-900"
             >
               {account ? (
-                // eslint-disable-next-line @next/next/no-img-element
                 account.picture ? (
+                  // eslint-disable-next-line @next/next/no-img-element
                   <img
                     alt={account.name || undefined}
                     className="h-8 w-8 rounded-full"
