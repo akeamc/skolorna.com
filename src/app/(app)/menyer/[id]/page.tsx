@@ -38,7 +38,7 @@ export default async function Page({ params: { id } }: Props) {
   const menu = await getMenu(id);
 
   return (
-    <main className="mx-auto max-w-screen-lg px-4">
+    <main className="main">
       <HistoryRecorder menu={menu.id} />
       <div className="my-8 flex max-sm:flex-col sm:items-center sm:justify-between sm:gap-2">
         <h1 className="text-2xl font-semibold tracking-tight sm:text-4xl">

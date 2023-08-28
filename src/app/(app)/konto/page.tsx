@@ -27,7 +27,7 @@ export default function Account() {
   }
 
   return (
-    <main className="mx-auto max-w-screen-lg px-4">
+    <main className="main">
       <div className="my-8">
         <h1 className="text-2xl font-semibold tracking-tight sm:text-4xl">
           Konto

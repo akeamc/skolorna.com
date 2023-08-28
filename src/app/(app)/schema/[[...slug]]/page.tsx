@@ -45,7 +45,7 @@ export default function Page({ params }: { params: { slug?: string[] } }) {
   }
 
   return (
-    <div className="mx-auto max-w-screen-lg px-4">
+    <div className="main">
       <AuthRedirecter />
       <main>
         <ScheduleProvider view={view} cursor={cursor.toISODate() || ""}>

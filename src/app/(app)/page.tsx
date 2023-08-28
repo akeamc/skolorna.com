@@ -6,7 +6,7 @@ export default function Page() {
   const { data: stats } = useStats();
 
   return (
-    <main className="mx-auto max-w-screen-lg px-4">
+    <main className="main">
       <div className="my-16 flex flex-col items-center justify-center">
         <h1 className="text-center text-6xl font-semibold tracking-tight md:text-8xl">
           Vi vet vad det blir till lunch

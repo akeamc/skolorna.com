@@ -140,7 +140,7 @@ const Days: FunctionComponent<{
   if (!Number.isInteger(hours)) throw new Error("`hours` must be an integer");
 
   return (
-    <div className="flex max-md:-mx-4">
+    <div className="flex">
       <div
         className={classNames(
           "relative flex w-full",
