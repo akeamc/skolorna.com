@@ -47,12 +47,13 @@ export default function Page({ params }: { params: { slug?: string[] } }) {
   return (
     <div className="main">
       <AuthRedirecter />
-      <main>
-        <ScheduleProvider view={view} cursor={cursor.toISODate() || ""}>
+      <ScheduleProvider view={view} cursor={cursor.toISODate() || ""}>
+        <main>
           <Calendar />
-        </ScheduleProvider>
-      </main>
-      <Footer />
+        </main>
+        <hr className="my-6 h-px border-0 bg-gray-200" />
+        <Footer />
+      </ScheduleProvider>
     </div>
   );
 }

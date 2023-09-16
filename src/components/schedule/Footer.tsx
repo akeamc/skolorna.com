@@ -15,7 +15,7 @@ export default function Footer() {
   }, [isSuccess, credentials]);
 
   return (
-    <footer className="my-8 flex items-center justify-between">
+    <footer className="my-4 flex items-center justify-between">
       <CredentialsModal open={credentialsModal} setOpen={setCredentialsModal} />
       <ShareModal open={shareModal} setOpen={setShareModal} />
       <div>

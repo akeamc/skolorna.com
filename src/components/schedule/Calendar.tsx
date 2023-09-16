@@ -7,6 +7,7 @@ import MonthView from "./views/Month";
 import DayView from "./views/Day";
 import WeekView from "./views/Week";
 import { View } from "@/lib/schedule";
+import Annotations from "./Annotations";
 
 const BODIES: Record<View, ComponentType> = {
   month: MonthView,
@@ -22,6 +23,7 @@ export default function Calendar() {
     <>
       <CalendarHeader />
       <Body />
+      <Annotations />
     </>
   );
 }

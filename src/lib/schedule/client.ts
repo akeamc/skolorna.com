@@ -93,17 +93,26 @@ export class Lesson {
 }
 
 export class Schedule {
+  annotations: string[];
   lessons: Lesson[];
 
-  constructor(lessons: Lesson[]) {
+  constructor(annotations: string[], lessons: Lesson[]) {
     lessons.sort((a, b) => +a.start - +b.start);
+    this.annotations = annotations;
     this.lessons = lessons;
   }
 
-  static fromJSON(json: unknown): Schedule {
-    if (!Array.isArray(json)) throw new Error("invalid schedule");
+  static fromJSON(json: any): Schedule {
+    if (!("annotations" in json && "lessons" in json)) {
+      throw new Error("invalid schedule");
+    }
 
-    return new Schedule(json.map(Lesson.fromJSON));
+    const { annotations, lessons } = json;
+
+    if (!Array.isArray(lessons)) throw new Error("invalid lessons");
+    if (!Array.isArray(annotations)) throw new Error("invalid annotations");
+
+    return new Schedule(annotations, lessons.map(Lesson.fromJSON));
   }
 }
 

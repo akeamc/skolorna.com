@@ -9,16 +9,17 @@ import { DateTime } from "luxon";
 import request from "../request";
 import { API_URL } from "../api/config";
 
-export function useDays(around: DateTime, count: number) {
+export function useWeek(around: DateTime) {
   const q = {
     year: around.weekYear,
     week: around.weekNumber,
   };
-  const { data: schedule, status } = useQuery({
+
+  return useQuery({
     queryKey: ["skool", "schedule", q],
     queryFn: async () => {
       const res = await request(
-        `${API_URL}/skool/schedule?year=${q.year}&week=${q.week}`,
+        `${API_URL}/skool/schedule/schedule?year=${q.year}&week=${q.week}`,
         {
           cache: "no-cache",
           credentials: "include",
@@ -27,6 +28,10 @@ export function useDays(around: DateTime, count: number) {
       return Schedule.fromJSON(await res.json());
     },
   });
+}
+
+export function useDays(around: DateTime, count: number) {
+  const { data: schedule, status } = useWeek(around);
   const start = around.startOf("week");
 
   const days: Day[] = Array.from({ length: count }).map((_, i) => ({
