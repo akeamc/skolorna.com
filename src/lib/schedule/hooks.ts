@@ -8,23 +8,29 @@ import { Day, Schedule } from "./client";
 import { DateTime } from "luxon";
 import request from "../request";
 import { API_URL } from "../api/config";
+import { useSchedule } from "./context";
 
 export function useWeek(around: DateTime) {
+  const { klass } = useSchedule();
   const q = {
     year: around.weekYear,
     week: around.weekNumber,
+    klass,
   };
 
   return useQuery({
     queryKey: ["skool", "schedule", q],
     queryFn: async () => {
-      const res = await request(
-        `${API_URL}/skool/schedule/schedule?year=${q.year}&week=${q.week}`,
-        {
-          cache: "no-cache",
-          credentials: "include",
-        }
-      );
+      let url = `${API_URL}/skool/schedule/schedule?year=${q.year}&week=${q.week}`;
+
+      if (q.klass) {
+        url += `&class=${q.klass}`;
+      }
+
+      const res = await request(url, {
+        cache: "no-cache",
+        credentials: "include",
+      });
       return Schedule.fromJSON(await res.json());
     },
   });
@@ -53,14 +59,32 @@ export function useDays(around: DateTime, count: number) {
   return { days, status };
 }
 
+export interface Klass {
+  school: string;
+  reference: string;
+  name: string;
+}
+
 export function useClasses() {
-  return useQuery({
+  return useQuery<Klass[]>({
     queryKey: ["skool", "classes"],
     queryFn: async () => {
       const res = await request(`${API_URL}/skool/classes`, {
         credentials: "include",
       });
-      return await res.json();
+
+      const data = await res.json();
+      if (!Array.isArray(data)) throw new Error("bad response");
+
+      const classes: Klass[] = Object.values(
+        data.reduce((acc, c) => {
+          acc[c.name] = c;
+          return acc;
+        }, {})
+      );
+      classes.sort((a, b) => a.name.localeCompare(b.name));
+
+      return classes;
     },
   });
 }

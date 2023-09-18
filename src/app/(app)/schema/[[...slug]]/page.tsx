@@ -6,6 +6,7 @@ import { View, isView } from "@/lib/schedule";
 import Footer from "@/components/schedule/Footer";
 import AuthRedirecter from "@/components/auth/AuthRedirecter";
 import { Metadata } from "next";
+import ClassSelector from "@/components/schedule/ClassSelector";
 
 // export const runtime = "edge";
 
@@ -48,6 +49,7 @@ export default function Page({ params }: { params: { slug?: string[] } }) {
     <div className="main">
       <AuthRedirecter />
       <ScheduleProvider view={view} cursor={cursor.toISODate() || ""}>
+        <ClassSelector />
         <main>
           <Calendar />
         </main>

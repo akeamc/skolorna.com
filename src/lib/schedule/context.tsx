@@ -3,7 +3,7 @@
 import { DateTime } from "luxon";
 import { FunctionComponent, ReactNode, createContext, useContext } from "react";
 import { View } from ".";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 interface ScheduleContextType {
   view: View;
@@ -16,6 +16,8 @@ interface ScheduleContextType {
    */
   timeBounds: [number, number];
   daysPerWeek: number;
+  klass: string | null;
+  setClass: (klass: string | null) => void;
 }
 
 const ScheduleContext = createContext<ScheduleContextType | undefined>(
@@ -29,21 +31,40 @@ export const ScheduleProvider: FunctionComponent<{
 }> = ({ children, view, cursor: isoCursor }) => {
   const cursor = DateTime.fromISO(isoCursor);
   const router = useRouter();
+  const searchParams = useSearchParams()!;
+  const klass = searchParams.get("class");
 
-  function pushState(view: View, cursor: DateTime) {
-    router.push(`/schema/${view}/${cursor.year}/${cursor.month}/${cursor.day}`);
+  function pushState(
+    view: View,
+    cursor: DateTime,
+    klass: string | null = null
+  ) {
+    const params = new URLSearchParams(searchParams as any);
+    if (klass) {
+      params.set("class", klass);
+    } else {
+      params.delete("class");
+    }
+
+    router.push(
+      `/schema/${view}/${cursor.year}/${cursor.month}/${
+        cursor.day
+      }?${params.toString()}`
+    );
   }
 
   return (
     <ScheduleContext.Provider
       value={{
         view,
-        setView: (view) => pushState(view, cursor),
+        setView: (view) => pushState(view, cursor, klass),
         cursor,
-        setCursor: (cursor) => pushState(view, cursor),
+        setCursor: (cursor) => pushState(view, cursor, klass),
         pushState,
         timeBounds: [7 * 3600, 20 * 3600],
         daysPerWeek: 5,
+        klass,
+        setClass: (klass) => pushState(view, cursor, klass),
       }}
     >
       {children}
